@@ -1,0 +1,18 @@
+[
+  { "fromPath": "/about", "toPath": "/vi/about", "note": "SPA cũ → Giới thiệu" },
+  { "fromPath": "/services", "toPath": "/vi/services", "note": "SPA cũ → Lĩnh vực" },
+  { "fromPath": "/services/", "toPath": "/vi/services", "note": "trailing slash" },
+  { "fromPath": "/services/1", "toPath": "/vi/services/thanh-lap-doanh-nghiep-fdi", "note": "Thành lập DN FDI" },
+  { "fromPath": "/services/2", "toPath": "/vi/services/dang-ky-quyen-tac-gia", "note": "Đăng ký quyền tác giả" },
+  { "fromPath": "/services/3", "toPath": "/vi/services/giay-phep-lao-dong", "note": "Giấy phép lao động" },
+  { "fromPath": "/services/4", "toPath": "/vi/services/tu-van-tech-blockchain", "note": "Tech & Blockchain" },
+  { "fromPath": "/services/5", "toPath": "/vi/services/tu-van-ma", "note": "M&A" },
+  { "fromPath": "/services/6", "toPath": "/vi/services/giay-phep-kinh-doanh-dau-tu", "note": "Giấy phép KD/ĐT" },
+  { "fromPath": "/contact", "toPath": "/vi/contact", "note": "Liên hệ" },
+  { "fromPath": "/blog", "toPath": "/vi/news", "note": "Blog → Tin tức" },
+  { "fromPath": "/blog/", "toPath": "/vi/news", "note": "trailing" },
+  { "fromPath": "/new", "toPath": "/vi/news", "note": "New → Tin tức" },
+  { "fromPath": "/new/", "toPath": "/vi/news", "note": "trailing" },
+  { "fromPath": "/casestudy", "toPath": "/vi/news", "note": "Case study → Tin tức (chưa có mục riêng)" },
+  { "fromPath": "/casestudy/", "toPath": "/vi/news", "note": "trailing" }
+]
