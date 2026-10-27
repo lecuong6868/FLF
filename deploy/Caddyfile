@@ -1,0 +1,19 @@
+{
+  email {$ACME_EMAIL:admin@flf.vn}
+}
+
+flf.vn, www.flf.vn {
+  encode gzip zstd
+  reverse_proxy app:3000
+
+  header {
+    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options nosniff
+    Referrer-Policy strict-origin-when-cross-origin
+    -Server
+  }
+
+  log {
+    output stdout
+  }
+}

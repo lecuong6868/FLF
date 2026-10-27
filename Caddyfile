@@ -1,0 +1,13 @@
+# Đổi flf.vn thành IP hoặc localhost khi test chưa có DNS
+{$SITE_ADDRESS:flf.vn,www.flf.vn} {
+	encode gzip zstd
+	reverse_proxy app:3000
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+}

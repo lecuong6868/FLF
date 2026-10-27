@@ -1,21 +1,101 @@
-# Đưa FLF (www.flf.vn) lên VPS
+# Triển khai FLF lên VPS (Docker Compose + Caddy)
 
-Mọi code và dữ liệu của FLF nằm trong `~/FLF` trên VPS:
+VPS khách đã xác nhận: **68.183.136.251**. Tên miền: `flf.vn` / `www.flf.vn`.
 
-| Thư mục | Nội dung |
-|---|---|
-| `~/FLF/repo` | bản sao repo GitHub này |
-| `~/FLF/releases/<thời điểm>` | các bản web đã giải nén (giữ 5 bản gần nhất) |
-| `~/FLF/site` | trỏ tới bản đang chạy |
-| `~/FLF/backups` | sao lưu cấu hình / bản trước |
-| `~/FLF/setup.sh` | script cài, cập nhật, bật HTTPS |
+Khách **no-code** — team kỹ thuật chạy các bước dưới đây; không yêu cầu khách SSH chỉnh tay ngoài cung cấp DNS / mật khẩu khi được hỏi.
 
-Lệnh:
-- Cài / cập nhật: `sudo bash ~/FLF/setup.sh`
-- Bật HTTPS khi tên miền đã trỏ về VPS: `sudo bash ~/FLF/setup.sh ssl`
-- Chỉ xem tình trạng: `sudo bash ~/FLF/setup.sh check`
-- Quay lại bản trước: `ln -sfn ~/FLF/releases/<bản cũ> ~/FLF/site`
+Script nhanh (sau khi đã có Docker + file `.env`):
 
-Script chỉ thêm một site nginx riêng (`/etc/nginx/sites-available/flf.vn`). Nó dừng nếu cổng web đang do phần mềm khác giữ hoặc tên miền đã nằm trong cấu hình khác.
+```bash
+sudo bash deploy/setup-docker.sh
+sudo bash deploy/setup-docker.sh check
+```
 
-`swap-2g.sh`: thêm 2 GB swap cho VPS (không làm gì nếu VPS đã có swap).
+`deploy/setup.sh` là bản **web tĩnh nginx** cũ — giữ tham chiếu, không dùng cho stack Next/Payload.
+
+## 1. Chuẩn bị trên VPS
+
+```bash
+# SSH vào VPS bằng tài khoản có quyền sudo
+sudo bash deploy/swap-2g.sh          # nếu RAM nhỏ
+sudo apt-get update
+sudo apt-get install -y git curl ca-certificates
+# Cài Docker (nếu chưa): https://docs.docker.com/engine/install/ubuntu/
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker "$USER"      # đăng nhập lại sau lệnh này
+```
+
+## 2. Clone & cấu hình
+
+```bash
+sudo mkdir -p /opt/flf && sudo chown "$USER":"$USER" /opt/flf
+cd /opt/flf
+git clone https://github.com/lecuong6868/FLF.git repo
+cd repo
+cp .env.example .env
+nano .env   # điền PAYLOAD_SECRET, POSTGRES_PASSWORD, SEED_*, SMTP_*, SITE_ADDRESS
+```
+
+DNS: trỏ bản ghi **A** của `@` và `www` về `68.183.136.251` trước khi bật HTTPS (Caddy tự xin Let's Encrypt).
+
+## 3. Chạy
+
+```bash
+cd /opt/flf/repo
+docker compose up -d --build
+```
+
+Seed admin lần đầu (trong container app hoặc máy có `DATABASE_URL` trỏ vào Postgres Compose):
+
+```bash
+# Ví dụ exec vào network compose
+docker compose run --rm -e DATABASE_URL="postgresql://flf:MAT_KHAU@db:5432/flf" app \
+  sh -c "node --version" 
+# Khuyến nghị: copy .env đủ biến rồi:
+docker compose exec app sh -c "npx tsx scripts/seed.ts"
+# Nếu image production không có tsx/devDeps, chạy seed từ máy CI/local trỏ DATABASE_URL vào VPS (port 5432 chỉ mở nội bộ — dùng SSH tunnel):
+# ssh -L 5432:127.0.0.1:5432 user@68.183.136.251
+# DATABASE_URL=postgresql://flf:...@127.0.0.1:5432/flf npm run seed
+```
+
+Kiểm tra:
+
+```bash
+curl -s http://127.0.0.1/api/health
+# hoặc qua domain sau khi DNS OK
+curl -sI https://www.flf.vn/vi
+```
+
+## 4. Script hỗ trợ
+
+| File | Việc |
+|------|------|
+| `deploy/swap-2g.sh` | Thêm 2GB swap nếu thiếu RAM |
+| `deploy/setup.sh` | Bản cũ phục vụ **web tĩnh nginx** — giữ để tham chiếu; **stack mới dùng Docker Compose** như trên |
+| `deploy/backup-db.sh` | Sao lưu Postgres định kỳ |
+
+## 5. Backup DB định kỳ
+
+```bash
+sudo cp deploy/backup-db.sh /opt/flf/backup-db.sh
+sudo chmod +x /opt/flf/backup-db.sh
+# Cron mỗi ngày 02:30
+echo '30 2 * * * root /opt/flf/backup-db.sh' | sudo tee /etc/cron.d/flf-backup
+```
+
+File backup mặc định: `/opt/flf/backups/`. Giữ 14 bản gần nhất.
+
+## 6. Cập nhật phiên bản mới
+
+```bash
+cd /opt/flf/repo
+git pull
+docker compose up -d --build
+```
+
+## 7. Lưu ý bảo mật
+
+- Không mở port Postgres ra internet.
+- Đổi toàn bộ mật khẩu trong `.env`.
+- Bật 2FA cho tài khoản admin sau seed.
+- SMTP và API MXH/AI chỉ điền khi sẵn sàng (giai đoạn 2/3).
