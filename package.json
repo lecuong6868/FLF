@@ -1,0 +1,16 @@
+{
+  "name": "renew-web-flf-mockups",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bộ mockup so sánh UI/UX giai đoạn duyệt cho website FLF",
+  "scripts": {
+    "start": "npx --yes serve -l 4173 .",
+    "serve": "python3 -m http.server 4173",
+    "capture": "node scripts/capture-mockups.mjs",
+    "render:mockups": "python3 scripts/render-mockups.py",
+    "check": "node scripts/check-pages.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}

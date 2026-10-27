@@ -1,0 +1,11 @@
+.aat/
+node_modules/
+.playwright/
+playwright-report/
+test-results/
+.DS_Store
+*.log
+.pgdata/
+.next/
+.env
+.env.local

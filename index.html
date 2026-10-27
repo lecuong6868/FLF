@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FLF — So sánh hai hướng UI/UX (mockup duyệt)</title>
+    <meta
+      name="description"
+      content="Bộ mockup trực quan hai phương án trang chủ FLF để khách duyệt trước khi phát triển tiếp."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #003050;
+        --red: #a02020;
+        --ink: #14202b;
+        --muted: #5a6b78;
+        --line: #d7e0e7;
+        --bg: #f4f7fa;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: Manrope, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse at 10% 0%, rgba(160, 32, 32, 0.08), transparent 40%),
+          linear-gradient(180deg, #eef3f7, var(--bg) 30%);
+        line-height: 1.6;
+      }
+      .wrap {
+        width: min(1100px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 2.5rem 0 4rem;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        margin-bottom: 1.5rem;
+      }
+      .brand img {
+        width: 56px;
+        height: 56px;
+        object-fit: contain;
+      }
+      .brand strong {
+        display: block;
+        color: var(--navy);
+        font-size: 1.15rem;
+      }
+      .brand span {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      h1 {
+        font-family: "Source Serif 4", Georgia, serif;
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        line-height: 1.2;
+        color: var(--navy);
+        margin: 0 0 0.75rem;
+        max-width: 18ch;
+      }
+      .lead {
+        max-width: 62ch;
+        color: var(--muted);
+        margin: 0 0 1.5rem;
+      }
+      .badge {
+        display: inline-block;
+        padding: 0.35rem 0.7rem;
+        background: #fff;
+        border: 1px solid var(--line);
+        color: var(--red);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+        margin: 2rem 0;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        padding: 1.35rem;
+        display: grid;
+        gap: 0.85rem;
+      }
+      .card h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: var(--navy);
+      }
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .swatches {
+        display: flex;
+        gap: 0.4rem;
+      }
+      .swatches i {
+        width: 28px;
+        height: 28px;
+        display: block;
+        border: 1px solid var(--line);
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+      }
+      a.btn {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 0.55rem 1rem;
+        background: var(--red);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      a.btn-ghost {
+        background: transparent;
+        color: var(--navy);
+        border: 1px solid var(--line);
+      }
+      .docs,
+      .shots,
+      .note {
+        background: #fff;
+        border: 1px solid var(--line);
+        padding: 1.25rem 1.35rem;
+        margin-top: 1.25rem;
+      }
+      .docs h2,
+      .shots h2,
+      .note h2 {
+        margin: 0 0 0.75rem;
+        font-size: 1.1rem;
+        color: var(--navy);
+      }
+      .docs ul,
+      .shots ul {
+        margin: 0;
+        padding-left: 1.15rem;
+        color: var(--muted);
+      }
+      .shots-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .shots-grid figure {
+        margin: 0;
+        border: 1px solid var(--line);
+        background: #f8fafc;
+      }
+      .shots-grid img {
+        width: 100%;
+        height: auto;
+        display: block;
+        background: #e8eef3;
+      }
+      .shots-grid figcaption {
+        padding: 0.55rem 0.7rem;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .note p {
+        margin: 0;
+        color: var(--muted);
+      }
+      @media (max-width: 800px) {
+        .grid,
+        .shots-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="brand">
+        <img src="public/brand/logo-color.png" alt="Logo FLF" width="56" height="56" />
+        <div>
+          <strong>First Legal Force</strong>
+          <span>Bộ mockup duyệt UI/UX — chưa phải bản khách đã chấp thuận</span>
+        </div>
+      </div>
+
+      <p class="badge">Tài liệu duyệt · Giai đoạn chọn hướng</p>
+      <h1>Hai hướng trang chủ để so sánh</h1>
+      <p class="lead">
+        Cùng một bộ nội dung tiếng Việt mẫu. Khách xem desktop/mobile của từng
+        phương án, đọc sơ đồ trang và bản nháp trang dịch vụ, rồi chọn hướng
+        trước khi team phát triển tiếp (không dựng CMS ở lượt này).
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <h2>Phương án A — Hiện đại, nền sáng</h2>
+          <p>
+            Nhiều khoảng trắng, nền sáng, xanh đen + đỏ theo logo. Phù hợp cảm
+            giác tư vấn doanh nghiệp gọn, dễ quét nội dung.
+          </p>
+          <div class="swatches" aria-hidden="true">
+            <i style="background: #f7fafc"></i>
+            <i style="background: #003050"></i>
+            <i style="background: #a02020"></i>
+            <i style="background: #eef3f7"></i>
+          </div>
+          <div class="actions">
+            <a class="btn" href="option-a/">Mở mockup A</a>
+            <a class="btn btn-ghost" href="mockups/A-desktop-1440.png"
+              >Ảnh desktop</a
+            >
+            <a class="btn btn-ghost" href="mockups/A-mobile-390.png"
+              >Ảnh mobile</a
+            >
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Phương án B — Trang trọng, biên tập</h2>
+          <p>
+            Typography có điểm nhấn, xanh đen chủ đạo, bố cục biên tập rõ.
+            Phù hợp cảm giác tư vấn nghiêm túc, phân tầng nội dung mạnh.
+          </p>
+          <div class="swatches" aria-hidden="true">
+            <i style="background: #001524"></i>
+            <i style="background: #003050"></i>
+            <i style="background: #a02020"></i>
+            <i style="background: #f3f6f8"></i>
+          </div>
+          <div class="actions">
+            <a class="btn" href="option-b/">Mở mockup B</a>
+            <a class="btn btn-ghost" href="mockups/B-desktop-1440.png"
+              >Ảnh desktop</a
+            >
+            <a class="btn btn-ghost" href="mockups/B-mobile-390.png"
+              >Ảnh mobile</a
+            >
+          </div>
+        </article>
+      </div>
+
+      <section class="shots">
+        <h2>Bốn ảnh chụp mockup (PNG)</h2>
+        <div class="shots-grid">
+          <figure>
+            <img
+              src="mockups/A-desktop-1440.png"
+              alt="Phương án A — desktop 1440px"
+              loading="lazy"
+            />
+            <figcaption>A · Desktop 1440px</figcaption>
+          </figure>
+          <figure>
+            <img
+              src="mockups/A-mobile-390.png"
+              alt="Phương án A — mobile 390px"
+              loading="lazy"
+            />
+            <figcaption>A · Mobile 390px</figcaption>
+          </figure>
+          <figure>
+            <img
+              src="mockups/B-desktop-1440.png"
+              alt="Phương án B — desktop 1440px"
+              loading="lazy"
+            />
+            <figcaption>B · Desktop 1440px</figcaption>
+          </figure>
+          <figure>
+            <img
+              src="mockups/B-mobile-390.png"
+              alt="Phương án B — mobile 390px"
+              loading="lazy"
+            />
+            <figcaption>B · Mobile 390px</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="docs">
+        <h2>Tài liệu kèm theo</h2>
+        <ul>
+          <li>
+            <a href="docs/SO-DO-TRANG.md">Sơ đồ trang ngắn</a> — cấu trúc đề xuất
+            giai đoạn 1
+          </li>
+          <li>
+            <a href="docs/NOI-DUNG-MAU.md">Bản nháp nội dung trang dịch vụ</a> —
+            đánh giá giọng văn
+          </li>
+          <li>
+            <a href="docs/DE-XUAT-HUONG.md">Nhận xét đề xuất chọn hướng</a> —
+            chưa phải quyết định cuối của khách
+          </li>
+          <li>
+            <a href="docs/KIEM-TRA.md">Biên bản kiểm tra</a> — những gì đã chạy
+          </li>
+          <li>
+            <a href="docs/PR-MO-TA.md">Gợi ý mô tả PR</a> — đường dẫn ảnh xem được trên GitHub
+          </li>
+          <li>
+            <a href="docs/COMPANY_VERIFICATION.md">Xác minh thông tin công ty</a>
+            — địa chỉ/SĐT chờ khách chốt
+          </li>
+        </ul>
+      </section>
+
+      <section class="note">
+        <h2>Lưu ý duyệt</h2>
+        <p>
+          Thông điệp đề xuất: «FLF — Đồng hành cùng doanh nghiệp trong các vấn
+          đề tư vấn đa lĩnh vực». Nhóm lĩnh vực ghi rõ là nội dung đề xuất. Không
+          có tên đối tác, số liệu thành tích, chứng nhận hay cam kết kết quả.
+          Logo dùng file gốc đã gửi — không vẽ lại.
+        </p>
+      </section>
+    </div>
+  </body>
+</html>
