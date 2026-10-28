@@ -1,0 +1,47 @@
+# Xuất bản preview thiết kế công khai lên GitHub Pages (HTTPS).
+# Điều kiện: Settings → Pages → Source = GitHub Actions (cần quyền admin repo).
+# Chỉ publish tài nguyên thiết kế — không gồm .aat, zip WordPress, secrets.
+name: Preview Pages
+
+on:
+  push:
+    branches:
+      - main
+      - "aat/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-preview
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Chuẩn bị thư mục publish (chỉ thiết kế công khai)
+        run: |
+          mkdir -p _site
+          cp index.html robots.txt README.md package.json _site/ 2>/dev/null || true
+          cp -r option-a option-b mockups public docs shared _site/
+          # Không copy: .aat, flf.vn_*.zip, deploy scripts nhạy cảm vận hành
+          test -f _site/index.html
+          test -f _site/mockups/A-desktop-1440.png
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
