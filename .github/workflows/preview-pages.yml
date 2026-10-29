@@ -1,0 +1,81 @@
+# Xuất bản preview thiết kế công khai lên GitHub Pages (HTTPS).
+# Điều kiện bắt buộc: Settings → Pages → Source = GitHub Actions (quyền admin repo).
+# Chỉ publish tài nguyên thiết kế — không gồm .aat, zip WordPress, secrets.
+name: Preview Pages
+
+on:
+  push:
+    branches:
+      - main
+      - "aat/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-preview
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ghi commit triển khai
+        run: |
+          echo "${{ github.sha }}" > DEPLOY-COMMIT.txt
+          echo "ref=${{ github.ref_name }}" >> DEPLOY-COMMIT.txt
+          echo "run=${{ github.run_id }}" >> DEPLOY-COMMIT.txt
+      - name: Chuẩn bị thư mục publish (chỉ thiết kế công khai)
+        run: |
+          mkdir -p _site
+          cp index.html robots.txt README.md package.json DEPLOY-COMMIT.txt _site/ 2>/dev/null || true
+          cp -r option-a option-b mockups public docs shared _site/
+          # Không copy: .aat, flf.vn_*.zip, deploy scripts nhạy cảm vận hành
+          test -f _site/index.html
+          test -f _site/option-b/index.html
+          test -f _site/public/brand/logo-color.png
+          test -f _site/mockups/B-desktop-1440.png
+          grep -q 'noindex' _site/option-b/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Tóm tắt URL
+        if: success()
+        run: |
+          {
+            echo "## Preview đã xuất bản"
+            echo ""
+            echo "- Commit: \`${{ github.sha }}\`"
+            echo "- URL: https://lecuong6868.github.io/FLF/"
+            echo "- Phương án B: https://lecuong6868.github.io/FLF/option-b/"
+            echo "- Xác minh: \`FLF_BASE_URL=https://lecuong6868.github.io/FLF npm run verify:preview\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Nhắc quyền Pages nếu deploy thất bại
+        if: failure()
+        run: |
+          {
+            echo "## Deploy Pages thất bại"
+            echo ""
+            echo "Job \`build\` đã tạo artifact; job \`deploy\` cần **GitHub Pages đã bật**."
+            echo ""
+            echo "Admin repo mở: Settings → Pages → Build and deployment → Source = **GitHub Actions**."
+            echo "URL kỳ vọng: https://lecuong6868.github.io/FLF/"
+            echo "Sau đó: Actions → Preview Pages → Re-run, rồi \`npm run verify:preview\`."
+            echo ""
+            echo "Agent/token xưởng **không** đủ quyền bật Pages — không thử lại enable qua API."
+            echo "Lỗi đã thấy trên PR #7 (commit c8364c5): *Ensure GitHub Pages has been enabled*."
+          } >> "$GITHUB_STEP_SUMMARY"
