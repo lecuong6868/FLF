@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FLF — Preview thiết kế chờ duyệt (mockup)</title>
+    <meta
+      name="description"
+      content="Bản thiết kế chờ duyệt: hai hướng UI/UX FLF, sơ đồ trang và flow minh họa. Không phải website chính thức."
+    />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <link rel="icon" href="public/brand/logo-color.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #003050;
+        --red: #a02020;
+        --ink: #14202b;
+        --muted: #5a6b78;
+        --line: #d7e0e7;
+        --bg: #f4f7fa;
+        --ok: #0f6b4c;
+        --warn: #8a5a00;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: Manrope, system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse at 10% 0%, rgba(160, 32, 32, 0.08), transparent 40%),
+          linear-gradient(180deg, #eef3f7, var(--bg) 28%);
+        line-height: 1.6;
+      }
+      .pending-banner {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: var(--navy);
+        color: #fff;
+        padding: 0.65rem 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+      .pending-banner span {
+        color: #ffd7a8;
+      }
+      .wrap {
+        width: min(1100px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 2rem 0 4rem;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        margin-bottom: 1.25rem;
+      }
+      .brand img {
+        width: 56px;
+        height: 56px;
+        object-fit: contain;
+      }
+      .brand strong {
+        display: block;
+        color: var(--navy);
+        font-size: 1.15rem;
+      }
+      .brand em {
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-style: normal;
+      }
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 0 0 1.75rem;
+      }
+      .toc a {
+        color: var(--navy);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.4rem 0.7rem;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+      .toc a:hover,
+      .toc a:focus-visible {
+        border-color: var(--navy);
+        outline: none;
+      }
+      h1 {
+        font-family: "Source Serif 4", Georgia, serif;
+        font-size: clamp(1.75rem, 4vw, 2.55rem);
+        line-height: 1.2;
+        color: var(--navy);
+        margin: 0 0 0.75rem;
+        max-width: 20ch;
+      }
+      h2 {
+        margin: 0 0 0.75rem;
+        font-size: 1.2rem;
+        color: var(--navy);
+      }
+      h3 {
+        margin: 0 0 0.4rem;
+        font-size: 1rem;
+        color: var(--navy);
+      }
+      .lead {
+        max-width: 64ch;
+        color: var(--muted);
+        margin: 0 0 1.25rem;
+      }
+      .badge {
+        display: inline-block;
+        padding: 0.35rem 0.7rem;
+        background: #fff7ef;
+        border: 1px solid #f0d3a8;
+        color: var(--warn);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 0.85rem;
+      }
+      .badge-soft {
+        background: #eef7f3;
+        border-color: #b7dccb;
+        color: var(--ok);
+      }
+      .badge-warn {
+        background: #fff1f1;
+        border-color: #efc2c2;
+        color: var(--red);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+        margin: 1.5rem 0;
+      }
+      .card,
+      .panel {
+        background: #fff;
+        border: 1px solid var(--line);
+        padding: 1.25rem 1.35rem;
+      }
+      .card p,
+      .panel p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .swatches {
+        display: flex;
+        gap: 0.4rem;
+        margin: 0.75rem 0;
+      }
+      .swatches i {
+        width: 28px;
+        height: 28px;
+        display: block;
+        border: 1px solid var(--line);
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        margin-top: 0.85rem;
+      }
+      a.btn,
+      button.btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0.55rem 1rem;
+        background: var(--red);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-family: inherit;
+        font-size: 0.92rem;
+        border: 0;
+        cursor: pointer;
+      }
+      a.btn-ghost,
+      button.btn-ghost {
+        background: transparent;
+        color: var(--navy);
+        border: 1px solid var(--line);
+      }
+      section.block {
+        margin-top: 1.5rem;
+      }
+      .shots-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .shots-grid figure {
+        margin: 0;
+        border: 1px solid var(--line);
+        background: #f8fafc;
+      }
+      .shots-grid button.zoom {
+        display: block;
+        width: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        cursor: zoom-in;
+      }
+      .shots-grid img {
+        width: 100%;
+        height: auto;
+        display: block;
+        background: #e8eef3;
+      }
+      .shots-grid figcaption {
+        padding: 0.55rem 0.7rem;
+        font-size: 0.85rem;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+      .map {
+        display: grid;
+        gap: 0.55rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.86rem;
+        color: var(--ink);
+        background: #f8fafc;
+        border: 1px dashed var(--line);
+        padding: 1rem;
+        overflow-x: auto;
+        white-space: pre;
+        margin: 0.75rem 0 0;
+      }
+      .flow {
+        display: grid;
+        gap: 0.65rem;
+        margin-top: 0.85rem;
+      }
+      .flow-row {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.75rem;
+        align-items: start;
+        padding: 0.75rem 0.85rem;
+        background: #f8fafc;
+        border-left: 3px solid var(--navy);
+      }
+      .flow-row.legal {
+        border-left-color: var(--red);
+      }
+      .flow-n {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        background: var(--navy);
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+      .flow-row.legal .flow-n {
+        background: var(--red);
+      }
+      .flow-row p {
+        margin: 0.15rem 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .callout {
+        margin-top: 0.85rem;
+        padding: 0.85rem 1rem;
+        background: #fff8e8;
+        border: 1px solid #f0d3a8;
+        color: #5c4500;
+        font-size: 0.92rem;
+      }
+      .callout strong {
+        color: var(--warn);
+      }
+      .docs ul {
+        margin: 0;
+        padding-left: 1.15rem;
+        color: var(--muted);
+      }
+      .docs li + li {
+        margin-top: 0.35rem;
+      }
+      .status-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        margin-top: 0.75rem;
+      }
+      .status-table th,
+      .status-table td {
+        border: 1px solid var(--line);
+        padding: 0.55rem 0.65rem;
+        text-align: left;
+        vertical-align: top;
+      }
+      .status-table th {
+        background: #f3f7fa;
+        color: var(--navy);
+      }
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(8, 18, 28, 0.88);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        z-index: 100;
+      }
+      .lightbox.open {
+        display: flex;
+      }
+      .lightbox img {
+        max-width: min(1400px, 100%);
+        max-height: 92vh;
+        object-fit: contain;
+        background: #fff;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      }
+      .lightbox-close {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        min-height: 44px;
+        min-width: 44px;
+        border: 0;
+        background: #fff;
+        color: var(--navy);
+        font-size: 1.4rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .lightbox-cap {
+        position: absolute;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+        font-size: 0.9rem;
+        background: rgba(0, 0, 0, 0.45);
+        padding: 0.35rem 0.75rem;
+      }
+      footer.site-foot {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+      @media (max-width: 800px) {
+        .grid,
+        .shots-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pending-banner" role="status">
+      Bản thiết kế chờ duyệt · <span>không lập chỉ mục (noindex)</span> · Không phải
+      website chính thức flf.vn
+    </div>
+
+    <div class="wrap">
+      <div class="brand">
+        <img
+          src="public/brand/logo-color.png"
+          alt="Logo First Legal Force"
+          width="56"
+          height="56"
+        />
+        <div>
+          <strong>First Legal Force</strong>
+          <em>Preview thiết kế — giai đoạn chọn hướng UI/UX</em>
+        </div>
+      </div>
+
+      <nav class="toc" aria-label="Mục lục trang preview">
+        <a href="#huong">Hai hướng</a>
+        <a href="#mockups">Mockup phóng to</a>
+        <a href="#muc-noi-dung">Tin tức / Quy định / Chuyên mục</a>
+        <a href="#so-do">Sơ đồ trang</a>
+        <a href="#flow-khach">Flow khách</a>
+        <a href="#flow-nv">Flow xuất bản &amp; MXH</a>
+        <a href="#phan-biet">Minh họa vs thật</a>
+        <a href="#tai-lieu">Tài liệu</a>
+      </nav>
+
+      <p class="badge">Thiết kế chờ duyệt · Giai đoạn 1 (MVP preview)</p>
+      <h1>Hai hướng trang chủ để so sánh</h1>
+      <p class="lead">
+        Cùng nội dung tiếng Việt mẫu. Xem mockup desktop 1440px / mobile 390px,
+        trang Tin tức / Quy định mới / Chuyên mục, sơ đồ trang và flow duyệt + MXH
+        minh họa. Chưa dựng CMS, AI đăng bài hay API mạng xã hội — chỉ tài nguyên
+        thiết kế công khai để duyệt.
+      </p>
+
+      <section id="huong" class="block">
+        <div class="grid">
+          <article class="card">
+            <h2>Phương án A — Hiện đại, nền sáng</h2>
+            <p>
+              Nhiều khoảng trắng, nền sáng, xanh đen + đỏ theo logo. Cảm giác tư
+              vấn doanh nghiệp gọn, dễ quét nội dung.
+            </p>
+            <div class="swatches" aria-hidden="true">
+              <i style="background: #f7fafc"></i>
+              <i style="background: #003050"></i>
+              <i style="background: #a02020"></i>
+              <i style="background: #eef3f7"></i>
+            </div>
+            <div class="actions">
+              <a class="btn" href="option-a/">Mở mockup A</a>
+              <button
+                class="btn btn-ghost"
+                type="button"
+                data-zoom="mockups/A-desktop-1440.png"
+                data-cap="A · Desktop 1440px"
+              >
+                Phóng to desktop
+              </button>
+              <button
+                class="btn btn-ghost"
+                type="button"
+                data-zoom="mockups/A-mobile-390.png"
+                data-cap="A · Mobile 390px"
+              >
+                Phóng to mobile
+              </button>
+            </div>
+          </article>
+
+          <article class="card">
+            <h2>Phương án B — Trang trọng, biên tập</h2>
+            <p>
+              Typography có điểm nhấn, xanh đen chủ đạo, bố cục biên tập rõ. Cảm
+              giác tư vấn nghiêm túc, phân tầng nội dung mạnh.
+            </p>
+            <div class="swatches" aria-hidden="true">
+              <i style="background: #001524"></i>
+              <i style="background: #003050"></i>
+              <i style="background: #a02020"></i>
+              <i style="background: #f3f6f8"></i>
+            </div>
+            <div class="actions">
+              <a class="btn" href="option-b/">Mở mockup B</a>
+              <button
+                class="btn btn-ghost"
+                type="button"
+                data-zoom="mockups/B-desktop-1440.png"
+                data-cap="B · Desktop 1440px"
+              >
+                Phóng to desktop
+              </button>
+              <button
+                class="btn btn-ghost"
+                type="button"
+                data-zoom="mockups/B-mobile-390.png"
+                data-cap="B · Mobile 390px"
+              >
+                Phóng to mobile
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="mockups" class="block panel">
+        <h2>Bốn ảnh mockup (bấm để phóng to)</h2>
+        <p>
+          Ảnh PNG xuất từ HTML mockup. Nội dung mẫu dùng chung; logo gốc giữ
+          nguyên — không tự thêm địa chỉ, đối tác, thành tích hay cam kết chưa
+          xác minh.
+        </p>
+        <div class="shots-grid">
+          <figure>
+            <button
+              class="zoom"
+              type="button"
+              data-zoom="mockups/A-desktop-1440.png"
+              data-cap="A · Desktop 1440px"
+              aria-label="Phóng to phương án A desktop"
+            >
+              <img
+                src="mockups/A-desktop-1440.png"
+                alt="Phương án A — desktop 1440px"
+                width="1440"
+                height="2352"
+                loading="lazy"
+              />
+            </button>
+            <figcaption><span>A · Desktop 1440px</span><span>Phóng to</span></figcaption>
+          </figure>
+          <figure>
+            <button
+              class="zoom"
+              type="button"
+              data-zoom="mockups/A-mobile-390.png"
+              data-cap="A · Mobile 390px"
+              aria-label="Phóng to phương án A mobile"
+            >
+              <img
+                src="mockups/A-mobile-390.png"
+                alt="Phương án A — mobile 390px"
+                width="390"
+                height="3122"
+                loading="lazy"
+              />
+            </button>
+            <figcaption><span>A · Mobile 390px</span><span>Phóng to</span></figcaption>
+          </figure>
+          <figure>
+            <button
+              class="zoom"
+              type="button"
+              data-zoom="mockups/B-desktop-1440.png"
+              data-cap="B · Desktop 1440px"
+              aria-label="Phóng to phương án B desktop"
+            >
+              <img
+                src="mockups/B-desktop-1440.png"
+                alt="Phương án B — desktop 1440px"
+                width="1440"
+                height="2479"
+                loading="lazy"
+              />
+            </button>
+            <figcaption><span>B · Desktop 1440px</span><span>Phóng to</span></figcaption>
+          </figure>
+          <figure>
+            <button
+              class="zoom"
+              type="button"
+              data-zoom="mockups/B-mobile-390.png"
+              data-cap="B · Mobile 390px"
+              aria-label="Phóng to phương án B mobile"
+            >
+              <img
+                src="mockups/B-mobile-390.png"
+                alt="Phương án B — mobile 390px"
+                width="390"
+                height="3070"
+                loading="lazy"
+              />
+            </button>
+            <figcaption><span>B · Mobile 390px</span><span>Phóng to</span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="muc-noi-dung" class="block panel">
+        <p class="badge badge-soft">Đã xem được trên mockup A/B</p>
+        <h2>Tin tức · Quy định mới · Chuyên mục</h2>
+        <p>
+          Ba mục cấp chính trên menu (desktop &amp; mobile). Phân biệt:
+          <strong>Tin tức</strong> = hoạt động FLF;
+          <strong>Quy định mới</strong> = cập nhật văn bản/chính sách + metadata;
+          <strong>Chuyên mục</strong> = bài phân tích theo chủ đề (bộ lọc minh họa).
+        </p>
+        <div class="actions" style="margin-top: 0.75rem">
+          <a class="btn" href="option-a/tin-tuc/">A · Tin tức</a>
+          <a class="btn btn-ghost" href="option-a/quy-dinh-moi/">A · Quy định mới</a>
+          <a class="btn btn-ghost" href="option-a/chuyen-muc/">A · Chuyên mục</a>
+          <a class="btn btn-ghost" href="option-b/tin-tuc/">B · Tin tức</a>
+          <a class="btn btn-ghost" href="option-b/quy-dinh-moi/">B · Quy định mới</a>
+          <a class="btn btn-ghost" href="option-b/chuyen-muc/">B · Chuyên mục</a>
+        </div>
+        <p class="callout" style="margin-top: 1rem">
+          <strong>Minh họa:</strong> bộ lọc trạng thái / chủ đề, ô tìm kiếm, trạng thái
+          rỗng (vd. chọn «Quản trị rủi ro»), metadata số hiệu–hiệu lực đều mang nhãn
+          minh họa — <em>không</em> phải văn bản pháp lý thật.
+        </p>
+      </section>
+
+      <section id="so-do" class="block panel">
+        <h2>Sơ đồ trang (đề xuất giai đoạn 1)</h2>
+        <p>
+          Cấu trúc đề xuất để duyệt thông tin kiến trúc — chưa triển khai
+          routing/CMS. Chi tiết thêm trong
+          <a href="docs/SO-DO-TRANG.md">docs/SO-DO-TRANG.md</a>.
+        </p>
+        <pre class="map" aria-label="Sơ đồ trang dạng cây">Trang chủ
+├── Giới thiệu (FLF vs đối tác pháp lý)
+├── Lĩnh vực tư vấn
+│   ├── Tư vấn doanh nghiệp &amp; quản trị
+│   ├── Đầu tư &amp; mở rộng hoạt động
+│   ├── Tuân thủ &amp; giấy phép          ← đề xuất
+│   └── Hợp tác pháp lý chuyên sâu    ← đề xuất
+├── Đối tác pháp lý (chưa ghi tên trên mockup)
+├── Tin tức              ← hoạt động FLF
+├── Quy định mới         ← văn bản / chính sách + metadata
+├── Chuyên mục           ← phân tích theo chủ đề (8 chủ đề đề xuất)
+├── Liên hệ (+ đồng ý NĐ 13/2023)
+└── Chính sách bảo mật</pre>
+      </section>
+
+      <section id="flow-khach" class="block panel">
+        <p class="badge badge-soft">Flow minh họa · Khách truy cập</p>
+        <h2>Flow khách: từ trang chủ đến xác nhận gửi</h2>
+        <p>
+          Mô tả hành trình dự kiến trên website công khai. Các bước dưới đây
+          <strong>chưa phải chức năng đã chạy</strong> trên preview này — chỉ
+          mockup trang chủ + form minh họa.
+        </p>
+        <div class="flow">
+          <div class="flow-row">
+            <div class="flow-n">1</div>
+            <div>
+              <h3>Trang chủ</h3>
+              <p>Xem thông điệp thương hiệu, phạm vi FLF vs đối tác pháp lý, CTA.</p>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-n">2</div>
+            <div>
+              <h3>Lĩnh vực</h3>
+              <p>Chọn nhóm lĩnh vực đề xuất (nội dung chờ khách xác nhận).</p>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-n">3</div>
+            <div>
+              <h3>Chi tiết dịch vụ</h3>
+              <p>
+                Đọc mô tả phạm vi tư vấn FLF và phần cần đối tác hành nghề luật
+                sư (xem bản nháp giọng văn trong tài liệu).
+              </p>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-n">4</div>
+            <div>
+              <h3>Liên hệ</h3>
+              <p>
+                Điền form + ô đồng ý xử lý dữ liệu cá nhân theo Nghị định
+                13/2023/NĐ-CP.
+              </p>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-n">5</div>
+            <div>
+              <h3>Xác nhận gửi</h3>
+              <p>Màn hình cảm ơn / mã tiếp nhận (sẽ có khi nối backend).</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="flow-nv" class="block panel">
+        <p class="badge badge-warn">Flow minh họa · Dashboard / AI / MXH (giai đoạn 2)</p>
+        <h2>Flow: nguồn → AI nháp → duyệt → web → MXH</h2>
+        <p>
+          Workflow dự kiến (Next.js + Payload). Preview tĩnh
+          <strong>không có đăng nhập, AI hay API MXH thật</strong>. AI
+          <strong>không</strong> được tự vượt bước duyệt.
+        </p>
+        <div class="flow">
+          <div class="flow-row">
+            <div class="flow-n">1</div>
+            <div>
+              <h3>Chọn nguồn chính thức / chủ đề</h3>
+              <p>Biên tập chọn nguồn công báo hoặc chủ đề Chuyên mục trước khi tạo nháp.</p>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-n">2</div>
+            <div>
+              <h3>AI tạo bản nháp</h3>
+              <p>Chỉ tạo nháp — không xuất bản và không đăng MXH tự động.</p>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-n">3</div>
+            <div>
+              <h3>Biên tập kiểm tra nguồn &amp; nội dung</h3>
+              <p>Đối chiếu nguồn chính thức; chỉnh sửa trước khi gửi duyệt.</p>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-n">4</div>
+            <div>
+              <h3>Duyệt (admin / biên tập)</h3>
+              <p>Chấp thuận, yêu cầu sửa, hoặc từ chối. Đăng nhập + 2FA trên Dashboard thật.</p>
+            </div>
+          </div>
+          <div class="flow-row legal">
+            <div class="flow-n">⚠</div>
+            <div>
+              <h3>Luật sư đối tác duyệt (bắt buộc với nội dung pháp lý)</h3>
+              <p>
+                Bài pháp lý chỉ xuất bản sau khi luật sư / công ty luật đối tác
+                xác nhận.
+              </p>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-n">5</div>
+            <div>
+              <h3>Lên lịch → Xuất bản web</h3>
+              <p>Có thể tạm dừng lịch. Xuất bản web là bước độc lập với MXH.</p>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-n">6</div>
+            <div>
+              <h3>Tạo bản kênh từ phiên bản đã duyệt</h3>
+              <p>
+                Facebook / LinkedIn (Zalo: chuẩn bị). Nếu đổi nội dung đáng kể so
+                với bản đã duyệt → phải duyệt lại trước khi đăng.
+              </p>
+            </div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-n">7</div>
+            <div>
+              <h3>Đăng MXH + giám sát kênh</h3>
+              <p>
+                Trạng thái lỗi từng kênh, thử lại có giới hạn, chống đăng trùng,
+                nhật ký. <strong>Lỗi MXH không làm mất bài web.</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Phạm vi preview:</strong> chỉ sơ đồ để duyệt quy trình. Kết nối
+          Facebook / LinkedIn / Zalo, AI đăng định kỳ và chatbot nằm giai đoạn
+          2–3 — chưa có trên bản này.
+        </div>
+      </section>
+
+      <section id="phan-biet" class="block panel">
+        <h2>Phân biệt: minh họa vs đã hoạt động</h2>
+        <table class="status-table">
+          <thead>
+            <tr>
+              <th>Hạng mục</th>
+              <th>Trên preview này</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Trang so sánh A/B + mockup PNG phóng to</td>
+              <td><strong>Đã xem được</strong> (HTML/CSS tĩnh)</td>
+            </tr>
+            <tr>
+              <td>Menu + trang Tin tức / Quy định mới / Chuyên mục</td>
+              <td><strong>Đã xem được</strong> — nội dung &amp; bộ lọc minh họa</td>
+            </tr>
+            <tr>
+              <td>Metadata quy định (số hiệu, hiệu lực, nguồn, người duyệt)</td>
+              <td><strong>Đã xem được</strong> — giá trị mang nhãn minh họa</td>
+            </tr>
+            <tr>
+              <td>Sơ đồ trang &amp; flow duyệt / MXH</td>
+              <td>Tài liệu / sơ đồ minh họa</td>
+            </tr>
+            <tr>
+              <td>Form liên hệ gửi được / lưu DB</td>
+              <td>Chưa — nút CTA chỉ neo trang</td>
+            </tr>
+            <tr>
+              <td>Đăng nhập, 2FA, Dashboard duyệt bài</td>
+              <td>Chưa — chỉ mô tả flow (giai đoạn 1 sau chọn UI)</td>
+            </tr>
+            <tr>
+              <td>AI tạo nháp / đăng định kỳ / API MXH / chatbot</td>
+              <td>Chưa — giai đoạn 2–3 (chỉ sơ đồ trên preview)</td>
+            </tr>
+            <tr>
+              <td>DNS / production flf.vn</td>
+              <td>Không đổi trong lượt này</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="tai-lieu" class="block panel docs">
+        <h2>Tài liệu kèm theo</h2>
+        <ul>
+          <li>
+            <a href="docs/SO-DO-TRANG.md">Sơ đồ trang</a> — cấu trúc đề xuất giai
+            đoạn 1
+          </li>
+          <li>
+            <a href="docs/NOI-DUNG-MAU.md">Bản nháp trang dịch vụ</a> — đánh giá
+            giọng văn
+          </li>
+          <li>
+            <a href="docs/DE-XUAT-HUONG.md">Đề xuất chọn hướng</a> — chưa phải
+            quyết định của khách
+          </li>
+          <li>
+            <a href="docs/KIEM-TRA.md">Biên bản kiểm tra</a> — bằng chứng đã chạy
+          </li>
+          <li>
+            <a href="docs/PREVIEW-URL.md">URL preview &amp; bàn giao</a> — một URL
+            chính
+          </li>
+          <li>
+            <a href="docs/COMPANY_VERIFICATION.md">Xác minh công ty</a> — địa
+            chỉ/SĐT chờ chốt
+          </li>
+        </ul>
+      </section>
+
+      <footer class="site-foot">
+        Logo dùng file gốc đã gửi. Thông điệp đề xuất: «FLF — Đồng hành cùng
+        doanh nghiệp trong các vấn đề tư vấn đa lĩnh vực». Không merge PR #2/#3
+        hay đổi DNS flf.vn trong lượt preview này.
+      </footer>
+    </div>
+
+    <div
+      class="lightbox"
+      id="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Phóng to mockup"
+      hidden
+    >
+      <button class="lightbox-close" type="button" aria-label="Đóng">×</button>
+      <img id="lightbox-img" alt="" />
+      <div class="lightbox-cap" id="lightbox-cap"></div>
+    </div>
+
+    <script>
+      (function () {
+        var box = document.getElementById("lightbox");
+        var img = document.getElementById("lightbox-img");
+        var cap = document.getElementById("lightbox-cap");
+        var lastFocus = null;
+
+        function openZoom(src, caption) {
+          lastFocus = document.activeElement;
+          img.src = src;
+          img.alt = caption || "Mockup phóng to";
+          cap.textContent = caption || "";
+          box.hidden = false;
+          box.classList.add("open");
+          box.querySelector(".lightbox-close").focus();
+        }
+
+        function closeZoom() {
+          box.classList.remove("open");
+          box.hidden = true;
+          img.removeAttribute("src");
+          if (lastFocus && lastFocus.focus) lastFocus.focus();
+        }
+
+        document.addEventListener("click", function (e) {
+          var t = e.target.closest("[data-zoom]");
+          if (t) {
+            e.preventDefault();
+            openZoom(t.getAttribute("data-zoom"), t.getAttribute("data-cap"));
+          }
+        });
+
+        box.addEventListener("click", function (e) {
+          if (e.target === box || e.target.classList.contains("lightbox-close")) {
+            closeZoom();
+          }
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && box.classList.contains("open")) closeZoom();
+        });
+      })();
+    </script>
+  </body>
+</html>

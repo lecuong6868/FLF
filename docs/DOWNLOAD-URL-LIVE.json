@@ -1,0 +1,12 @@
+{
+  "url": "https://cdn.jsdelivr.net/gh/lecuong6868/FLF@15ed82c2bff89c9a3635dfd53568d2cdf83147f2/FLF-preview.zip",
+  "httpStatus": 200,
+  "contentType": "application/zip",
+  "bytes": 2436515,
+  "magicHex": "504b0304",
+  "isZipMagic": true,
+  "sha256": "5cf4cd68bace42e33465dc7a17d1c817b97e24c4be8117234326d72200be4036",
+  "sha256Match": true,
+  "bytesMatch": true,
+  "ok": true
+}
