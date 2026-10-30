@@ -1,0 +1,24 @@
+{
+  "name": "renew-web-flf-mockups",
+  "version": "1.0.0",
+  "private": true,
+  "description": "B\u1ed9 mockup so s\u00e1nh UI/UX giai \u0111o\u1ea1n duy\u1ec7t cho website FLF",
+  "scripts": {
+    "start": "npx --yes serve -l 4173 .",
+    "serve": "python3 -m http.server 4173",
+    "capture": "node scripts/capture-mockups.mjs",
+    "gen:sections": "node scripts/gen-section-pages.mjs",
+    "render:mockups": "python3 scripts/render-mockups.py",
+    "check": "node scripts/check-pages.mjs",
+    "test:menu": "node scripts/test-header-menu.mjs",
+    "verify:preview": "node scripts/verify-preview-url.mjs",
+    "bootstrap:browser": "bash scripts/bootstrap-browser-libs.sh",
+    "pack:offline": "node scripts/pack-offline-preview.mjs",
+    "verify:offline": "node scripts/verify-offline.mjs",
+    "offline": "npm run pack:offline && npm run verify:offline",
+    "verify:download": "node scripts/verify-download-url.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}

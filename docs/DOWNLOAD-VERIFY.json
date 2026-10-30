@@ -1,0 +1,66 @@
+{
+  "ok": true,
+  "verifiedAt": "2026-10-30T13:05:00Z",
+  "jobContext": "Sửa URL sau PR #11-#13 — [đã ẩn] là che hex khi bàn giao, không đổi CDN lần nữa",
+  "prSourcePackage": "https://github.com/lecuong6868/FLF/pull/11",
+  "relatedPrs": [
+    "https://github.com/lecuong6868/FLF/pull/11",
+    "https://github.com/lecuong6868/FLF/pull/12",
+    "https://github.com/lecuong6868/FLF/pull/13"
+  ],
+  "packageBranch": "aat/20261030-154651",
+  "packageCommitFull": "15ed82c2bff89c9a3635dfd53568d2cdf83147f2",
+  "downloadUrl": "https://raw.githubusercontent.com/lecuong6868/FLF/aat/20261030-154651/FLF-preview.zip",
+  "downloadUrlFile": "docs/URL-TAI.txt",
+  "downloadUrlAlt": [
+    "https://raw.githubusercontent.com/lecuong6868/FLF/aat/20261030-191204/FLF-preview.zip",
+    "https://cdn.jsdelivr.net/gh/lecuong6868/FLF@aat/20261030-154651/FLF-preview.zip"
+  ],
+  "httpStatus": 200,
+  "redirects": 0,
+  "contentType": "application/zip",
+  "bytes": 2436515,
+  "mb": 2.32,
+  "magic": "PK\\x03\\x04",
+  "sha256": "5cf4cd68bace42e33465dc7a17d1c817b97e24c4be8117234326d72200be4036",
+  "md5": "b9075516a277363aa2d82dde487d45d6",
+  "zipEntries": 27,
+  "zipIntegrity": "testzip_ok",
+  "entry": "FLF-preview/index.html → option-b/index.html",
+  "redactionFinding": {
+    "token": "[đã ẩn]",
+    "inRepoFiles": false,
+    "inHandoffDisplayAndAttachedScrapedUrl": true,
+    "conclusion": "Lớp che hiển thị/bàn giao làm cụt URL có commit SHA; URL gốc trong repo vẫn đủ. Đổi URL chính sang path theo tên nhánh (không hex)."
+  },
+  "rootCauseReproduced": [
+    {
+      "url": "https://github.com/lecuong6868/FLF/blob/aat/20261030-154651/FLF-preview.zip",
+      "http": 200,
+      "contentType": "text/html",
+      "isZip": false,
+      "note": "Trang blob GitHub — không phải ZIP"
+    },
+    {
+      "url": "https://github.com/lecuong6868/FLF/raw/aat/20261030-154651/FLF-preview.zip",
+      "http": 302,
+      "followRedirects": false,
+      "bytes": 0,
+      "note": "Client không follow redirect → tải rỗng"
+    },
+    {
+      "note": "URL jsDelivr/raw có SHA trong chuỗi bị hệ thống bàn giao thay bằng [đã ẩn] → khách nhận URL hỏng dù endpoint gốc vẫn tải được"
+    }
+  ],
+  "offlineVerify": {
+    "command": "npm run verify:offline",
+    "protocol": "file://",
+    "source": "ZIP tải từ downloadUrl (raw GitHub theo nhánh), không dùng source local làm bằng chứng tải",
+    "pass": true,
+    "failed": 0,
+    "total": 17
+  },
+  "contactDemo": "Minh họa giao diện — chưa có backend. Yêu cầu liên hệ chưa được gửi. Không có thông báo gửi thành công giả.",
+  "permissionsNote": "GH_TOKEN/GITHUB_TOKEN = 401 Bad credentials — chưa tạo GitHub Release asset.",
+  "note": "URL chính: raw.githubusercontent.com theo tên nhánh PR #11. Không dùng blob/PR page. Không đặt commit SHA dài vào URL chính để tránh [đã ẩn]."
+}

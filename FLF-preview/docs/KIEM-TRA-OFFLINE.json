@@ -1,0 +1,100 @@
+{
+  "protocol": "file://",
+  "home": "file:///home/coder/workspaces/renew-web-flf/FLF-preview/option-b/index.html",
+  "pass": true,
+  "failed": 0,
+  "total": 17,
+  "shots": [
+    "mockups/offline/B-desktop-1440-file.png",
+    "mockups/offline/B-mobile-390-file.png",
+    "mockups/offline/B-mobile-390-menu-open-file.png"
+  ],
+  "results": [
+    {
+      "name": "home-title",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "logo-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "css-header",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "nav-desktop",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "logo-loaded-size",
+      "pass": true,
+      "detail": "{\"x\":130,\"y\":55.25,\"width\":48,\"height\":48}"
+    },
+    {
+      "name": "dropdown-open",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "dropdown-5-topics",
+      "pass": true,
+      "detail": "count=5"
+    },
+    {
+      "name": "tin-tuc-href-index",
+      "pass": true,
+      "detail": "tin-tuc/index.html"
+    },
+    {
+      "name": "tin-tuc-page",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "contact-demo-note",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "contact-no-fake-success",
+      "pass": true,
+      "detail": "Minh họa giao diện — chưa có backend. Yêu cầu liên hệ chưa được gửi. Không có thông báo gửi thành công giả."
+    },
+    {
+      "name": "menu-toggle-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile-open",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "backdrop-open",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile-escape-close",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "topic-filter-query",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "no-console-error",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "at": "2026-10-30T13:05:10.145Z"
+}
