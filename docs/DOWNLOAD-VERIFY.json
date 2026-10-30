@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "verifiedAt": "2026-10-30T12:15:16Z",
+  "jobContext": "Sửa lỗi link tải PR #12 / jc1a8afbce472",
+  "prSourcePackage": "https://github.com/lecuong6868/FLF/pull/11",
+  "commitSha": "15ed82c2bff89c9a3635dfd53568d2cdf83147f2",
+  "branch": "aat/20261030-154651",
+  "downloadUrl": "https://cdn.jsdelivr.net/gh/lecuong6868/FLF@15ed82c2bff89c9a3635dfd53568d2cdf83147f2/FLF-preview.zip",
+  "downloadUrlAlt": "https://raw.githubusercontent.com/lecuong6868/FLF/15ed82c2bff89c9a3635dfd53568d2cdf83147f2/FLF-preview.zip",
+  "httpStatus": 200,
+  "redirects": 0,
+  "contentType": "application/zip",
+  "bytes": 2436515,
+  "mb": 2.32,
+  "magic": "PK\\x03\\x04",
+  "sha256": "5cf4cd68bace42e33465dc7a17d1c817b97e24c4be8117234326d72200be4036",
+  "md5": "b9075516a277363aa2d82dde487d45d6",
+  "zipEntries": 27,
+  "zipIntegrity": "testzip_ok",
+  "entry": "FLF-preview/index.html → option-b/index.html",
+  "rootCauseReproduced": [
+    {
+      "url": "https://github.com/lecuong6868/FLF/blob/15ed82c2bff89c9a3635dfd53568d2cdf83147f2/FLF-preview.zip",
+      "http": 200,
+      "contentType": "text/html",
+      "isZip": false,
+      "note": "Trang blob GitHub — không phải ZIP"
+    },
+    {
+      "url": "https://github.com/lecuong6868/FLF/raw/15ed82c2bff89c9a3635dfd53568d2cdf83147f2/FLF-preview.zip",
+      "http": 302,
+      "followRedirects": false,
+      "bytes": 0,
+      "note": "Client không follow redirect → tải rỗng"
+    }
+  ],
+  "offlineVerify": {
+    "command": "npm run verify:offline",
+    "protocol": "file://",
+    "source": "ZIP tải từ downloadUrl (jsDelivr), không dùng source local làm bằng chứng tải",
+    "pass": true,
+    "failed": 0,
+    "total": 17
+  },
+  "contactDemo": "Minh họa giao diện — chưa có backend. Yêu cầu liên hệ chưa được gửi. Không có thông báo gửi thành công giả.",
+  "permissionsNote": "Không có GH_TOKEN hợp lệ để tạo GitHub Release asset; dùng jsDelivr trên commit công khai đã có sẵn.",
+  "note": "Không dùng link trang PR / blob làm link tải. URL chính: jsDelivr CDN."
+}
