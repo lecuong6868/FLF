@@ -1,0 +1,34 @@
+{
+  "checked_at": "2026-10-30T00:55:01Z",
+  "base": "https://lecuong6868.github.io/FLF",
+  "preview_pages_last_run": "https://github.com/lecuong6868/FLF/actions/runs/40838830940",
+  "menu_commit": "c8364c5",
+  "pages_docs_commit": "0ca02c7",
+  "results": [
+    {
+      "path": "/",
+      "status": 404
+    },
+    {
+      "path": "/option-b/",
+      "status": 404
+    },
+    {
+      "path": "/option-b/styles.css",
+      "status": 404
+    },
+    {
+      "path": "/public/brand/logo-color.png",
+      "status": 404
+    },
+    {
+      "path": "/shared/content.js",
+      "status": 404
+    },
+    {
+      "path": "/robots.txt",
+      "status": 404
+    }
+  ],
+  "verdict": "NO_VERIFIED_HTTPS_PREVIEW"
+}
