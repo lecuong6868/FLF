@@ -1,0 +1,8 @@
+!.env.example
+*.log
+.DS_Store
+.aat/
+.env
+.env.*
+.local-browser-libs/
+node_modules/
