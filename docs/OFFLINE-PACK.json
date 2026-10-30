@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "zip": "FLF-preview.zip",
+  "folder": "FLF-preview",
+  "bytes": 2436515,
+  "mb": 2.32,
+  "entry": "FLF-preview/index.html → option-b/index.html",
+  "createdAt": "2026-10-30T08:51:17.819Z",
+  "screenshots": [
+    "FLF-preview/screenshots/B-desktop-1440-file.png",
+    "FLF-preview/screenshots/B-mobile-390-file.png",
+    "FLF-preview/screenshots/B-mobile-390-menu-open-file.png"
+  ],
+  "report": "FLF-preview/docs/KIEM-TRA-OFFLINE.md"
+}
