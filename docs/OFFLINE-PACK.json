@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "zip": "FLF-preview.zip",
+  "folder": "FLF-preview",
+  "bytes": 2436515,
+  "mb": 2.32,
+  "entry": "FLF-preview/index.html → option-b/index.html",
+  "commitSha": "15ed82c2bff89c9a3635dfd53568d2cdf83147f2",
+  "downloadUrl": "https://raw.githubusercontent.com/lecuong6868/FLF/15ed82c2bff89c9a3635dfd53568d2cdf83147f2/FLF-preview.zip",
+  "createdAt": "2026-10-30T08:51:17.819Z",
+  "redownloadedAt": "2026-10-30T09:40:46Z",
+  "screenshots": [
+    "FLF-preview/screenshots/B-desktop-1440-file.png",
+    "FLF-preview/screenshots/B-mobile-390-file.png",
+    "FLF-preview/screenshots/B-mobile-390-menu-open-file.png"
+  ],
+  "report": "FLF-preview/docs/KIEM-TRA-OFFLINE.md",
+  "handoff": "docs/BAN-GIAO-TAI.md"
+}
