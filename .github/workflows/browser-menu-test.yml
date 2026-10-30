@@ -1,0 +1,40 @@
+# Kiểm thử trình duyệt header/menu trên CI (ubuntu có đủ lib Chromium).
+name: Browser menu test
+
+on:
+  push:
+    branches:
+      - main
+      - "aat/**"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  menu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Cài phụ thuộc
+        run: npm ci || npm install
+      - name: Cài Chromium Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Kiểm tra tĩnh
+        run: npm run check
+      - name: Kiểm thử header/menu (1440 + 390)
+        run: npm run test:menu
+      - name: Lưu ảnh & báo cáo
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: menu-browser-evidence
+          path: |
+            mockups/B-desktop-1440.png
+            mockups/B-mobile-390.png
+            mockups/B-mobile-390-menu-open.png
+            mockups/test-runs/
+            docs/KIEM-TRA-TRINH-DUYET.json
+          if-no-files-found: warn

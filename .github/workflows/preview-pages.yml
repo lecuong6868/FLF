@@ -1,0 +1,105 @@
+# Xuất bản preview thiết kế công khai lên GitHub Pages (HTTPS).
+# Điều kiện:
+#   1) Settings → Pages → Source = GitHub Actions (admin; khách đã xác nhận bằng ảnh 2026-10-29).
+#   2) Settings → Environments → github-pages → Deployment branches gồm nhánh đang chạy
+#      (hiện API chỉ liệt kê `main` — cần thêm `aat/**` để preview từ nhánh xưởng).
+# Chỉ publish tài nguyên thiết kế — không gồm .aat, zip WordPress, secrets.
+name: Preview Pages
+
+on:
+  push:
+    branches:
+      - main
+      - "aat/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-preview
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ghi commit triển khai
+        run: |
+          echo "${{ github.sha }}" > DEPLOY-COMMIT.txt
+          echo "ref=${{ github.ref_name }}" >> DEPLOY-COMMIT.txt
+          echo "run=${{ github.run_id }}" >> DEPLOY-COMMIT.txt
+      - name: Chuẩn bị thư mục publish (chỉ thiết kế công khai)
+        run: |
+          mkdir -p _site
+          cp index.html robots.txt README.md package.json DEPLOY-COMMIT.txt _site/ 2>/dev/null || true
+          cp -r option-a option-b mockups public docs shared _site/
+          # Không copy: .aat, flf.vn_*.zip, deploy scripts nhạy cảm vận hành
+          test -f _site/index.html
+          test -f _site/option-b/index.html
+          test -f _site/public/brand/logo-color.png
+          test -f _site/mockups/B-desktop-1440.png
+          grep -q 'noindex' _site/option-b/index.html
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Nhật ký nhánh / quyền
+        run: |
+          {
+            echo "## Deploy Preview Pages"
+            echo ""
+            echo "- ref: \`${{ github.ref_name }}\`"
+            echo "- sha: \`${{ github.sha }}\`"
+            echo "- event: \`${{ github.event_name }}\`"
+            echo "- URL kỳ vọng: https://lecuong6868.github.io/FLF/"
+            echo ""
+            echo "Environment \`github-pages\` phải cho phép nhánh này (Deployment branches)."
+          } >> "$GITHUB_STEP_SUMMARY"
+      - id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Tóm tắt URL
+        if: success()
+        run: |
+          {
+            echo "## Preview đã xuất bản"
+            echo ""
+            echo "- Commit: \`${{ github.sha }}\`"
+            echo "- page_url: ${{ steps.deployment.outputs.page_url }}"
+            echo "- URL: https://lecuong6868.github.io/FLF/"
+            echo "- Phương án B: https://lecuong6868.github.io/FLF/option-b/"
+            echo "- Xác minh: \`FLF_BASE_URL=https://lecuong6868.github.io/FLF npm run verify:preview\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Nhắc điểm chặn nếu deploy thất bại
+        if: failure()
+        run: |
+          {
+            echo "## Deploy Pages thất bại"
+            echo ""
+            echo "Job \`build\` đã tạo artifact; job \`deploy\` thất bại."
+            echo ""
+            echo "**Không** yêu cầu bật lại Source = GitHub Actions nếu Settings → Pages đã chọn GitHub Actions (ảnh khách 2026-10-29)."
+            echo ""
+            echo "Kiểm tra theo thứ tự:"
+            echo "1. Actions → lượt chạy này → mở log bước \`deploy-pages\` (lỗi gốc)."
+            echo "2. Settings → Environments → **github-pages** → **Deployment branches**: thêm pattern \`aat/**\` (API hiện chỉ có \`main\`)."
+            echo "3. Re-run workflow (hoặc để hệ thống AAT push nhánh \`aat/**\`)."
+            echo "4. Xác minh: \`FLF_BASE_URL=https://lecuong6868.github.io/FLF npm run verify:preview\`"
+            echo ""
+            echo "Agent xưởng: \`GH_TOKEN\` rỗng — không re-run/sửa environment qua API; không lặp thử enable Pages."
+          } >> "$GITHUB_STEP_SUMMARY"

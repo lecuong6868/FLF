@@ -1,0 +1,207 @@
+{
+  "at": "2026-10-30T00:54:51.410Z",
+  "commitHint": "PR #7 (c8364c5) — header/menu phương án B",
+  "target": "http://127.0.0.1:4177",
+  "viewport": [
+    "1440x900",
+    "390x844"
+  ],
+  "ok": true,
+  "failed": 0,
+  "total": 37,
+  "results": [
+    {
+      "name": "desktop: có Tin tức / Quy định mới / Chuyên mục",
+      "ok": true,
+      "detail": "Trang chủ | Giới thiệu | Lĩnh vực | Đối tác pháp lý | Tin tức | Quy định mới | Chuyên mục▾ | Liên hệ"
+    },
+    {
+      "name": "desktop: link Tin tức",
+      "ok": true,
+      "detail": "tin-tuc/"
+    },
+    {
+      "name": "desktop: link Quy định mới",
+      "ok": true,
+      "detail": "quy-dinh-moi/"
+    },
+    {
+      "name": "desktop: mở submenu bằng ArrowDown",
+      "ok": true,
+      "detail": "aria-expanded=true"
+    },
+    {
+      "name": "desktop: submenu có 5 mục",
+      "ok": true,
+      "detail": "count=5"
+    },
+    {
+      "name": "desktop: submenu Đầu tư → chu-de=dau-tu",
+      "ok": true,
+      "detail": "chuyen-muc/?chu-de=dau-tu"
+    },
+    {
+      "name": "desktop: submenu Thuế → chu-de=thue",
+      "ok": true,
+      "detail": "chuyen-muc/?chu-de=thue"
+    },
+    {
+      "name": "desktop: submenu Quản trị doanh nghiệp → chu-de=quan-tri-dn",
+      "ok": true,
+      "detail": "chuyen-muc/?chu-de=quan-tri-dn"
+    },
+    {
+      "name": "desktop: submenu Quản trị rủi ro → chu-de=rui-ro",
+      "ok": true,
+      "detail": "chuyen-muc/?chu-de=rui-ro"
+    },
+    {
+      "name": "desktop: submenu Giấy phép → chu-de=giay-phep",
+      "ok": true,
+      "detail": "chuyen-muc/?chu-de=giay-phep"
+    },
+    {
+      "name": "desktop: Escape đóng submenu",
+      "ok": true,
+      "detail": "aria-expanded=false"
+    },
+    {
+      "name": "desktop: trang lọc chu-de=dau-tu",
+      "ok": true,
+      "detail": "http://127.0.0.1:4177/option-b/chuyen-muc/?chu-de=dau-tu"
+    },
+    {
+      "name": "desktop: trang lọc chu-de=thue",
+      "ok": true,
+      "detail": "http://127.0.0.1:4177/option-b/chuyen-muc/?chu-de=thue"
+    },
+    {
+      "name": "desktop: trang lọc chu-de=quan-tri-dn",
+      "ok": true,
+      "detail": "http://127.0.0.1:4177/option-b/chuyen-muc/?chu-de=quan-tri-dn"
+    },
+    {
+      "name": "desktop: trang lọc chu-de=rui-ro",
+      "ok": true,
+      "detail": "http://127.0.0.1:4177/option-b/chuyen-muc/?chu-de=rui-ro"
+    },
+    {
+      "name": "desktop: trang lọc chu-de=giay-phep",
+      "ok": true,
+      "detail": "http://127.0.0.1:4177/option-b/chuyen-muc/?chu-de=giay-phep"
+    },
+    {
+      "name": "desktop 1440: không tràn ngang",
+      "ok": true,
+      "detail": "{\"scrollWidth\":1440,\"clientWidth\":1440,\"overflow\":0}"
+    },
+    {
+      "name": "desktop: chụp ảnh",
+      "ok": true,
+      "detail": "/home/coder/workspaces/renew-web-flf/mockups/test-runs/B-desktop-1440-live.png"
+    },
+    {
+      "name": "desktop: không lỗi JS ảnh hưởng",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: panel đóng mặc định",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: mở menu (aria/panel/backdrop/body)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: focus vào panel khi mở",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: accordion Chuyên mục mở",
+      "ok": true,
+      "detail": "links=5"
+    },
+    {
+      "name": "mobile: accordion có 5 chủ đề",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: submenu Đầu tư",
+      "ok": true,
+      "detail": "chuyen-muc/?chu-de=dau-tu"
+    },
+    {
+      "name": "mobile: submenu Thuế",
+      "ok": true,
+      "detail": "chuyen-muc/?chu-de=thue"
+    },
+    {
+      "name": "mobile: submenu Quản trị doanh nghiệp",
+      "ok": true,
+      "detail": "chuyen-muc/?chu-de=quan-tri-dn"
+    },
+    {
+      "name": "mobile: submenu Quản trị rủi ro",
+      "ok": true,
+      "detail": "chuyen-muc/?chu-de=rui-ro"
+    },
+    {
+      "name": "mobile: submenu Giấy phép",
+      "ok": true,
+      "detail": "chuyen-muc/?chu-de=giay-phep"
+    },
+    {
+      "name": "mobile: Tab/Shift+Tab giữ focus trong panel",
+      "ok": true,
+      "detail": "active=BUTTON"
+    },
+    {
+      "name": "mobile: Escape đóng menu",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: Escape trả focus về nút Menu",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: backdrop đóng menu",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile 390 (đóng): không tràn ngang",
+      "ok": true,
+      "detail": "{\"scrollWidth\":390,\"clientWidth\":390,\"overflow\":0}"
+    },
+    {
+      "name": "mobile 390 (mở): không tràn ngang",
+      "ok": true,
+      "detail": "{\"scrollWidth\":390,\"clientWidth\":390,\"overflow\":0}"
+    },
+    {
+      "name": "mobile: chụp ảnh",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: không lỗi JS ảnh hưởng",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "screenshots": [
+    "mockups/B-desktop-1440.png",
+    "mockups/B-mobile-390.png",
+    "mockups/B-mobile-390-menu-open.png",
+    "mockups/test-runs/B-desktop-1440-live.png",
+    "mockups/test-runs/B-mobile-390-live.png",
+    "mockups/test-runs/B-mobile-390-menu-open-live.png"
+  ]
+}
