@@ -1,0 +1,38 @@
+{
+  "purpose": "Tái hiện lỗi chuyển VI–EN (file://) — khảo sát, không sửa site",
+  "old_site": {
+    "zip": "flf.vn_20261023_094322.zip",
+    "findings": [
+      {
+        "id": "ABS_ASSET_PATHS",
+        "ok": true,
+        "detail": "18 asset đường dẫn tuyệt đối gốc; ví dụ: ['/favicon.ico', '/site.webmanifest', '/apple-icon-57x57.png', '/apple-icon-60x60.png', '/apple-icon-72x72.png']"
+      },
+      {
+        "id": "LANG_LOCALSTORAGE",
+        "ok": true,
+        "detail": "Bundle dùng localStorage selectedLanguage cho VI/EN"
+      },
+      {
+        "id": "LANG_SWITCHER",
+        "ok": true,
+        "detail": "Có component LanguageSwitcher trong bundle"
+      },
+      {
+        "id": "HYGRAPH_API",
+        "ok": true,
+        "detail": "Nội dung theo locale phụ thuộc API Hygraph (cần mạng)"
+      },
+      {
+        "id": "FILE_URL_BREAKS_JS",
+        "ok": true,
+        "detail": "Trên file://, trình duyệt resolve src='/static/js/...' thành file:///static/js/... (không nằm trong thư mục giải nén) → JS không tải → LanguageSwitcher không chạy."
+      }
+    ]
+  },
+  "preview": {
+    "path": null,
+    "note": "Workspace hiện không chứa FLF-preview/. Bản Preview mới nhất nằm trên nhánh aat/20261030-154651 (PR #11). Xem docs/survey/evidence/preview-pages.txt (đã liệt kê từ lần khảo sát)."
+  },
+  "pass": true
+}
