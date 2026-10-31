@@ -1,0 +1,8 @@
+# Bằng chứng môi trường xưởng (không deploy được)
+
+- Thời điểm UTC: 2026-10-31T14:46:21Z
+- RAM: 961Mi
+- Docker: missing
+- Node: v22.23.4
+- Platform tokens: Render/Railway/Fly/Neon/Vercel = missing
+- Kết luận: cấu hình đã sẵn; link /admin live chưa kiểm chứng — không công bố URL.
