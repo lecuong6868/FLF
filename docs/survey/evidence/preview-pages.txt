@@ -1,0 +1,12 @@
+index.html
+option-b/chuyen-muc/bai-mau.html
+option-b/chuyen-muc/index.html
+option-b/chuyen-muc/thue-minh-hoa.html
+option-b/chuyen-muc/tuan-thu-minh-hoa.html
+option-b/index.html
+option-b/quy-dinh-moi/bai-mau.html
+option-b/quy-dinh-moi/chua-hieu-luc.html
+option-b/quy-dinh-moi/du-thao.html
+option-b/quy-dinh-moi/index.html
+option-b/tin-tuc/bai-mau.html
+option-b/tin-tuc/index.html

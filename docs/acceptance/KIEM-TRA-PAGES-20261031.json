@@ -1,0 +1,79 @@
+{
+  "checked_at": "2026-10-31T09:11:24Z",
+  "session": "aat/20261031-161018",
+  "continues_pr": 19,
+  "source_pr": 18,
+  "source_branch": "aat/20261031-144113",
+  "source_commit": "fd3a0dcde80b4a4b6321133c4c911e6ed84c7c6d",
+  "pr19": {
+    "url": "https://github.com/lecuong6868/FLF/pull/19",
+    "head": "aat/20261031-160440",
+    "head_sha": "2b66a218291f1b1bd2de7e2d54d796a220f43255",
+    "state": "open",
+    "merged_at": null,
+    "mergeable": true,
+    "mergeable_state": "clean",
+    "checks": [
+      { "name": "verify-preview", "conclusion": "success" }
+    ]
+  },
+  "main_sha": "32221761564a",
+  "main_contents": ["deploy/", "flf.vn_20261023_094322.zip"],
+  "pages_base": "https://lecuong6868.github.io/FLF",
+  "pages_settings": {
+    "source": "GitHub Actions",
+    "evidence": ".aat/files/Screenshot_2026-10-29_at_19.00.38.png",
+    "custom_domain": null,
+    "enforce_https": true,
+    "environment_github_pages_branches": ["main"],
+    "aat_branches_allowed": false,
+    "pages_api_unauthenticated": "404 Not Found (site chưa có deployment thành công)"
+  },
+  "gh_token": {
+    "present": true,
+    "length": 0,
+    "empty": true
+  },
+  "denied_operations": [
+    {
+      "op": "PUT /repos/lecuong6868/FLF/pulls/19/merge",
+      "http": 401,
+      "message": "Requires authentication"
+    },
+    {
+      "op": "git push --dry-run origin HEAD",
+      "error": "could not read Username for 'https://github.com': terminal prompts disabled"
+    },
+    {
+      "op": "workflow_dispatch Preview Pages on main",
+      "reason": "GH_TOKEN empty — không gọi được API authenticated"
+    }
+  ],
+  "local": {
+    "verify_home": "PASS 37",
+    "verify_about": "PASS 34",
+    "verify_basepath": "PASS",
+    "form_preview_no_send": true,
+    "logo_sha256_prefix": "58e8c8d74a291ee5 (khớp .aat/files/Logo_color.png)"
+  },
+  "remote_https": {
+    "verify_preview": "FAIL",
+    "checked_at": "2026-10-31T09:11:24Z",
+    "results": [
+      { "path": "/", "status": 404 },
+      { "path": "/vi/", "status": 404 },
+      { "path": "/en/", "status": 404 },
+      { "path": "/vi/gioi-thieu/", "status": 404 },
+      { "path": "/en/about/", "status": 404 }
+    ],
+    "verdict": "NO_VERIFIED_HTTPS_PREVIEW — không bàn giao link cho khách"
+  },
+  "blocker": "Environment github-pages chỉ cho phép main. PR #19 mergeable + checks xanh nhưng agent GH_TOKEN rỗng → merge API 401. Pages Source = GitHub Actions đã bật; thiếu merge vào main + job deploy success.",
+  "preferred_next_step": "Merge PR #19 vào main (hoặc PR xưởng này nếu nội dung tương đương), chờ Actions Preview Pages xanh, rồi chạy verify:preview.",
+  "handoff_urls_after_pass": {
+    "vi_home": "https://lecuong6868.github.io/FLF/vi/",
+    "en_home": "https://lecuong6868.github.io/FLF/en/",
+    "vi_about": "https://lecuong6868.github.io/FLF/vi/gioi-thieu/",
+    "en_about": "https://lecuong6868.github.io/FLF/en/about/"
+  }
+}
