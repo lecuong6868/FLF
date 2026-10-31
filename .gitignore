@@ -1,0 +1,12 @@
+.aat/
+node_modules/
+.next/
+.env
+.env.local
+.env.*.local
+!.env.example
+cms/.data/
+cms/media/
+*.log
+.DS_Store
+tsconfig.tsbuildinfo
