@@ -1,0 +1,24 @@
+# Kiểm thử cấu trúc Preview (không cần Playwright khi chỉ verify file).
+name: Browser menu test
+
+on:
+  push:
+    branches:
+      - main
+      - "aat/**"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Kiểm tra trang chủ + Giới thiệu + base path /FLF/
+        run: |
+          node scripts/verify-home-bilingual.mjs
+          node scripts/verify-about-bilingual.mjs
+          node scripts/verify-basepath-local.mjs

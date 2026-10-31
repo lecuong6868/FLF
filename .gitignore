@@ -1,0 +1,9 @@
+.aat/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.local-browser-libs/
+node_modules/
+_site/

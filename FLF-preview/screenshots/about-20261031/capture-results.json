@@ -1,0 +1,65 @@
+{
+  "method": "relative URL resolve + file exists (no Chromium — libglib missing)",
+  "viewport_screenshots": "NOT RUN — Playwright Chromium lacks libglib-2.0.so.0; cannot install apt without sudo",
+  "checks": [
+    {
+      "step": "VI About lang→EN",
+      "href": "../../en/about/index.html",
+      "resolved": "en/about/index.html",
+      "ok": true
+    },
+    {
+      "step": "EN About lang→VI",
+      "href": "../../vi/gioi-thieu/index.html",
+      "resolved": "vi/gioi-thieu/index.html",
+      "ok": true
+    },
+    {
+      "step": "asset ../../assets/styles.css from vi/gioi-thieu/index.html",
+      "ok": true
+    },
+    {
+      "step": "asset ../../assets/home.js from vi/gioi-thieu/index.html",
+      "ok": true
+    },
+    {
+      "step": "asset ../../public/brand/logo-color.png from vi/gioi-thieu/index.html",
+      "ok": true
+    },
+    {
+      "step": "asset ../../public/brand/first-legal-force.png from vi/gioi-thieu/index.html",
+      "ok": true
+    },
+    {
+      "step": "asset ../../assets/styles.css from en/about/index.html",
+      "ok": true
+    },
+    {
+      "step": "asset ../../assets/home.js from en/about/index.html",
+      "ok": true
+    },
+    {
+      "step": "asset ../../public/brand/logo-color.png from en/about/index.html",
+      "ok": true
+    },
+    {
+      "step": "asset ../../public/brand/first-legal-force.png from en/about/index.html",
+      "ok": true
+    },
+    {
+      "step": "VI home→gioi-thieu",
+      "ok": true
+    },
+    {
+      "step": "EN home→about",
+      "ok": true
+    }
+  ],
+  "all_ok": true,
+  "zip": {
+    "bytes": 4599092,
+    "mb": 4.39,
+    "sha256": "237eb46d37375b326033cba5d6c60337447ccc8ea82745d7dc47ac895d8dc326",
+    "file": "FLF-preview.zip"
+  }
+}
