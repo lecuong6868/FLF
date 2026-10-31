@@ -1,0 +1,47 @@
+# Blueprint Render — bản thử Dashboard FLF CMS (noindex).
+# Cách dùng (khách / người có quyền Render):
+# 1) Đăng nhập https://dashboard.render.com bằng GitHub (cấp quyền cho repo lecuong6868/FLF).
+# 2) New → Blueprint → chọn repo → Apply.
+# 3) Gắn DATABASE_URL từ Neon (miễn phí) — xem README. Render Free Postgres đã ngừng.
+# 4) Điền SEED_ADMIN_PASSWORD / SEED_EDITOR_PASSWORD từ file cms/.preview-credentials
+#    (sinh bằng: bash cms/scripts/generate-preview-secrets.sh) — gửi khách qua kênh an toàn.
+# 5) Sau khi Deploy live: mở https://<service>.onrender.com/admin
+
+services:
+  - type: web
+    name: flf-cms-preview
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./cms/Dockerfile
+    dockerContext: ./cms
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PREVIEW_MODE
+        value: 'true'
+      - key: SEED_ON_START
+        value: 'true'
+      - key: SEED_UPDATE_PASSWORD
+        value: 'true'
+      - key: PAYLOAD_SECRET
+        generateValue: true
+      # start-preview.sh sẽ lấy RENDER_EXTERNAL_URL nếu thiếu NEXT_PUBLIC_SERVER_URL
+      - key: NEXT_PUBLIC_SERVER_URL
+        sync: false
+      # Bắt buộc điền tay — connection string Neon (miễn phí) hoặc Postgres khác:
+      - key: DATABASE_URL
+        sync: false
+      # Alias theo TASK (tuỳ chọn; start-preview map sang DATABASE_URL):
+      - key: DATABASE_URI
+        sync: false
+      - key: SEED_ADMIN_EMAIL
+        value: admin@flf-preview.local
+      - key: SEED_ADMIN_PASSWORD
+        sync: false
+      - key: SEED_EDITOR_EMAIL
+        value: editor@flf-preview.local
+      - key: SEED_EDITOR_PASSWORD
+        sync: false
