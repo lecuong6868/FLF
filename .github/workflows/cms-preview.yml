@@ -1,0 +1,172 @@
+# Bản thử Dashboard Payload trên runner GitHub (~7 GiB RAM):
+# Postgres service → build cms/ → seed → start → Cloudflare Quick Tunnel (không cần tài khoản)
+# → tự kiểm tra /admin + login + phân quyền → in URL vào Job Summary → giữ sống 60–90 phút.
+name: CMS Preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      keep_alive_minutes:
+        description: 'Giữ tunnel sống (phút, 30–90)'
+        required: false
+        default: '75'
+        type: string
+  push:
+    paths:
+      - 'cms/**'
+      - 'render.yaml'
+      - '.github/workflows/cms-preview.yml'
+  pull_request:
+    paths:
+      - 'cms/**'
+      - 'render.yaml'
+      - '.github/workflows/cms-preview.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: cms-preview-tunnel-${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  # Job ngắn: chỉ build image làm bằng chứng (PR/push). Không mở tunnel.
+  build-evidence:
+    name: Docker build + evidence
+    if: ${{ github.event_name != 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build CMS image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./cms
+          file: ./cms/Dockerfile
+          push: false
+          load: true
+          tags: flf-cms-preview:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Ghi bằng chứng build
+        run: |
+          mkdir -p docs/acceptance/evidence
+          {
+            echo "# Bằng chứng build CMS Preview"
+            echo
+            echo "- Thời điểm (UTC): $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "- Commit: ${{ github.sha }}"
+            echo "- Ref: ${{ github.ref }}"
+            echo "- Image: flf-cms-preview:ci"
+            echo "- Docker build: OK"
+            docker image inspect flf-cms-preview:ci --format 'Size={{.Size}} Created={{.Created}}'
+          } | tee docs/acceptance/evidence/cms-preview-build.txt
+
+      - name: Upload evidence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cms-preview-build-evidence
+          path: docs/acceptance/evidence/cms-preview-build.txt
+
+  # Job chính: mở /admin công khai tạm qua cloudflared (chỉ workflow_dispatch).
+  preview-tunnel:
+    name: Postgres + build + tunnel + accept
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: flf
+          POSTGRES_PASSWORD: flf_ci_only
+          POSTGRES_DB: flf
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U flf -d flf"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://flf:flf_ci_only@localhost:5432/flf
+      PREVIEW_MODE: 'true'
+      NODE_OPTIONS: --max-old-space-size=6144
+      KEEP_ALIVE_MINUTES: ${{ github.event.inputs.keep_alive_minutes || '75' }}
+      PREVIEW_CREDENTIALS_WEBHOOK: ${{ secrets.PREVIEW_CREDENTIALS_WEBHOOK }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+          cache: npm
+          cache-dependency-path: cms/package-lock.json
+
+      - name: Xác định repo private?
+        id: repo
+        run: |
+          if [ "${{ github.event.repository.private }}" = "true" ]; then
+            echo "private=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "private=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Cài dependency cms/
+        working-directory: cms
+        run: npm ci
+
+      - name: Build Next.js + Payload
+        working-directory: cms
+        env:
+          # Giống Dockerfile: DB/secret giả lúc build; seed/runtime dùng Postgres service
+          DATABASE_URL: postgresql://build:build@127.0.0.1:5432/build
+          NEXT_PUBLIC_SERVER_URL: http://127.0.0.1:3000
+          PAYLOAD_SECRET: build-time-secret-not-used-at-runtime-32chars
+          PREVIEW_MODE: 'true'
+        run: npm run build
+
+      - name: Chạy preview tunnel + nghiệm thu
+        id: tunnel
+        working-directory: cms
+        env:
+          REPO_IS_PRIVATE: ${{ steps.repo.outputs.private }}
+        run: |
+          chmod +x scripts/run-gha-preview.sh
+          bash scripts/run-gha-preview.sh
+
+      - name: Upload bằng chứng nghiệm thu
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cms-preview-acceptance-${{ github.run_id }}
+          path: |
+            docs/acceptance/evidence/
+            docs/acceptance/CMS-PREVIEW-TUNNEL-RUN.md
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Giữ tunnel sống (xem /admin)
+        if: always() && steps.tunnel.outcome != 'skipped'
+        run: |
+          URL="$(cat cms/.preview-run/tunnel-url.txt 2>/dev/null || true)"
+          if [ -z "$URL" ]; then
+            echo "Không có tunnel URL — bỏ qua giữ sống."
+            exit 0
+          fi
+          # Giới hạn 30–90 phút
+          MIN="${KEEP_ALIVE_MINUTES:-75}"
+          if [ "$MIN" -lt 30 ]; then MIN=30; fi
+          if [ "$MIN" -gt 90 ]; then MIN=90; fi
+          echo "Giữ sống ${MIN} phút — Admin: ${URL}/admin"
+          echo "Cancel job để tắt sớm. Chạy lại: Actions → CMS Preview → Run workflow."
+          sleep $((MIN * 60))
