@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-31",
+  "sources": {
+    "old_zip": "flf.vn_20261023_094322.zip",
+    "preview_branch": "aat/20261030-154651 (PR #11) — latest packaged Preview; PR #12–#14 only fix ZIP download URLs",
+    "latest_branch_overall": "aat/20261030-200152 (PR #14)",
+    "main_note": "main only has deploy/ + zip — does NOT contain Preview HTML"
+  },
+  "findings": [
+    {
+      "id": "ABS_ASSET_PATHS",
+      "severity": true,
+      "detail": "index.html references 18 root-absolute assets (e.g. ['/favicon.ico', '/site.webmanifest', '/apple-icon-57x57.png']). On file:// these resolve to file:///static/... not the local folder — SPA JS never loads."
+    },
+    {
+      "id": "LANG_VIA_LOCALSTORAGE",
+      "severity": true,
+      "detail": "Language is stored in localStorage selectedLanguage (found=True); UI LanguageSwitcher calls i18next.changeLanguage. No dedicated /vi|/en HTML files in ZIP. Paths /en /vi on live server are SPA catch-all (same index.html)."
+    },
+    {
+      "id": "LANG_NEEDS_NETWORK_API",
+      "severity": true,
+      "detail": "Blog/case content queries Hygraph with locales from selectedLanguage. Offline/file:// cannot reach https://api-ap-northeast-1.hygraph.com/v2/clkqm652e1wb501ulfbxbbgss/master → EN content for dynamic sections empty/fails."
+    },
+    {
+      "id": "EXTERNAL_FONTS",
+      "severity": true,
+      "detail": "index.html preconnects fonts.googleapis.com — offline fonts missing (secondary to language bug)."
+    },
+    {
+      "id": "PREVIEW_NO_EN",
+      "severity": true,
+      "detail": "FLF-preview (PR #11, branch aat/20261030-154651): 12 HTML pages; EN tree=0; all checked pages lang=vi → no language switch control exists to click on file://."
+    },
+    {
+      "id": "FILE_URL_RESOLUTION",
+      "severity": true,
+      "detail": "Opening file:///tmp/flf-old/site/index.html: browser requests ['file:///static/js/main.97fda272.js', 'file:///static/css/main.d5633398.css'] which do not exist. Relative fix would be ./static/... but build emits absolute /static/..."
+    }
+  ],
+  "reproduction_steps": [
+    "1. Giải nén flf.vn_20261023_094322.zip",
+    "2. Mở index.html bằng trình duyệt qua file:// (kéo thả hoặc Open File)",
+    "3. Quan sát: trang trắng / \"You need to enable JavaScript\" hoặc không render — vì /static/js/*.js 404 trên file://",
+    "4. Mở DevTools → Network: các request /static/... và fonts.googleapis.com fail",
+    "5. Không thể bấm chuyển VI↔EN vì LanguageSwitcher nằm trong bundle JS không tải được",
+    "6. (Đối chứng online) https://www.flf.vn — LanguageSwitcher đổi localStorage selectedLanguage + gọi Hygraph locales; URL vẫn /about không thành /en/about",
+    "7. Preview FLF-preview/option-b/index.html mở file:// được menu nhưng KHÔNG có nút VI/EN — thiếu HTML EN dựng sẵn"
+  ]
+}
