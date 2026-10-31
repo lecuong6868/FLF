@@ -1,0 +1,6 @@
+.aat/
+cms/.env
+cms/.preview-credentials
+**/.env
+!**/.env.example
+

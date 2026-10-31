@@ -1,0 +1,3 @@
+# Bản thử / staging — không cho công cụ tìm kiếm lập chỉ mục
+User-agent: *
+Disallow: /

@@ -1,0 +1,88 @@
+# Build image CMS trên runner GitHub (≥ RAM đủ) + lưu bằng chứng.
+# Deploy thật chỉ chạy khi đã có secret nền tảng (RENDER_API_KEY / …).
+name: CMS Preview
+
+on:
+  push:
+    paths:
+      - 'cms/**'
+      - 'render.yaml'
+      - '.github/workflows/cms-preview.yml'
+  pull_request:
+    paths:
+      - 'cms/**'
+      - 'render.yaml'
+      - '.github/workflows/cms-preview.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: cms-preview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-evidence:
+    name: Docker build + evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build CMS image (no push)
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: ./cms
+          file: ./cms/Dockerfile
+          push: false
+          load: true
+          tags: flf-cms-preview:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Ghi bằng chứng build
+        run: |
+          mkdir -p docs/acceptance/evidence
+          {
+            echo "# Bằng chứng build CMS Preview"
+            echo
+            echo "- Thời điểm (UTC): $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "- Commit: ${{ github.sha }}"
+            echo "- Ref: ${{ github.ref }}"
+            echo "- Image: flf-cms-preview:ci"
+            echo "- Docker build: OK"
+            docker image inspect flf-cms-preview:ci --format 'Size={{.Size}} Created={{.Created}}' 
+          } | tee docs/acceptance/evidence/cms-preview-build.txt
+
+      - name: Upload evidence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cms-preview-build-evidence
+          path: docs/acceptance/evidence/cms-preview-build.txt
+
+  # Chỉ chạy khi repo đã cấu hình secret. Không có secret → bỏ qua (không fail).
+  deploy-render:
+    name: Deploy Render (optional)
+    needs: build-evidence
+    if: ${{ github.event_name == 'workflow_dispatch' && vars.RENDER_DEPLOY_HOOK != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render deploy hook
+        run: |
+          curl -fsS -X POST "${{ vars.RENDER_DEPLOY_HOOK }}" \
+            -o /tmp/render-hook.json -w "HTTP %{http_code}\n" | tee /tmp/render-status.txt
+          cat /tmp/render-hook.json || true
+
+      - name: Upload deploy evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: cms-preview-deploy-evidence
+          path: |
+            /tmp/render-status.txt
+            /tmp/render-hook.json
