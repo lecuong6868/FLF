@@ -1,0 +1,43 @@
+{
+  "checked_at": "2026-10-31T09:07:00Z",
+  "source_pr": 18,
+  "source_branch": "aat/20261031-144113",
+  "source_commit": "fd3a0dcde80b4a4b6321133c4c911e6ed84c7c6d",
+  "workspace_branch": "aat/20261031-160440",
+  "pages_base": "https://lecuong6868.github.io/FLF",
+  "pages_settings": {
+    "source": "GitHub Actions",
+    "evidence": ".aat/files/Screenshot_2026-10-29_at_19.00.38.png",
+    "custom_domain": null,
+    "enforce_https": true,
+    "environment_github_pages_branches": ["main"],
+    "aat_branches_allowed": false
+  },
+  "gh_token": "empty",
+  "local": {
+    "verify_home": "PASS 37",
+    "verify_about": "PASS 34",
+    "verify_basepath": "PASS",
+    "form_preview_no_send": true
+  },
+  "remote_https": {
+    "verify_preview": "FAIL",
+    "results": [
+      { "path": "/", "status": 404 },
+      { "path": "/vi/", "status": 404 },
+      { "path": "/en/", "status": 404 },
+      { "path": "/vi/gioi-thieu/", "status": 404 },
+      { "path": "/en/about/", "status": 404 },
+      { "path": "/assets/styles.css", "status": 404 },
+      { "path": "/public/brand/logo-color.png", "status": 404 }
+    ],
+    "verdict": "NO_VERIFIED_HTTPS_PREVIEW"
+  },
+  "blocker": "Environment github-pages only allows main; GH_TOKEN empty so agent cannot merge or workflow_dispatch on main. Pages Source already GitHub Actions — not a 'enable Pages' gap.",
+  "handoff_urls_after_pass": {
+    "vi_home": "https://lecuong6868.github.io/FLF/vi/",
+    "en_home": "https://lecuong6868.github.io/FLF/en/",
+    "vi_about": "https://lecuong6868.github.io/FLF/vi/gioi-thieu/",
+    "en_about": "https://lecuong6868.github.io/FLF/en/about/"
+  }
+}
