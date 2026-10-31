@@ -1,0 +1,19 @@
+{
+  "name": "renew-web-flf-mockups",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Preview HTML offline FLF — trang chủ VI/EN",
+  "type": "module",
+  "scripts": {
+    "start": "npx --yes serve -l 4173 .",
+    "serve": "python3 -m http.server 4173",
+    "verify:home": "node scripts/verify-home-bilingual.mjs",
+    "capture:home": "node scripts/capture-home.mjs",
+    "pack:offline": "node scripts/pack-offline-preview.mjs",
+    "offline": "npm run verify:home && npm run pack:offline",
+    "check": "npm run verify:home"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}
