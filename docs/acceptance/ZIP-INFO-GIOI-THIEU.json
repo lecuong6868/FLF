@@ -1,0 +1,12 @@
+{
+  "bytes": 4599098,
+  "mb": 4.39,
+  "sha256": "84b4d8b7a5d61902432d1ac7cff258cb266a669d4aa8e7710f825ddf0ad8424f",
+  "file": "FLF-preview.zip",
+  "contains": [
+    "FLF-preview/vi/index.html",
+    "FLF-preview/en/index.html",
+    "FLF-preview/vi/gioi-thieu/index.html",
+    "FLF-preview/en/about/index.html"
+  ]
+}
