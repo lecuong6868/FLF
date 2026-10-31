@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-flf}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-flf_local_only}
+      POSTGRES_DB: ${POSTGRES_DB:-flf}
+    volumes:
+      - flf_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-flf} -d ${POSTGRES_DB:-flf}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Bản thử full-stack trên máy/VPS có Docker + ≥4 GiB RAM khi build
+  cms:
+    profiles: ['app']
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '${CMS_PORT:-3000}:3000'
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-flf}:${POSTGRES_PASSWORD:-flf_local_only}@postgres:5432/${POSTGRES_DB:-flf}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:-thay_bang_chuoi_ngau_nhien_dai_it_nhat_32_ky_tu}
+      NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-http://localhost:3000}
+      PAYLOAD_PUBLIC_SERVER_URL: ${PAYLOAD_PUBLIC_SERVER_URL:-http://localhost:3000}
+      PREVIEW_MODE: ${PREVIEW_MODE:-true}
+      SEED_ON_START: ${SEED_ON_START:-true}
+      SEED_UPDATE_PASSWORD: ${SEED_UPDATE_PASSWORD:-true}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@flf.local}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-thay_bang_mat_khau_manh}
+      SEED_EDITOR_EMAIL: ${SEED_EDITOR_EMAIL:-editor@flf.local}
+      SEED_EDITOR_PASSWORD: ${SEED_EDITOR_PASSWORD:-thay_bang_mat_khau_manh}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  flf_pgdata:

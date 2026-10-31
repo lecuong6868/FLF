@@ -1,0 +1,14 @@
+# Railway — bản thử CMS (cần tài khoản Railway + quyền repo GitHub).
+# Tạo project → Add PostgreSQL → Add service từ Dockerfile (Root Directory: cms).
+# Gán biến: PAYLOAD_SECRET, PREVIEW_MODE=true, SEED_ON_START=true,
+# SEED_ADMIN_*, DATABASE_URL=${{Postgres.DATABASE_URL}}
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5

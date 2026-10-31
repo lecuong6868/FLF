@@ -1,0 +1,11 @@
+# Bằng chứng môi trường xưởng (tunnel cần chạy trên GitHub Actions)
+
+- Thời điểm UTC: 2026-10-31T15:24:37Z
+- RAM total: 961Mi
+- Docker: missing
+- gh CLI: missing
+- Node: missing trên PATH máy xưởng hiện tại
+- YAML workflow: parse OK (PyYAML)
+- bash -n cms/scripts/run-gha-preview.sh: OK
+- Kết luận: không chạy được /admin tại xưởng (~1GiB + thiếu Node/Docker).
+  Sau khi hệ thống push: Actions → CMS Preview → Run workflow để có URL + log thật.

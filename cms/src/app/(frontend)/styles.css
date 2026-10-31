@@ -1,0 +1,73 @@
+:root {
+  --bg: #0f1c17;
+  --fg: #f3f0e8;
+  --accent: #c4a35a;
+  --muted: #a8b5ad;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, #1a3328 0%, transparent 55%),
+    linear-gradient(160deg, #0f1c17 0%, #162820 45%, #0c1411 100%);
+  color: var(--fg);
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.home {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.content {
+  max-width: 36rem;
+}
+
+.eyebrow {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--accent);
+  margin: 0 0 0.75rem;
+  font-family: system-ui, sans-serif;
+}
+
+h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 600;
+  margin: 0 0 1rem;
+  line-height: 1.2;
+}
+
+p {
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0 0 1rem;
+}
+
+.links {
+  margin-top: 1.5rem;
+}
+
+.admin {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  background: var(--accent);
+  color: #1a1408;
+  text-decoration: none;
+  font-family: system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.admin:hover {
+  filter: brightness(1.05);
+}
