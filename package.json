@@ -1,0 +1,24 @@
+{
+  "name": "renew-web-flf-preview",
+  "version": "1.2.0",
+  "private": true,
+  "description": "Preview HTML FLF — trang chủ + Giới thiệu VI/EN; xuất bản GitHub Pages /FLF/",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 4173 --directory FLF-preview",
+    "serve": "python3 -m http.server 4173 --directory FLF-preview",
+    "verify:home": "node scripts/verify-home-bilingual.mjs",
+    "verify:about": "node scripts/verify-about-bilingual.mjs",
+    "verify:basepath": "node scripts/verify-basepath-local.mjs",
+    "verify:preview": "node scripts/verify-preview-url.mjs",
+    "verify": "npm run verify:home && npm run verify:about && npm run verify:basepath",
+    "capture:home": "node scripts/capture-home.mjs",
+    "capture:about": "node scripts/capture-about.mjs",
+    "pack:offline": "node scripts/pack-offline-preview.mjs",
+    "offline": "npm run verify:home && npm run verify:about && npm run pack:offline",
+    "check": "npm run verify"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}
