@@ -1,0 +1,37 @@
+# FLF — Bản xem thử offline (trang chủ VI / EN)
+
+## Cách mở (không cần cài đặt)
+
+1. Giải nén `FLF-preview.zip` (nếu nhận gói ZIP).
+2. Mở file `index.html` bằng Chrome / Edge / Firefox.
+3. Hoặc mở trực tiếp:
+   - `vi/index.html` — trang chủ tiếng Việt
+   - `en/index.html` — trang chủ tiếng Anh
+4. Nút **VI | EN** trên header/footer dẫn tới trang đối ứng bằng đường dẫn tương đối — hoạt động khi không có mạng (`file://`).
+
+Không cần Node, Python, server hay GitHub Pages để xem trang chủ.
+
+## Cấu trúc gói
+
+| Đường dẫn | Nội dung |
+|-----------|----------|
+| `index.html` | Điểm vào → chọn / chuyển tới `vi/` |
+| `vi/index.html` | Trang chủ VI (HTML dựng sẵn) |
+| `en/index.html` | Trang chủ EN (HTML dựng sẵn) |
+| `assets/` | CSS + JS menu/form (cục bộ) |
+| `public/brand/` | Logo khách (giữ nguyên) |
+| `public/fonts/` | Font local (offline) |
+| `option-b/` | Trang mẫu VI cũ (Tin tức / Quy định / Chuyên mục) — **chưa** có bản EN |
+| `docs/` | Xác minh công ty + biên bản nghiệm thu |
+| `screenshots/` | Ảnh kiểm tra 390px / 1440px |
+
+## Phạm vi phiên này
+
+- Đã làm: trang chủ VI + EN đầy đủ; chuyển ngôn ngữ offline; form liên hệ minh họa (không báo gửi thành công giả).
+- Chưa làm: song ngữ các trang Tin tức / Quy định / Chuyên mục / lĩnh vực riêng / CMS / AI / MXH.
+
+## Lưu ý
+
+- Đây là **bản thiết kế chờ duyệt**, không phải website chính thức [flf.vn](https://www.flf.vn).
+- Không bịa số liệu, chứng nhận, khách hàng hay địa chỉ chưa xác nhận.
+- MST đã xác minh: `0314193708`. Địa chỉ hiển thị công khai: chờ khách chốt.
