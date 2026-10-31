@@ -1,0 +1,64 @@
+{
+  "checked_at": "2026-10-31T09:28:47Z",
+  "repo": "lecuong6868/FLF",
+  "branch_workspace": "aat/20261031-162711",
+  "content_source": {
+    "pr": 18,
+    "ref": "aat/20261031-144113",
+    "sha": "fd3a0dcde80b4a4b6321133c4c911e6ed84c7c6d",
+    "scope": "trang chủ + Giới thiệu VI/EN trong FLF-preview/"
+  },
+  "publish_prs": [
+    {
+      "number": 19,
+      "ref": "aat/20261031-160440",
+      "sha": "2b66a218",
+      "state": "open",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "role": "ưu tiên merge — xuất bản Preview + workflow"
+    },
+    {
+      "number": 20,
+      "ref": "aat/20261031-161018",
+      "sha": "5b2d55e6",
+      "state": "open",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "role": "cùng nội dung; không cần merge thêm nếu đã merge #19"
+    }
+  ],
+  "pages": {
+    "source": "GitHub Actions",
+    "environment": "github-pages (chỉ main)",
+    "expected_base": "https://lecuong6868.github.io/FLF/",
+    "live_http": {
+      "/": 404,
+      "/vi/": 404,
+      "/en/": 404,
+      "/vi/gioi-thieu/": 404,
+      "/en/about/": 404,
+      "/assets/styles.css": 404,
+      "/public/brand/logo-color.png": 404
+    }
+  },
+  "agent_credentials": {
+    "GH_TOKEN_len": 0,
+    "gh_auth": "not logged in",
+    "git_push_dry_run": "fatal: could not read Username for 'https://github.com': terminal prompts disabled",
+    "merge_api": "không gọi — thiếu credential (tránh tạo PR lặp)"
+  },
+  "local_verify": {
+    "verify_home": "PASS 37",
+    "verify_about": "PASS 34",
+    "verify_basepath": "PASS (mô phỏng /FLF/)",
+    "verify_preview_https": "FAIL 14 (toàn bộ 404)"
+  },
+  "browser_390_1440": {
+    "https_pages": "chưa — URL 404",
+    "local_chrome": "thiếu libglib-2.0.so.0; dùng ảnh có sẵn trong FLF-preview/screenshots/"
+  },
+  "blocker": "Environment github-pages chỉ cho phép main. PR #19/#20 mergeable + clean nhưng agent GH_TOKEN rỗng → không merge/push/workflow_dispatch được. Pages Source = GitHub Actions đã bật; thiếu merge vào main + job Preview Pages success.",
+  "handoff_url": null,
+  "do_not_create_more_preview_prs": true
+}

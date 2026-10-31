@@ -1,0 +1,145 @@
+# Xuất bản Preview HTML (FLF-preview) lên GitHub Pages — HTTPS, base path /FLF/.
+# Điều kiện đã xác minh (ảnh khách 2026-10-29):
+#   1) Settings → Pages → Source = GitHub Actions
+#   2) Environment github-pages chỉ cho phép nhánh main — GIỮ NGUYÊN (không thêm aat/**).
+# Deploy chỉ khi push main hoặc workflow_dispatch chọn main.
+# Nguồn: thư mục FLF-preview (PR #18 / commit trang chủ + Giới thiệu VI/EN).
+# Không gồm: .aat, zip WordPress, secrets. Không đổi DNS flf.vn.
+name: Preview Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-preview
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ghi commit triển khai
+        run: |
+          {
+            echo "sha=${{ github.sha }}"
+            echo "ref=${{ github.ref_name }}"
+            echo "run=${{ github.run_id }}"
+            echo "event=${{ github.event_name }}"
+            echo "source=FLF-preview"
+            echo "expected_base=https://lecuong6868.github.io/FLF/"
+          } > DEPLOY-COMMIT.txt
+
+      - name: Chuẩn bị thư mục publish từ FLF-preview
+        run: |
+          set -euo pipefail
+          test -d FLF-preview
+          test -f FLF-preview/index.html
+          test -f FLF-preview/vi/index.html
+          test -f FLF-preview/en/index.html
+          test -f FLF-preview/vi/gioi-thieu/index.html
+          test -f FLF-preview/en/about/index.html
+          test -f FLF-preview/assets/styles.css
+          test -f FLF-preview/assets/home.js
+          test -f FLF-preview/public/brand/logo-color.png
+
+          mkdir -p _site
+          # Nội dung site root = FLF-preview → URL /FLF/… trên GitHub Pages
+          cp -a FLF-preview/. _site/
+          cp DEPLOY-COMMIT.txt _site/DEPLOY-COMMIT.txt
+
+          # robots + nojekyll
+          if [ ! -f _site/robots.txt ]; then
+            printf '%s\n' 'User-agent: *' 'Disallow: /' > _site/robots.txt
+          fi
+          touch _site/.nojekyll
+
+          # Smoke nội dung bắt buộc
+          grep -q 'noindex' _site/vi/index.html
+          grep -q 'noindex' _site/en/index.html
+          grep -q 'chưa được gửi\|was not sent\|chưa có backend\|no backend' _site/vi/index.html
+          grep -q 'gioi-thieu/index.html' _site/vi/index.html
+          grep -q 'about/index.html' _site/en/index.html
+          test -f _site/DEPLOY-COMMIT.txt
+
+          echo "Publish tree (top):"
+          find _site -maxdepth 3 -type f | head -n 60
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Nhật ký nhánh / quyền
+        run: |
+          {
+            echo "## Deploy Preview Pages (FLF-preview)"
+            echo ""
+            echo "- ref: \`${{ github.ref_name }}\`"
+            echo "- sha: \`${{ github.sha }}\`"
+            echo "- event: \`${{ github.event_name }}\`"
+            echo "- URL kỳ vọng: https://lecuong6868.github.io/FLF/"
+            echo "- Trang chủ VI: https://lecuong6868.github.io/FLF/vi/"
+            echo "- Trang chủ EN: https://lecuong6868.github.io/FLF/en/"
+            echo "- Giới thiệu VI: https://lecuong6868.github.io/FLF/vi/gioi-thieu/"
+            echo "- About EN: https://lecuong6868.github.io/FLF/en/about/"
+            echo "- base path: \`/FLF/\`"
+            echo ""
+            echo "Environment \`github-pages\` chỉ cho phép \`main\` (giữ nguyên)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Tóm tắt URL
+        if: success()
+        run: |
+          {
+            echo "## Preview đã xuất bản"
+            echo ""
+            echo "- Commit: \`${{ github.sha }}\`"
+            echo "- page_url: ${{ steps.deployment.outputs.page_url }}"
+            echo "- Root: https://lecuong6868.github.io/FLF/"
+            echo "- VI: https://lecuong6868.github.io/FLF/vi/"
+            echo "- EN: https://lecuong6868.github.io/FLF/en/"
+            echo "- Giới thiệu: https://lecuong6868.github.io/FLF/vi/gioi-thieu/"
+            echo "- About: https://lecuong6868.github.io/FLF/en/about/"
+            echo "- Xác minh: \`FLF_BASE_URL=https://lecuong6868.github.io/FLF npm run verify:preview\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Nhắc điểm chặn nếu deploy thất bại
+        if: failure()
+        run: |
+          {
+            echo "## Deploy Pages thất bại"
+            echo ""
+            echo "Job \`build\` đã tạo artifact; job \`deploy\` thất bại trên \`main\`."
+            echo ""
+            echo "Kiểm tra:"
+            echo "1. Actions → lượt chạy này → log bước \`deploy-pages\`."
+            echo "2. Settings → Pages → Source vẫn là **GitHub Actions**."
+            echo "3. Settings → Environments → github-pages → Deployment branches gồm \`main\`."
+            echo "4. Không chạy từ nhánh \`aat/**\` (env từ chối — xem annotation *Branch is not allowed*)."
+            echo "5. Xác minh sau khi xanh: \`FLF_BASE_URL=https://lecuong6868.github.io/FLF npm run verify:preview\`"
+          } >> "$GITHUB_STEP_SUMMARY"
