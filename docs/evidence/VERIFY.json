@@ -1,0 +1,81 @@
+{
+  "checked_at_utc": "2026-11-01T09:18:22Z",
+  "checked_at_local": "2026-11-01 16:18 +07",
+  "verdict": "CHƯA HOÀN TẤT — không có URL công khai đạt tiêu chí (mở trực tiếp, không login/cảnh báo, render đủ FLF).",
+  "mockup_commit": "936c5d94de75507e0840824ba89ccd3aad09df53",
+  "restored_from_branch": "origin/aat/20261101-120818 (PR #31)",
+  "links_checked_first": {
+    "vi_expected_pages": {
+      "url": "https://lecuong6868.github.io/FLF/vi/",
+      "http": 404
+    },
+    "en_expected_pages": {
+      "url": "https://lecuong6868.github.io/FLF/en/",
+      "http": 404
+    },
+    "pages_root": {
+      "url": "https://lecuong6868.github.io/FLF/",
+      "http": 404,
+      "note": "Site not found"
+    },
+    "rawcdn_vi_full": {
+      "url": "https://rawcdn.githack.com/lecuong6868/FLF/936c5d94de75507e0840824ba89ccd3aad09df53/vi/index.html",
+      "http_get": "200 text/html",
+      "browser_new_session": "External Content Notice / interstitial — KHÔNG đạt tiêu chí mở trực tiếp",
+      "evidence": "rawcdn-vi-attempt-1440.png"
+    },
+    "rawcdn_en_full": {
+      "url": "https://rawcdn.githack.com/lecuong6868/FLF/936c5d94de75507e0840824ba89ccd3aad09df53/en/index.html",
+      "http_get": "200 text/html",
+      "same_interstitial_limitation": true
+    },
+    "jsdelivr": {
+      "content_type": "text/plain",
+      "usable_as_preview": false
+    }
+  },
+  "auth_probe_once": {
+    "GH_TOKEN_len": 0,
+    "pages_api_bearer": "401 Bad credentials",
+    "git_push_dry_run": "fatal: could not read Username for https://github.com (prompts disabled)",
+    "policy": "Không lặp lại thao tác ghi cần cùng quyền sau 401"
+  },
+  "other_hosts": {
+    "NETLIFY_AUTH_TOKEN": "missing",
+    "SURGE_TOKEN": "missing",
+    "VERCEL_TOKEN": "missing",
+    "statically.io": "200 text/plain — không dùng",
+    "gitcdn.link": "redirect lander — không dùng"
+  },
+  "local_smoke": {
+    "server": "python3 -m http.server 8765",
+    "pages_200": [
+      "/vi/index.html",
+      "/en/index.html",
+      "/vi/lien-he/index.html",
+      "/en/contact/index.html",
+      "/vi/dich-vu/index.html",
+      "/en/services/index.html",
+      "/vi/dashboard/index.html",
+      "/assets/css/styles.css",
+      "/assets/js/main.js",
+      "/assets/img/logo-shield.png",
+      "/assets/fonts/source-sans-3-400.woff2"
+    ],
+    "lang_switch_html": "VI lien-he ↔ EN contact; VI home ↔ EN home; EN services ↔ VI dich-vu",
+    "logo_hash_match_aat_files": true,
+    "evidence_png": [
+      "local-vi-home-1440.png",
+      "local-vi-home-390.png",
+      "local-en-home-1440.png",
+      "local-en-home-390.png",
+      "rawcdn-vi-attempt-1440.png"
+    ]
+  },
+  "github_pages_ready_in_repo": {
+    "workflow": ".github/workflows/pages.yml",
+    "nojekyll": true,
+    "settings_source_per_customer_screenshot": "GitHub Actions",
+    "blocked_by": "thiếu quyền push/merge main + token Pages hợp lệ trên môi trường triển khai"
+  }
+}
