@@ -1,0 +1,43 @@
+{
+  "checked_at_utc": "2026-11-01T05:17:34Z",
+  "checked_at_local": "2026-11-01 12:17 +07",
+  "commit": "936c5d94de75507e0840824ba89ccd3aad09df53",
+  "branch_source": "aat/20261101-094532 (README/workflow cập nhật từ aat/20261101-114748)",
+  "primary_public_url": "https://rawcdn.githack.com/lecuong6868/FLF/936c5d94de75507e0840824ba89ccd3aad09df53/vi/index.html",
+  "en_public_url": "https://rawcdn.githack.com/lecuong6868/FLF/936c5d94de75507e0840824ba89ccd3aad09df53/en/index.html",
+  "index_public_url": "https://rawcdn.githack.com/lecuong6868/FLF/936c5d94de75507e0840824ba89ccd3aad09df53/index.html",
+  "cdn_http": {
+    "/vi/index.html": "200 text/html",
+    "/en/index.html": "200 text/html",
+    "/assets/css/styles.css": "200 text/css",
+    "/assets/js/main.js": "200 application/javascript",
+    "/assets/fonts/source-sans-3-400.woff2": "200 application/font-woff2",
+    "/assets/img/logo-shield.png": "200 image/png (theo redirect raw.githubusercontent.com)"
+  },
+  "browser_render": {
+    "rawcdn_interstitial": "Lần đầu mở URL, rawcdn.githack hiện External Content Notice (không phải đăng nhập). Bấm nút cạnh ô URL một lần → title chuyển sang First Legal Force; font Source Sans 3; logo-shield/logo-text tải được; hero VI/EN render.",
+    "evidence_png": [
+      "vi-home-1440.png",
+      "vi-home-390.png",
+      "en-home-1440.png",
+      "en-home-390.png",
+      "local-vi-home-1440.png",
+      "local-vi-home-390.png",
+      "local-en-home-1440.png",
+      "local-en-home-390.png"
+    ],
+    "lang_switch_html": "Tất cả cặp VI↔EN giữ đúng trang tương ứng (đã kiểm tra trong source)."
+  },
+  "github_pages": {
+    "url": "https://lecuong6868.github.io/FLF/",
+    "status": "404 Site not found",
+    "settings_source": "GitHub Actions (theo ảnh Settings→Pages khách gửi)",
+    "token_in_environment": "GH_TOKEN rỗng / API 401 Bad credentials — không kiểm tra/bật Pages, không push nhánh, không merge PR được từ xưởng này"
+  },
+  "other_hosts_tried": {
+    "netlify_cli": "đã cài; Not logged in — không có NETLIFY_AUTH_TOKEN",
+    "surge_cli": "Aborted - not logged in — không có SURGE_TOKEN",
+    "jsdelivr": "200 nhưng Content-Type text/plain (trình duyệt hiện mã nguồn, không render trang)"
+  },
+  "verdict": "URL công khai dùng được cho khách: rawcdn.githack commit 936c5d94… (sau 1 lần Continue trên notice). GitHub Pages chính thức vẫn 404 vì thiếu quyền ghi/token hợp lệ trên môi trường AAT."
+}
