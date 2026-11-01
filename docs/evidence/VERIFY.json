@@ -1,0 +1,97 @@
+{
+  "checked_at_utc": "2026-11-01T09:59:01Z",
+  "checked_at_local": "2026-11-01 16:59 +0700",
+  "verdict": "CHƯA HOÀN TẤT — phiên Cursor mới vẫn không nhận credential GitHub ghi; GitHub Pages VI/EN vẫn 404. Lỗi nằm ở bước truyền credential vào môi trường chạy (GH_TOKEN len=0), không kết luận khách thiếu quyền tài khoản.",
+  "mockup_commit_source": "936c5d94de75507e0840824ba89ccd3aad09df53",
+  "restored_from": "origin/aat/20261101-161434 (PR #32) — tái sử dụng mockup/workflow/logo từ PR #31/#29",
+  "prs_reviewed": [
+    "#29",
+    "#30",
+    "#31",
+    "#32"
+  ],
+  "public_urls": {
+    "pages_root": {
+      "url": "https://lecuong6868.github.io/FLF/",
+      "http": 404
+    },
+    "pages_vi": {
+      "url": "https://lecuong6868.github.io/FLF/vi/",
+      "http": 404
+    },
+    "pages_en": {
+      "url": "https://lecuong6868.github.io/FLF/en/",
+      "http": 404
+    }
+  },
+  "auth_probe_once": {
+    "GH_TOKEN": {
+      "present": true,
+      "len": 0,
+      "nonempty": false
+    },
+    "GITHUB_TOKEN": {
+      "present": false
+    },
+    "NETLIFY_AUTH_TOKEN": {
+      "present": false
+    },
+    "VERCEL_TOKEN": {
+      "present": false
+    },
+    "SURGE_TOKEN": {
+      "present": false
+    },
+    "api_user_no_auth": {
+      "http": 401,
+      "message": "{\r\n  \"message\": \"Requires authentication\",\r\n  \"documentation_url\": \"https://docs.github.com/rest\",\r\n  \"status\": \"401\"\r\n}"
+    },
+    "pages_api_public": {
+      "http": 404,
+      "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/pages/pages#get-a-apiname-pages-site\",\"status\":\"404\"}"
+    },
+    "git_push_dry_run": {
+      "returncode": 128,
+      "stderr": "fatal: could not read Username for 'https://github.com': terminal prompts disabled\n",
+      "stdout": ""
+    },
+    "gh_cli": false,
+    "ssh_dir_exists": false,
+    "git_credentials_file": false,
+    "gh_config_dir": false,
+    "policy": "Không lặp thao tác ghi/deploy sau khi xác nhận GH_TOKEN rỗng + push 401/prompt-disabled"
+  },
+  "logo": {
+    "shield_match": true,
+    "text_match": true
+  },
+  "local_smoke": {
+    "server": "python3 -m http.server 8765 --bind 127.0.0.1",
+    "pages_200": [
+      "/vi/index.html",
+      "/en/index.html",
+      "/vi/lien-he/index.html",
+      "/en/contact/index.html",
+      "/vi/dich-vu/index.html",
+      "/en/services/index.html",
+      "/assets/css/styles.css",
+      "/assets/js/main.js",
+      "/assets/img/logo-shield.png",
+      "/assets/img/logo-text.png",
+      "/assets/fonts/source-sans-3-400.woff2"
+    ],
+    "lang_switch": "VI home↔EN home; VI lien-he↔EN contact; VI dich-vu↔EN services",
+    "evidence_png": [
+      "local-vi-home-1440.png",
+      "local-vi-home-390.png",
+      "local-en-home-1440.png",
+      "local-en-home-390.png",
+      "pages-vi-404-1440.png"
+    ]
+  },
+  "github_pages_ready_in_repo": {
+    "workflow": ".github/workflows/pages.yml",
+    "nojekyll": true,
+    "blocked_by": "credential injection vào phiên Cursor: biến GH_TOKEN tồn tại nhưng len=0; không có git credential helper/SSH/gh auth; git push dry-run không đọc được Username"
+  }
+}
