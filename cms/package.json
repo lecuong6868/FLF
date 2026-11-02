@@ -1,0 +1,53 @@
+{
+  "name": "flf-cms",
+  "version": "1.0.0",
+  "description": "Dashboard quản trị FLF — Next.js + Payload CMS + PostgreSQL (bước 1)",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "dev": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=4096\" next dev",
+    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
+    "typecheck": "tsc --noEmit",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/seed.ts",
+    "test:access": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/test-access.ts",
+    "pg:embedded": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/embedded-pg.ts",
+    "accept": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/accept-step1.ts",
+    "accept:http": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/http-accept.ts",
+    "secrets:preview": "bash scripts/generate-preview-secrets.sh",
+    "start:preview": "bash scripts/start-preview.sh",
+    "preview:gha": "bash scripts/run-gha-preview.sh"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "3.92.1",
+    "@payloadcms/next": "3.92.1",
+    "@payloadcms/richtext-lexical": "3.92.1",
+    "@payloadcms/ui": "3.92.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "16.4.7",
+    "graphql": "^16.8.1",
+    "next": "15.4.11",
+    "payload": "3.92.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "sharp": "0.34.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "embedded-postgres": "^17.6.0-beta.15",
+    "eslint": "^9.16.0",
+    "eslint-config-next": "15.4.11",
+    "tsx": "^4.19.0",
+    "typescript": "5.7.3"
+  },
+  "engines": {
+    "node": "^22.23.4 || >=24.22.1"
+  }
+}

@@ -1,0 +1,213 @@
+/**
+ * FLF Preview — tương tác cục bộ (menu, form minh họa, reveal).
+ * Không dùng API, fetch, localStorage hay mạng để hiển thị nội dung / đổi ngôn ngữ.
+ */
+(function () {
+  "use strict";
+
+  function el(sel, root) {
+    return (root || document).querySelector(sel);
+  }
+
+  /* —— Mobile menu —— */
+  const toggle = el("[data-menu-toggle]");
+  const mobile = el("[data-mobile-panel]");
+  const mobileBackdrop = el("[data-menu-backdrop]");
+  let lastFocus = null;
+
+  function getFocusable(container) {
+    return Array.from(
+      container.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((node) => !node.hasAttribute("hidden") && node.offsetParent !== null);
+  }
+
+  function setMobileOpen(open) {
+    if (!toggle || !mobile) return;
+    mobile.classList.toggle("is-open", open);
+    mobile.hidden = !open;
+    mobile.setAttribute("aria-hidden", open ? "false" : "true");
+    if ("inert" in mobile) mobile.inert = !open;
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    const openLabel = toggle.getAttribute("data-label-open") || "Mở menu";
+    const closeLabel = toggle.getAttribute("data-label-close") || "Đóng menu";
+    toggle.setAttribute("aria-label", open ? closeLabel : openLabel);
+    document.body.classList.toggle("nav-open", open);
+    if (mobileBackdrop) {
+      mobileBackdrop.hidden = !open;
+      mobileBackdrop.classList.toggle("is-open", open);
+    }
+    if (open) {
+      lastFocus = document.activeElement;
+      const focusables = getFocusable(mobile);
+      (focusables[0] || mobile).focus({ preventScroll: true });
+    } else if (lastFocus && typeof lastFocus.focus === "function") {
+      lastFocus.focus({ preventScroll: true });
+    }
+  }
+
+  if (mobile) {
+    mobile.hidden = true;
+    mobile.setAttribute("aria-hidden", "true");
+    if ("inert" in mobile) mobile.inert = true;
+  }
+
+  if (toggle && mobile) {
+    toggle.addEventListener("click", function () {
+      setMobileOpen(!mobile.classList.contains("is-open"));
+    });
+    mobile.addEventListener("click", function (e) {
+      const link = e.target.closest("a[href]");
+      if (link) setMobileOpen(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (!mobile.classList.contains("is-open")) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setMobileOpen(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const focusables = getFocusable(mobile);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+  }
+
+  if (mobileBackdrop) {
+    mobileBackdrop.addEventListener("click", function () {
+      setMobileOpen(false);
+    });
+  }
+
+  /* —— Contact form: Preview only — never fake success —— */
+  const form = el("[data-preview-form]");
+  const formNote = el("[data-form-note]");
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (formNote) {
+        formNote.hidden = false;
+        formNote.focus?.();
+        formNote.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+  }
+
+  document.querySelectorAll("[data-demo-contact]").forEach(function (cta) {
+    cta.addEventListener("click", function (e) {
+      if (cta.getAttribute("href") === "#contact" || cta.tagName === "BUTTON") {
+        /* allow hash navigation; if button outside form, show note near contact */
+        return;
+      }
+    });
+  });
+
+  /* —— Chuyên mục / Topics: lọc chip + tìm kiếm cục bộ (không API) —— */
+  const topicFilters = el("[data-topic-filters]");
+  const topicList = el("[data-post-list]");
+  const topicEmpty = el("[data-topic-empty]");
+  const topicSearch = el("[data-topic-search]");
+  if (topicFilters && topicList) {
+    let activeTopic = "all";
+    let query = "";
+
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const fromUrl = params.get("chu-de") || params.get("topic");
+      if (fromUrl) activeTopic = fromUrl;
+    } catch (_) {
+      /* file:// / trình duyệt hạn chế — bỏ qua */
+    }
+
+    function paintTopics() {
+      const cards = Array.from(topicList.querySelectorAll(".post-card"));
+      let visible = 0;
+      cards.forEach(function (card) {
+        const topic = card.getAttribute("data-topic") || "";
+        const hay = (card.getAttribute("data-search") || card.textContent || "").toLowerCase();
+        const topicOk = activeTopic === "all" || topic === activeTopic;
+        const queryOk = !query || hay.indexOf(query) !== -1;
+        const show = topicOk && queryOk;
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+      if (topicEmpty) {
+        topicEmpty.hidden = visible > 0;
+      }
+      topicFilters.querySelectorAll(".chip").forEach(function (chip) {
+        chip.classList.toggle(
+          "is-active",
+          chip.getAttribute("data-topic") === activeTopic
+        );
+      });
+    }
+
+    topicFilters.querySelectorAll(".chip").forEach(function (chip) {
+      if (chip.getAttribute("data-topic") === activeTopic) {
+        chip.classList.add("is-active");
+      }
+    });
+
+    topicFilters.addEventListener("click", function (e) {
+      const btn = e.target.closest("[data-topic]");
+      if (!btn) return;
+      activeTopic = btn.getAttribute("data-topic") || "all";
+      try {
+        const url = new URL(window.location.href);
+        if (activeTopic === "all") {
+          url.searchParams.delete("chu-de");
+          url.searchParams.delete("topic");
+        } else {
+          url.searchParams.set("chu-de", activeTopic);
+          url.searchParams.set("topic", activeTopic);
+        }
+        window.history.replaceState({}, "", url);
+      } catch (_) {
+        /* bỏ qua trên file:// */
+      }
+      paintTopics();
+    });
+
+    if (topicSearch) {
+      topicSearch.addEventListener("input", function () {
+        query = (topicSearch.value || "").trim().toLowerCase();
+        paintTopics();
+      });
+    }
+
+    paintTopics();
+  }
+
+  /* —— Reveal on scroll —— */
+  const reveals = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    reveals.forEach(function (node) {
+      io.observe(node);
+    });
+  } else {
+    reveals.forEach(function (node) {
+      node.classList.add("is-visible");
+    });
+  }
+})();

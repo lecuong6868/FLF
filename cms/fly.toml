@@ -1,0 +1,28 @@
+# Fly.io — bản thử CMS (cần FLY_API_TOKEN + `fly apps create` + Postgres/Neon).
+# Dockerfile tại cms/Dockerfile. Máy xưởng không có token Fly → không deploy được tại đây.
+
+app = "flf-cms-preview"
+primary_region = "sin"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "60s"
+    method = "GET"
+    path = "/"
+
+[[vm]]
+  memory = "2gb"
+  cpu_kind = "shared"
+  cpus = 1

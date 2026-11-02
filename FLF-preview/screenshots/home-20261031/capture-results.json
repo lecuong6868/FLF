@@ -1,0 +1,56 @@
+[
+  {
+    "label": "vi-home",
+    "width": 1440,
+    "url": "file:///home/coder/workspaces/renew-web-flf/FLF-preview/vi/index.html",
+    "overflowX": false,
+    "consoleErrors": [],
+    "langLink": "../en/index.html",
+    "noteVisible": true,
+    "fakeSuccess": false,
+    "shotName": "vi-home-1440.png",
+    "menuShot": null
+  },
+  {
+    "label": "vi-home",
+    "width": 390,
+    "url": "file:///home/coder/workspaces/renew-web-flf/FLF-preview/vi/index.html",
+    "overflowX": false,
+    "consoleErrors": [],
+    "langLink": "../en/index.html",
+    "noteVisible": true,
+    "fakeSuccess": false,
+    "shotName": "vi-home-390.png",
+    "menuShot": "vi-home-390-menu-open.png"
+  },
+  {
+    "label": "en-home",
+    "width": 1440,
+    "url": "file:///home/coder/workspaces/renew-web-flf/FLF-preview/en/index.html",
+    "overflowX": false,
+    "consoleErrors": [],
+    "langLink": "../vi/index.html",
+    "noteVisible": true,
+    "fakeSuccess": false,
+    "shotName": "en-home-1440.png",
+    "menuShot": null
+  },
+  {
+    "label": "en-home",
+    "width": 390,
+    "url": "file:///home/coder/workspaces/renew-web-flf/FLF-preview/en/index.html",
+    "overflowX": false,
+    "consoleErrors": [],
+    "langLink": "../vi/index.html",
+    "noteVisible": true,
+    "fakeSuccess": false,
+    "shotName": "en-home-390.png",
+    "menuShot": "en-home-390-menu-open.png"
+  },
+  {
+    "navRoundtrip": {
+      "onEn": true,
+      "onVi": true
+    }
+  }
+]
