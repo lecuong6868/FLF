@@ -312,6 +312,82 @@ export function NewPostButton({ lang, section }: { lang: Lang; section: SectionK
   )
 }
 
+/* ================= Hộp yêu cầu liên hệ (chỉ admin) ================= */
+const ST = [
+  { v: 'new', label: '🔴 Mới' },
+  { v: 'processing', label: '🟡 Đang xử lý' },
+  { v: 'done', label: '🟢 Đã xong' },
+]
+function fmtTime(s: string) {
+  try { return new Date(s).toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' }) } catch { return s }
+}
+
+function Inbox({ onClose, onCount }: { onClose: () => void; onCount: (n: number) => void }) {
+  const [filter, setFilter] = useState<'new' | 'processing' | 'done' | 'all'>('new')
+  const [items, setItems] = useState<any[] | null>(null)
+  const [open, setOpen] = useState<any>(null)
+  const [msg, setMsg] = useState('')
+  const load = useCallback(async () => {
+    setItems(null)
+    const w = filter === 'all' ? '' : `&where[status][equals]=${filter}`
+    try {
+      const j = await api(`/api/contact-requests?limit=100&sort=-createdAt${w}`)
+      setItems(j.docs)
+      const c = await api('/api/contact-requests?limit=0&where[status][equals]=new')
+      onCount(c.totalDocs || 0)
+    } catch (e: any) { setMsg('✕ ' + e.message); setItems([]) }
+  }, [filter, onCount])
+  useEffect(() => { load() }, [load])
+
+  const save = async (it: any) => {
+    try {
+      await api(`/api/contact-requests/${it.id}`, json('PATCH', { status: it.status, note: it.note || '' }))
+      setMsg('✓ Đã lưu.'); setOpen(null); load()
+    } catch (e: any) { setMsg('✕ ' + e.message) }
+  }
+  const del = async (it: any) => {
+    if (!confirm(`Xóa hẳn yêu cầu của ${it.name}?`)) return
+    try { await api(`/api/contact-requests/${it.id}`, { method: 'DELETE' }); setOpen(null); load() } catch (e: any) { setMsg('✕ ' + e.message) }
+  }
+
+  return (
+    <Drawer title="📥 Yêu cầu liên hệ từ khách" onClose={onClose}
+      tabs={[...ST.map((s) => ({ id: s.v, label: s.label, active: filter === s.v, onClick: () => { setFilter(s.v as any); setOpen(null) } })),
+        { id: 'all', label: 'Tất cả', active: filter === 'all', onClick: () => { setFilter('all'); setOpen(null) } }]}
+      footer={<span className="ce-hint">{msg || 'Bấm vào một yêu cầu để xem chi tiết, đổi tình trạng, ghi chú.'}</span>}>
+      {items === null ? <p>Đang tải…</p> : items.length === 0 ? <p className="ce-hint">Không có yêu cầu nào ở mục này.</p> : (
+        <div className="ce-inbox">
+          {items.map((it) => (
+            <div key={it.id} className={`ce-inbox-item ${open?.id === it.id ? 'open' : ''}`}>
+              <button type="button" className="ce-inbox-head" onClick={() => setOpen(open?.id === it.id ? null : { ...it })}>
+                <span><strong>{it.name}</strong> · {fmtTime(it.createdAt)}</span>
+                <span>{ST.find((s) => s.v === it.status)?.label}</span>
+                <span className="ce-inbox-preview">{String(it.message || '').slice(0, 90)}</span>
+              </button>
+              {open?.id === it.id ? (
+                <div className="ce-inbox-body">
+                  <p>{it.email ? <>📧 <a href={`mailto:${it.email}`}>{it.email}</a><br /></> : null}
+                    {it.phone ? <>📞 <a href={`tel:${it.phone}`}>{it.phone}</a><br /></> : null}
+                    <span className="ce-hint">Gửi từ {it.page || '—'} · {it.lang === 'en' ? 'English' : 'Tiếng Việt'} · đã đồng ý NĐ 13</span></p>
+                  <div className="ce-inbox-msg">{it.message}</div>
+                  <FieldList fields={[
+                    { name: 'status', type: 'select', label: 'Tình trạng', options: ST.map((s) => ({ label: s.label, value: s.v })) },
+                    { name: 'note', type: 'textarea', label: 'Ghi chú nội bộ (khách không thấy)' },
+                  ]} value={open} onChange={setOpen} />
+                  <div className="ce-row">
+                    <button type="button" className="ce-btn primary" onClick={() => save(open)}>💾 Lưu</button>
+                    <button type="button" className="ce-btn ghost danger" onClick={() => del(it)}>🗑 Xóa</button>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      )}
+    </Drawer>
+  )
+}
+
 /* ================= Thanh công cụ trên cùng ================= */
 const SETTINGS_FIELDS: F[] = [
   { name: 'companyLegalName', type: 'text', label: 'Tên pháp lý công ty' },
@@ -348,6 +424,18 @@ export function EditorBar({ lang, userName, role, adminHref }: { lang: Lang; use
   const [msg, setMsg] = useState('')
   const [saving, setSaving] = useState(false)
   const slug = { theme: 'theme', settings: 'site-settings', nav: 'navigation' } as const
+  const [inbox, setInbox] = useState(false)
+  const [newCount, setNewCount] = useState(0)
+  const isAdmin = role === 'admin'
+  useEffect(() => {
+    if (!isAdmin) return
+    const tick = () => api('/api/contact-requests?limit=0&where[status][equals]=new').then((j) => setNewCount(j.totalDocs || 0)).catch(() => {})
+    tick()
+    const t = setInterval(tick, 60000)
+    return () => clearInterval(t)
+  }, [isAdmin])
+  const closeInbox = useCallback(() => setInbox(false), [])
+  useCloseOnOther('inbox', closeInbox)
 
   const closePanel = useCallback(() => setPanel(null), [])
   useCloseOnOther('bar', closePanel)
@@ -393,6 +481,11 @@ export function EditorBar({ lang, userName, role, adminHref }: { lang: Lang; use
           <input type="checkbox" checked={on} onChange={(e) => setOn(e.target.checked)} />
           <span>{on ? 'Đang ở chế độ sửa' : 'Xem như khách'}</span>
         </label>
+        {isAdmin ? (
+          <button type="button" className={newCount ? 'ce-hot' : ''} onClick={() => { announceOpen('inbox'); setPanel(null); setInbox(true) }}>
+            📥 Liên hệ{newCount ? <b className="ce-badge">{newCount}</b> : null}
+          </button>
+        ) : null}
         <button type="button" onClick={() => openPanel('theme')}>🎨 Màu sắc</button>
         <button type="button" onClick={() => openPanel('nav')}>☰ Menu</button>
         <button type="button" onClick={() => openPanel('settings')}>🏢 Công ty</button>
@@ -400,6 +493,7 @@ export function EditorBar({ lang, userName, role, adminHref }: { lang: Lang; use
         <span className="ce-user">{userName} · {role}</span>
         <button type="button" onClick={async () => { await fetch('/api/users/logout', { method: 'POST', credentials: 'include' }); window.location.reload() }}>Đăng xuất</button>
       </div>
+      {inbox ? <Inbox onClose={closeInbox} onCount={setNewCount} /> : null}
       {panel ? (
         <Drawer title={titles[panel]} onClose={close}
           footer={<><span className="ce-hint">{msg || (panel === 'theme' ? 'Màu đổi ngay trên trang để anh xem thử.' : '')}</span><button type="button" className="ce-btn primary" disabled={saving || !data} onClick={save}>💾 Lưu</button></>}>

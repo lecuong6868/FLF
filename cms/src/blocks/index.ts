@@ -42,6 +42,7 @@ const appearance: Field = {
 
 export const HeroBlock: Block = {
   slug: 'hero',
+  admin: { disableBlockName: true },
   labels: { singular: 'Banner đầu trang', plural: 'Banner đầu trang' },
   fields: [
     appearance,
@@ -63,6 +64,7 @@ export const HeroBlock: Block = {
 
 export const CardsBlock: Block = {
   slug: 'cards',
+  admin: { disableBlockName: true },
   labels: { singular: 'Phần có các thẻ', plural: 'Phần có các thẻ' },
   fields: [
     appearance,
@@ -105,6 +107,7 @@ export const CardsBlock: Block = {
 
 export const StepsBlock: Block = {
   slug: 'steps',
+  admin: { disableBlockName: true },
   labels: { singular: 'Các bước / quy trình', plural: 'Các bước / quy trình' },
   fields: [
     appearance,
@@ -137,6 +140,7 @@ export const StepsBlock: Block = {
 
 export const TextBlock: Block = {
   slug: 'text',
+  admin: { disableBlockName: true },
   labels: { singular: 'Đoạn văn tự do', plural: 'Đoạn văn tự do' },
   fields: [
     appearance,
@@ -150,6 +154,7 @@ export const TextBlock: Block = {
 
 export const ContactBlock: Block = {
   slug: 'contact',
+  admin: { disableBlockName: true },
   labels: { singular: 'Form liên hệ', plural: 'Form liên hệ' },
   fields: [
     appearance,
@@ -164,6 +169,7 @@ export const ContactBlock: Block = {
 
 export const CtaBlock: Block = {
   slug: 'cta',
+  admin: { disableBlockName: true },
   labels: { singular: 'Dải kêu gọi liên hệ', plural: 'Dải kêu gọi liên hệ' },
   fields: [
     appearance,
