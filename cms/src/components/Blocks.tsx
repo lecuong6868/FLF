@@ -1,6 +1,7 @@
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import React from 'react'
 
+import { ContactForm } from '@/components/ContactForm'
 import { href, type Lang, mediaAlt, mediaUrl, T } from '@/lib/shared'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -148,22 +149,12 @@ function Text({ b }: { b: B }) {
 }
 
 function Contact({ b, lang }: { b: B; lang: Lang }) {
-  const t = T[lang]
   return (
     <section style={ap(b)} id={b.anchor || 'contact'} className="section contact">
       <div className="wrap contact-frame">
         {b.title ? <h2>{b.title}</h2> : null}
         {b.lead ? <p className="lead"><Lines text={b.lead} /></p> : null}
-        <form className="contact-form" data-preview-form action="#" method="post" noValidate>
-          <label>{t.name}<input type="text" name="name" autoComplete="name" /></label>
-          <label>{t.email}<input type="email" name="email" autoComplete="email" /></label>
-          <label>{t.message}<textarea name="message"></textarea></label>
-          {b.consent ? (
-            <label className="consent"><input type="checkbox" name="consent" value="1" /><span>{b.consent}</span></label>
-          ) : null}
-          <div className="form-actions"><button className="btn" type="submit">{b.button || t.send}</button></div>
-          <p className="form-note" data-form-note hidden tabIndex={-1} role="status">{t.formNote}</p>
-        </form>
+        <ContactForm lang={lang} button={b.button} consentText={b.consent} />
         {b.privacy ? <p className="privacy"><Lines text={b.privacy} /></p> : null}
       </div>
     </section>

@@ -120,3 +120,15 @@
 .ce-newpost { margin: 0 0 1rem; }
 
 .badge-draft { display: inline-block; background: #fef3c7; color: #92400e; font: 600 11px system-ui, sans-serif; padding: 2px 8px; border-radius: 999px; margin-left: .4rem; vertical-align: middle; }
+
+/* Hộp liên hệ */
+.ce-bar .ce-hot { background: #7f1d1d; border-color: #b91c1c; }
+.ce-badge { display: inline-block; min-width: 18px; padding: 1px 6px; margin-left: 6px; border-radius: 999px; background: #ef4444; color: #fff; font-size: 11px; text-align: center; }
+.ce-inbox-item { border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: .5rem; background: #fff; }
+.ce-inbox-item.open { border-color: #2563eb; }
+.ce-inbox-head { display: grid; grid-template-columns: 1fr auto; gap: .2rem .6rem; width: 100%; text-align: left; background: none; border: 0; padding: .65rem .8rem; cursor: pointer; font: inherit; color: #111827; }
+.ce-inbox-preview { grid-column: 1 / -1; color: #6b7280; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ce-inbox-body { padding: .2rem .8rem .8rem; border-top: 1px solid #f3f4f6; }
+.ce-inbox-msg { white-space: pre-wrap; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: .7rem; margin: .5rem 0 1rem; }
+.ce-tabs button { font-size: 12px; padding: .65rem .3rem; }
+.contact-done .lead { margin-bottom: 1rem; }
