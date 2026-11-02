@@ -42,6 +42,10 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      beforeDashboard: ['@/components/admin/EditOnSite'],
+      beforeNavLinks: ['@/components/admin/EditOnSiteNav'],
+    },
   },
   collections: [Users, Media, Categories, Posts, Pages, ContactRequests],
   globals: [SiteSettings, Navigation, Theme],
