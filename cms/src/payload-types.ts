@@ -96,10 +96,12 @@ export interface Config {
   globals: {
     'site-settings': SiteSetting;
     navigation: Navigation;
+    theme: Theme;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
+    theme: ThemeSelect<false> | ThemeSelect<true>;
   };
   locale: 'vi' | 'en';
   widgets: {
@@ -192,6 +194,8 @@ export interface Category {
   createdAt: string;
 }
 /**
+ * Chọn Chuyên mục: Tin tức / Quy định mới / Chuyên mục — bài "Đã đăng" sẽ hiện ở mục tương ứng trên web.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
@@ -204,6 +208,7 @@ export interface Post {
    */
   status: 'draft' | 'pending_review' | 'published';
   category?: (number | null) | Category;
+  layoutStyle?: ('standard' | 'wide' | 'image-left' | 'cover') | null;
   topic?: ('dau-tu' | 'thue' | 'quan-tri-dn' | 'rui-ro' | 'giay-phep' | 'lao-dong' | 'hop-dong' | 'tuan-thu') | null;
   featuredImage?: (number | null) | Media;
   excerpt?: string | null;
@@ -247,6 +252,18 @@ export interface Page {
   layout?:
     | (
         | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
             eyebrow?: string | null;
             masthead?: string | null;
             headline: string;
@@ -274,11 +291,24 @@ export interface Page {
             blockType: 'hero';
           }
         | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
             /**
              * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
              */
             anchor?: string | null;
             style?: ('about' | 'services' | 'why' | 'navy') | null;
+            columns?: ('auto' | '1' | '2' | '3' | '4') | null;
             index?: string | null;
             title?: string | null;
             lead?: string | null;
@@ -313,6 +343,18 @@ export interface Page {
             blockType: 'cards';
           }
         | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
             /**
              * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
              */
@@ -333,6 +375,18 @@ export interface Page {
             blockType: 'steps';
           }
         | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
             /**
              * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
              */
@@ -360,6 +414,18 @@ export interface Page {
             blockType: 'text';
           }
         | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
             /**
              * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
              */
@@ -374,6 +440,18 @@ export interface Page {
             blockType: 'contact';
           }
         | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
             title?: string | null;
             primary?: {
               label?: string | null;
@@ -566,6 +644,7 @@ export interface PostsSelect<T extends boolean = true> {
   slug?: T;
   status?: T;
   category?: T;
+  layoutStyle?: T;
   topic?: T;
   featuredImage?: T;
   excerpt?: T;
@@ -594,6 +673,14 @@ export interface PagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
               eyebrow?: T;
               masthead?: T;
               headline?: T;
@@ -617,8 +704,17 @@ export interface PagesSelect<T extends boolean = true> {
         cards?:
           | T
           | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
               anchor?: T;
               style?: T;
+              columns?: T;
               index?: T;
               title?: T;
               lead?: T;
@@ -649,6 +745,14 @@ export interface PagesSelect<T extends boolean = true> {
         steps?:
           | T
           | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
               anchor?: T;
               style?: T;
               index?: T;
@@ -667,6 +771,14 @@ export interface PagesSelect<T extends boolean = true> {
         text?:
           | T
           | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
               anchor?: T;
               index?: T;
               title?: T;
@@ -678,6 +790,14 @@ export interface PagesSelect<T extends boolean = true> {
         contact?:
           | T
           | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
               anchor?: T;
               title?: T;
               lead?: T;
@@ -690,6 +810,14 @@ export interface PagesSelect<T extends boolean = true> {
         cta?:
           | T
           | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
               title?: T;
               primary?:
                 | T
@@ -808,6 +936,41 @@ export interface Navigation {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "theme".
+ */
+export interface Theme {
+  id: number;
+  /**
+   * Mã màu, ví dụ #003050. Để trống = mặc định.
+   */
+  navy?: string | null;
+  /**
+   * Mã màu, ví dụ #001524. Để trống = mặc định.
+   */
+  navyDeep?: string | null;
+  /**
+   * Mã màu, ví dụ #a02020. Để trống = mặc định.
+   */
+  red?: string | null;
+  /**
+   * Mã màu, ví dụ #102130. Để trống = mặc định.
+   */
+  ink?: string | null;
+  /**
+   * Mã màu, ví dụ #617484. Để trống = mặc định.
+   */
+  muted?: string | null;
+  /**
+   * Mã màu, ví dụ #f3f6f8. Để trống = mặc định.
+   */
+  paper?: string | null;
+  headingFont?: ('serif' | 'sans') | null;
+  radius?: ('none' | 'small' | 'large') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -844,6 +1007,23 @@ export interface NavigationSelect<T extends boolean = true> {
         openInNewTab?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "theme_select".
+ */
+export interface ThemeSelect<T extends boolean = true> {
+  navy?: T;
+  navyDeep?: T;
+  red?: T;
+  ink?: T;
+  muted?: T;
+  paper?: T;
+  headingFont?: T;
+  radius?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

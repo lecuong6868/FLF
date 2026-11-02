@@ -24,10 +24,27 @@ const anchor: Field = {
   admin: { description: 'Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.' },
 }
 
+/** Màu & khoảng cách riêng cho từng phần (để trống = theo thiết kế). */
+const appearance: Field = {
+  name: 'appearance',
+  type: 'group',
+  label: 'Giao diện phần này',
+  fields: [
+    { name: 'bg', type: 'text', label: 'Màu nền', admin: { description: 'Mã màu, ví dụ #ffffff. Trống = mặc định.' } },
+    { name: 'text', type: 'text', label: 'Màu chữ', admin: { description: 'Mã màu, ví dụ #102130. Trống = mặc định.' } },
+    {
+      name: 'spacing', type: 'select', label: 'Khoảng cách trên/dưới', defaultValue: 'normal',
+      options: [{ label: 'Gọn', value: 'compact' }, { label: 'Vừa', value: 'normal' }, { label: 'Rộng', value: 'large' }],
+    },
+    { name: 'hidden', type: 'checkbox', label: 'Tạm ẩn phần này', defaultValue: false },
+  ],
+}
+
 export const HeroBlock: Block = {
   slug: 'hero',
   labels: { singular: 'Banner đầu trang', plural: 'Banner đầu trang' },
   fields: [
+    appearance,
     { name: 'eyebrow', type: 'text', label: 'Dòng nhỏ phía trên' },
     { name: 'masthead', type: 'text', label: 'Dòng phụ' },
     { name: 'headline', type: 'textarea', label: 'Tiêu đề lớn', required: true },
@@ -48,6 +65,7 @@ export const CardsBlock: Block = {
   slug: 'cards',
   labels: { singular: 'Phần có các thẻ', plural: 'Phần có các thẻ' },
   fields: [
+    appearance,
     anchor,
     {
       name: 'style',
@@ -60,6 +78,10 @@ export const CardsBlock: Block = {
         { label: 'Lưới "Vì sao chọn"', value: 'why' },
         { label: 'Nền xanh navy', value: 'navy' },
       ],
+    },
+    {
+      name: 'columns', type: 'select', label: 'Số cột thẻ', defaultValue: 'auto',
+      options: [{ label: 'Tự động', value: 'auto' }, { label: '1 cột', value: '1' }, { label: '2 cột', value: '2' }, { label: '3 cột', value: '3' }, { label: '4 cột', value: '4' }],
     },
     { name: 'index', type: 'text', label: 'Số thứ tự phần (vd: 01 — Giới thiệu)' },
     { name: 'title', type: 'text', label: 'Tiêu đề phần' },
@@ -85,6 +107,7 @@ export const StepsBlock: Block = {
   slug: 'steps',
   labels: { singular: 'Các bước / quy trình', plural: 'Các bước / quy trình' },
   fields: [
+    appearance,
     anchor,
     {
       name: 'style',
@@ -116,6 +139,7 @@ export const TextBlock: Block = {
   slug: 'text',
   labels: { singular: 'Đoạn văn tự do', plural: 'Đoạn văn tự do' },
   fields: [
+    appearance,
     anchor,
     { name: 'index', type: 'text', label: 'Số thứ tự phần' },
     { name: 'title', type: 'text', label: 'Tiêu đề phần' },
@@ -128,6 +152,7 @@ export const ContactBlock: Block = {
   slug: 'contact',
   labels: { singular: 'Form liên hệ', plural: 'Form liên hệ' },
   fields: [
+    appearance,
     { ...anchor, defaultValue: 'contact' },
     { name: 'title', type: 'text', label: 'Tiêu đề' },
     { name: 'lead', type: 'textarea', label: 'Mô tả' },
@@ -141,6 +166,7 @@ export const CtaBlock: Block = {
   slug: 'cta',
   labels: { singular: 'Dải kêu gọi liên hệ', plural: 'Dải kêu gọi liên hệ' },
   fields: [
+    appearance,
     { name: 'title', type: 'text', label: 'Tiêu đề' },
     link('primary', 'Nút chính'),
     link('secondary', 'Liên kết phụ'),

@@ -1190,3 +1190,12 @@ body.nav-open {
 .band-navy .why-item p {
   color: #a9bbc9;
 }
+
+/* Bố cục bài viết */
+.article-wide { width: min(1100px, calc(100% - 2rem)) !important; max-width: none !important; }
+.post-img { width: 100%; height: auto; border-radius: 6px; margin: 1rem 0; }
+.post-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 2.5rem; align-items: start; }
+.post-split .post-img { margin-top: 0; position: sticky; top: 1rem; }
+@media (max-width: 800px) { .post-split { grid-template-columns: 1fr; } }
+.post-cover { background: var(--navy-deep, #001524) center/cover no-repeat; color: #fff; padding: 4rem 0 3rem; margin-bottom: 2rem; }
+.post-cover h1, .post-cover .kicker, .post-cover a, .post-cover .post-meta { color: #fff !important; }

@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 import React from 'react'
 
 import { Shell } from '@/components/Shell'
-import { asLang, getPosts, isSection, mediaAlt, mediaUrl, SECTIONS, T, TOPICS } from '@/lib/site'
+import { NewPostButton } from '@/components/edit/EditKit'
+import { asLang, getEditor, getPosts, isSection, mediaAlt, mediaUrl, SECTIONS, T, TOPICS } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,11 +20,12 @@ export default async function SectionList({ params }: P) {
   const { lang: rawLang, section } = await params
   const lang = asLang(rawLang)
   if (!lang || !isSection(section)) notFound()
-  const posts = await getPosts(section, lang)
+  const editor = await getEditor()
+  const posts = await getPosts(section, lang, !!editor)
   const t = T[lang]
   const topics = Array.from(new Set(posts.map((p) => p.topic).filter(Boolean))) as string[]
   return (
-    <Shell lang={lang} path={`/${section}`}>
+    <Shell lang={lang} path={`/${section}`} adminHref="/admin/collections/posts">
       <section className="page-hero">
         <div className="wrap">
           <h1>{SECTIONS[section][lang]}</h1>
@@ -32,6 +34,7 @@ export default async function SectionList({ params }: P) {
       </section>
       <section className="content-section">
         <div className="wrap">
+          {editor ? <NewPostButton lang={lang} section={section} /> : null}
           {topics.length > 1 ? (
             <div className="chip-row" data-topic-filters aria-label="Topics">
               <button type="button" className="chip is-active" data-topic="all">{lang === 'vi' ? 'Tất cả' : 'All'}</button>
@@ -52,7 +55,7 @@ export default async function SectionList({ params }: P) {
                       {p.topic ? <span className="pill pill-topic">{TOPICS[p.topic]?.[lang] || p.topic}</span> : null}
                       {p.publishedAt ? <time dateTime={p.publishedAt}> {p.publishedAt.slice(0, 10)}</time> : null}
                     </p>
-                    <h3><a href={url}>{p.title}</a></h3>
+                    <h3><a href={url}>{p.title}</a>{p.status !== 'published' ? <span className="badge-draft">{p.status === 'pending_review' ? 'Chờ duyệt' : 'Nháp'}</span> : null}</h3>
                     {p.excerpt ? <p>{p.excerpt}</p> : null}
                     <a className="text-link" href={url}>{t.read}</a>
                   </article>

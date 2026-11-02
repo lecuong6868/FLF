@@ -1,0 +1,122 @@
+/* ===== Chế độ sửa trực tiếp FLF — chỉ tải khi đã đăng nhập ===== */
+.ce-bar {
+  position: sticky; top: 0; z-index: 9000; display: flex; align-items: center; gap: .35rem; flex-wrap: wrap;
+  padding: .45rem .9rem; background: #111827; color: #f9fafb; font: 500 13px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+.ce-bar button, .ce-bar a {
+  background: #1f2937; color: #f9fafb; border: 1px solid #374151; border-radius: 6px; padding: .4rem .7rem; cursor: pointer;
+  font: inherit; text-decoration: none;
+}
+.ce-bar button:hover, .ce-bar a:hover { background: #374151; }
+.ce-brand { font-weight: 700; margin-right: .4rem; }
+.ce-user { margin-left: auto; opacity: .7; }
+.ce-switch { display: inline-flex; align-items: center; gap: .4rem; padding: .3rem .7rem; border-radius: 999px; background: #065f46; cursor: pointer; margin-right: .3rem; }
+.ce-switch input { accent-color: #10b981; width: 16px; height: 16px; }
+
+/* Khung từng phần */
+.ce-block { position: relative; }
+.ce-block.on { outline: 2px dashed transparent; outline-offset: -2px; transition: outline-color .15s; }
+.ce-block.on:hover { outline-color: #3b82f6; }
+.ce-block.active { outline: 3px solid #2563eb !important; }
+.ce-block.is-hidden > div:last-child { opacity: .35; filter: grayscale(1); }
+.ce-tools {
+  position: absolute; top: 10px; right: 10px; z-index: 50; display: flex; gap: 4px; align-items: center;
+  background: rgba(17,24,39,.92); padding: 5px; border-radius: 8px; opacity: 0; transform: translateY(-4px);
+  transition: opacity .15s, transform .15s; font: 500 13px system-ui, sans-serif;
+}
+.ce-block.on:hover .ce-tools, .ce-block.active .ce-tools { opacity: 1; transform: none; }
+@media (hover: none) { .ce-block.on .ce-tools { opacity: 1; transform: none; } }
+.ce-tag { color: #bfdbfe; padding: 0 .4rem; white-space: nowrap; }
+
+/* Nút */
+.ce-btn {
+  font: 600 13px/1 system-ui, -apple-system, sans-serif; padding: .55rem .85rem; border-radius: 6px; cursor: pointer;
+  background: #fff; color: #111827; border: 1px solid #d1d5db;
+}
+.ce-btn:hover { background: #f3f4f6; }
+.ce-btn.sm { padding: .35rem .55rem; }
+.ce-btn.primary { background: #2563eb; border-color: #2563eb; color: #fff; }
+.ce-btn.primary:hover { background: #1d4ed8; }
+.ce-btn.ghost { background: transparent; }
+.ce-btn.danger, .ce-link.danger { color: #b91c1c; }
+.ce-btn[disabled] { opacity: .5; cursor: default; }
+.ce-link { background: none; border: 0; color: #2563eb; cursor: pointer; font: inherit; padding: 0; text-decoration: underline; }
+.ce-row { display: inline-flex; gap: .4rem; align-items: center; flex-wrap: wrap; }
+
+/* Thêm phần */
+.ce-add { position: relative; height: 0; z-index: 40; display: flex; justify-content: center; }
+.ce-add > button {
+  transform: translateY(-50%); opacity: 0; background: #2563eb; color: #fff; border: 0; border-radius: 999px;
+  padding: .35rem .9rem; font: 600 12px system-ui, sans-serif; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2); transition: opacity .15s;
+}
+.ce-add:hover > button, .ce-add > button:focus { opacity: 1; }
+.ce-block.on:hover + .ce-add > button { opacity: .9; }
+@media (hover: none) { .ce-add > button { opacity: .85; } }
+.ce-add-menu {
+  position: absolute; top: 14px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  padding: .4rem; display: grid; min-width: 240px; font: 14px system-ui, sans-serif;
+}
+.ce-add-menu button { text-align: left; background: none; border: 0; padding: .55rem .7rem; border-radius: 6px; cursor: pointer; color: #111827; }
+.ce-add-menu button:hover { background: #eff6ff; }
+
+/* Ngăn kéo bên phải */
+.ce-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100vw); z-index: 9500; background: #fff; color: #111827;
+  box-shadow: -10px 0 40px rgba(0,0,0,.2); display: flex; flex-direction: column; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  animation: ce-in .18s ease-out;
+}
+@keyframes ce-in { from { transform: translateX(30px); opacity: 0 } to { transform: none; opacity: 1 } }
+.ce-drawer-head { display: flex; justify-content: space-between; align-items: center; padding: .9rem 1.1rem; border-bottom: 1px solid #e5e7eb; }
+.ce-drawer-head strong { font-size: 15px; }
+.ce-x { background: none; border: 0; font-size: 18px; cursor: pointer; color: #6b7280; }
+.ce-tabs { display: flex; border-bottom: 1px solid #e5e7eb; }
+.ce-tabs button { flex: 1; padding: .7rem; background: none; border: 0; border-bottom: 2px solid transparent; cursor: pointer; font: 600 13px system-ui, sans-serif; color: #6b7280; }
+.ce-tabs button.on { color: #2563eb; border-bottom-color: #2563eb; }
+.ce-drawer-body { flex: 1; overflow: auto; padding: 1rem 1.1rem 2rem; }
+.ce-drawer-foot { display: flex; justify-content: space-between; align-items: center; gap: .6rem; padding: .8rem 1.1rem; border-top: 1px solid #e5e7eb; background: #f9fafb; }
+
+/* Ô nhập */
+.ce-field { margin-bottom: 1rem; }
+.ce-label { display: block; font-weight: 600; margin-bottom: .3rem; color: #374151; }
+.ce-drawer input[type=text], .ce-drawer input[type=email], .ce-drawer input[type=date], .ce-drawer textarea, .ce-drawer select {
+  width: 100%; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 6px; padding: .55rem .65rem; font: 14px/1.45 system-ui, sans-serif; color: #111827; background: #fff;
+}
+.ce-drawer textarea { resize: vertical; }
+.ce-drawer input:focus, .ce-drawer textarea:focus, .ce-drawer select:focus { outline: 2px solid #93c5fd; border-color: #2563eb; }
+.ce-hint { color: #6b7280; font-size: 12.5px; margin: .3rem 0 0; }
+.ce-err { color: #b91c1c; font-size: 13px; }
+.ce-check { display: flex; gap: .5rem; align-items: center; font-weight: 500; }
+.ce-group { border-left: 3px solid #e5e7eb; padding-left: .8rem; }
+
+.ce-color { display: grid; grid-template-columns: 44px 1fr; gap: .5rem; align-items: center; }
+.ce-color input[type=color] { width: 44px; height: 38px; padding: 0; border: 1px solid #d1d5db; border-radius: 6px; cursor: pointer; }
+.ce-swatches { grid-column: 1 / -1; display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+.ce-swatches button:not(.ce-link) { width: 22px; height: 22px; border-radius: 50%; border: 1px solid #d1d5db; cursor: pointer; }
+
+.ce-image img { display: block; max-width: 100%; max-height: 180px; border-radius: 6px; border: 1px solid #e5e7eb; margin-bottom: .5rem; background: repeating-conic-gradient(#f3f4f6 0 25%, #fff 0 50%) 0 0/16px 16px; }
+.ce-image-empty { border: 2px dashed #d1d5db; border-radius: 6px; padding: 1.2rem; text-align: center; color: #9ca3af; margin-bottom: .5rem; }
+.ce-lib { margin-top: .6rem; border: 1px solid #e5e7eb; border-radius: 8px; padding: .6rem; background: #f9fafb; }
+.ce-lib-head { display: flex; justify-content: space-between; margin-bottom: .5rem; }
+.ce-lib-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-height: 280px; overflow: auto; }
+.ce-lib-grid button { padding: 0; border: 2px solid transparent; border-radius: 6px; background: #fff; cursor: pointer; aspect-ratio: 1; overflow: hidden; }
+.ce-lib-grid button:hover { border-color: #2563eb; }
+.ce-lib-grid img { width: 100%; height: 100%; object-fit: cover; }
+
+.ce-array-item { border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: .5rem; background: #fff; }
+.ce-array-head { display: flex; justify-content: space-between; align-items: center; padding: .55rem .7rem; cursor: pointer; font-weight: 600; gap: .4rem; }
+.ce-array-head span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ce-array-head button { background: #f3f4f6; border: 0; border-radius: 4px; width: 26px; height: 26px; cursor: pointer; }
+.ce-array-head button.danger { color: #b91c1c; }
+.ce-array-body { padding: .3rem .8rem .6rem; border-top: 1px solid #f3f4f6; }
+
+/* Thanh lưu */
+.ce-savebar {
+  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 9400; display: flex; gap: 1rem; align-items: center;
+  background: #111827; color: #fff; padding: .6rem .7rem .6rem 1rem; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.3);
+  font: 500 14px system-ui, sans-serif; max-width: calc(100vw - 2rem);
+}
+.ce-savebar.dirty { background: #92400e; }
+.ce-newpost { margin: 0 0 1rem; }
+
+.badge-draft { display: inline-block; background: #fef3c7; color: #92400e; font: 600 11px system-ui, sans-serif; padding: 2px 8px; border-radius: 999px; margin-left: .4rem; vertical-align: middle; }

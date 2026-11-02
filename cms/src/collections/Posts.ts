@@ -93,6 +93,19 @@ export const Posts: CollectionConfig = {
       admin: { position: 'sidebar' },
     },
     {
+      name: 'layoutStyle',
+      type: 'select',
+      label: 'Bố cục bài viết',
+      defaultValue: 'standard',
+      options: [
+        { label: 'Chuẩn (cột đọc giữa trang)', value: 'standard' },
+        { label: 'Rộng (ảnh lớn tràn khung)', value: 'wide' },
+        { label: 'Ảnh bên trái, chữ bên phải', value: 'image-left' },
+        { label: 'Ảnh bìa nền tối (kiểu tạp chí)', value: 'cover' },
+      ],
+      admin: { position: 'sidebar' },
+    },
+    {
       name: 'topic',
       type: 'select',
       label: 'Chủ đề (cho Chuyên mục)',

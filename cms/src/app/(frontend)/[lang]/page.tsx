@@ -4,7 +4,8 @@ import React from 'react'
 
 import { Blocks } from '@/components/Blocks'
 import { Shell } from '@/components/Shell'
-import { asLang, getPage } from '@/lib/site'
+import { EditablePage } from '@/components/edit/EditKit'
+import { asLang, getEditor, getPage } from '@/lib/site'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
 export const dynamic = 'force-dynamic'
@@ -21,12 +22,13 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
 export default async function Home({ params }: P) {
   const lang = asLang((await params).lang)
   if (!lang) notFound()
+  const editor = await getEditor()
   const page = await getPage('trang-chu', lang)
   return (
-    <Shell lang={lang}>
+    <Shell adminHref={page ? `/admin/collections/pages/${page.id}?locale=${lang}` : '/admin'} lang={lang}>
       {page ? (
         <>
-          <Blocks blocks={page.layout as never} lang={lang} isHome />
+          {editor ? <EditablePage pageId={page.id} initial={(page.layout || []) as never} lang={lang} isHome /> : <Blocks blocks={page.layout as never} lang={lang} isHome />}
           {page.content ? <section className="section about"><div className="wrap narrow article-body"><RichText data={page.content} /></div></section> : null}
         </>
       ) : (

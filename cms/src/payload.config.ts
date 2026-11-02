@@ -12,6 +12,7 @@ import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { Navigation } from './globals/Navigation'
 import { SiteSettings } from './globals/SiteSettings'
+import { Theme } from './globals/Theme'
 import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -42,7 +43,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Categories, Posts, Pages],
-  globals: [SiteSettings, Navigation],
+  globals: [SiteSettings, Navigation, Theme],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
