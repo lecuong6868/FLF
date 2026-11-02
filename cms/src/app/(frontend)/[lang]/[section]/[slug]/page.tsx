@@ -28,7 +28,7 @@ export default async function PostPage({ params }: P) {
   if (!post) notFound()
   return (
     <Shell lang={lang} path={`/${section}/${slug}`} adminHref={`/admin/collections/posts/${post.id}?locale=${lang}`}>
-      {editor ? <EditablePost initial={post} lang={lang} section={section} /> : <PostView post={post} lang={lang} section={section} />}
+      {editor ? <EditablePost initial={post} lang={lang} section={section} role={(editor as { role?: string }).role || ''} /> : <PostView post={post} lang={lang} section={section} />}
     </Shell>
   )
 }

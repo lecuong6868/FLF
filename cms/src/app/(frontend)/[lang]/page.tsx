@@ -28,7 +28,7 @@ export default async function Home({ params }: P) {
     <Shell adminHref={page ? `/admin/collections/pages/${page.id}?locale=${lang}` : '/admin'} lang={lang}>
       {page ? (
         <>
-          {editor ? <EditablePage pageId={page.id} initial={(page.layout || []) as never} lang={lang} isHome /> : <Blocks blocks={page.layout as never} lang={lang} isHome />}
+          {editor && ['admin', 'reviewer'].includes((editor as { role?: string }).role || '') ? <EditablePage pageId={page.id} initial={(page.layout || []) as never} lang={lang} isHome /> : <Blocks blocks={page.layout as never} lang={lang} isHome />}
           {page.content ? <section className="section about"><div className="wrap narrow article-body"><RichText data={page.content} /></div></section> : null}
         </>
       ) : (

@@ -1,13 +1,13 @@
 import type { GlobalConfig } from 'payload'
 
-import { admins } from '../access/roles'
+import { publishers } from '../access/roles'
 
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
   label: 'Menu điều hướng',
   access: {
     read: () => true,
-    update: admins,
+    update: publishers, // admin hoặc reviewer
   },
   fields: [
     {

@@ -1,13 +1,13 @@
 import type { GlobalConfig } from 'payload'
 
-import { admins } from '../access/roles'
+import { publishers } from '../access/roles'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Thông tin công ty',
   access: {
     read: () => true,
-    update: admins,
+    update: publishers, // admin hoặc reviewer
   },
   fields: [
     {
