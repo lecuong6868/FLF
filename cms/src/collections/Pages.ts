@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { PAGE_BLOCKS } from '../blocks'
 import { admins, authenticated, canPublish, staff } from '../access/roles'
 
 export const Pages: CollectionConfig = {
@@ -10,8 +11,12 @@ export const Pages: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
+    // Nút "Preview" trong CMS: mở đúng trang trên web theo ngôn ngữ đang sửa
+    preview: (doc, { locale }) =>
+      `${process.env.NEXT_PUBLIC_SERVER_URL || ''}/${locale || 'vi'}${doc?.slug && doc.slug !== 'trang-chu' ? '/' + doc.slug : ''}`,
     defaultColumns: ['title', 'slug', 'status', 'updatedAt'],
     group: 'Nội dung',
+    description: 'Trang chủ (slug: trang-chu) và Giới thiệu (slug: gioi-thieu) hiển thị trên web.',
   },
   access: {
     create: authenticated,
@@ -73,9 +78,20 @@ export const Pages: CollectionConfig = {
       admin: { position: 'sidebar' },
     },
     {
+      name: 'layout',
+      type: 'blocks',
+      label: 'Các phần của trang',
+      localized: true,
+      blocks: PAGE_BLOCKS,
+      admin: {
+        description:
+          'Mỗi khối là một phần trên web, theo thứ tự từ trên xuống. Kéo thả để đổi thứ tự. Đổi ngôn ngữ VI/EN ở góc trên để sửa bản tiếng Anh.',
+      },
+    },
+    {
       name: 'content',
       type: 'richText',
-      label: 'Nội dung',
+      label: 'Nội dung thêm (cuối trang, tùy chọn)',
       localized: true,
     },
     {
