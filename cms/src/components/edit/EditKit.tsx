@@ -1,0 +1,411 @@
+'use client'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useRouter } from 'next/navigation'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+
+import { PAGE_BLOCKS } from '@/blocks'
+import { THEME_COLORS } from '@/globals/Theme'
+import { BlockView } from '@/components/Blocks'
+import { PostView } from '@/components/PostView'
+import { type Lang, type SectionKey, themeCss } from '@/lib/shared'
+import { api, json, toSave } from './api'
+import { type F, FieldList } from './Fields'
+import './editor.css'
+
+/* ---------------- Bật/tắt chế độ sửa (nhớ trong trình duyệt) ---------------- */
+function useEditOn(): [boolean, (v: boolean) => void] {
+  const [on, setOn] = useState(true)
+  useEffect(() => {
+    try { setOn(localStorage.getItem('flf-edit') !== 'off') } catch {}
+    const h = (e: Event) => setOn((e as CustomEvent).detail)
+    window.addEventListener('flf-edit', h)
+    return () => window.removeEventListener('flf-edit', h)
+  }, [])
+  const set = (v: boolean) => {
+    try { localStorage.setItem('flf-edit', v ? 'on' : 'off') } catch {}
+    window.dispatchEvent(new CustomEvent('flf-edit', { detail: v }))
+  }
+  return [on, set]
+}
+
+/* Chỉ 1 ngăn kéo mở một lúc */
+function useCloseOnOther(id: string, close: () => void) {
+  useEffect(() => {
+    const h = (e: Event) => { if ((e as CustomEvent).detail !== id) close() }
+    window.addEventListener('ce-open', h)
+    return () => window.removeEventListener('ce-open', h)
+  }, [id, close])
+}
+const announceOpen = (id: string) => window.dispatchEvent(new CustomEvent('ce-open', { detail: id }))
+
+/* ---------------- Ngăn kéo bên phải ---------------- */
+function Drawer({ title, onClose, children, footer, tabs }: {
+  title: string; onClose: () => void; children: React.ReactNode; footer?: React.ReactNode
+  tabs?: { id: string; label: string; active: boolean; onClick: () => void }[]
+}) {
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', k)
+    return () => window.removeEventListener('keydown', k)
+  }, [onClose])
+  return (
+    <div className="ce-drawer" role="dialog" aria-label={title}>
+      <div className="ce-drawer-head">
+        <strong>{title}</strong>
+        <button type="button" className="ce-x" onClick={onClose} aria-label="Đóng">✕</button>
+      </div>
+      {tabs ? <div className="ce-tabs">{tabs.map((t) => <button key={t.id} type="button" className={t.active ? 'on' : ''} onClick={t.onClick}>{t.label}</button>)}</div> : null}
+      <div className="ce-drawer-body">{children}</div>
+      {footer ? <div className="ce-drawer-foot">{footer}</div> : null}
+    </div>
+  )
+}
+
+/* ---------------- Thanh lưu ở cuối màn hình ---------------- */
+function SaveBar({ dirty, saving, msg, onSave, onDiscard }: { dirty: boolean; saving: boolean; msg: string; onSave: () => void; onDiscard: () => void }) {
+  if (!dirty && !msg) return null
+  return (
+    <div className={`ce-savebar ${dirty ? 'dirty' : ''}`}>
+      <span>{saving ? 'Đang lưu…' : dirty ? '● Có thay đổi chưa lưu — đang xem trước trên trang' : msg}</span>
+      {dirty ? (
+        <span className="ce-row">
+          <button type="button" className="ce-btn ghost" onClick={onDiscard} disabled={saving}>Hủy thay đổi</button>
+          <button type="button" className="ce-btn primary" onClick={onSave} disabled={saving}>💾 Lưu & đăng</button>
+        </span>
+      ) : null}
+    </div>
+  )
+}
+
+function useUnsavedGuard(dirty: boolean) {
+  useEffect(() => {
+    const h = (e: BeforeUnloadEvent) => { if (dirty) { e.preventDefault(); e.returnValue = '' } }
+    window.addEventListener('beforeunload', h)
+    return () => window.removeEventListener('beforeunload', h)
+  }, [dirty])
+}
+
+const blockLabel = (slug: string) => (PAGE_BLOCKS.find((b) => b.slug === slug)?.labels?.singular as string) || slug
+const blockFields = (slug: string) => (PAGE_BLOCKS.find((b) => b.slug === slug)?.fields || []) as F[]
+
+function blockSummary(b: any): string {
+  return b.title || b.headline || b.index || ''
+}
+
+/* ================= Trang (Trang chủ / Giới thiệu) ================= */
+export function EditablePage({ pageId, initial, lang, isHome }: { pageId: number | string; initial: any[]; lang: Lang; isHome: boolean }) {
+  const router = useRouter()
+  const [on] = useEditOn()
+  const [saved, setSaved] = useState<any[]>(initial || [])
+  const [blocks, setBlocks] = useState<any[]>(initial || [])
+  const [edit, setEdit] = useState<number | null>(null)
+  const [tab, setTab] = useState<'content' | 'look'>('content')
+  const [adding, setAdding] = useState<number | null>(null)
+  const [saving, setSaving] = useState(false)
+  const [msg, setMsg] = useState('')
+  const dirty = useMemo(() => JSON.stringify(blocks) !== JSON.stringify(saved), [blocks, saved])
+  useUnsavedGuard(dirty)
+  const adminHref = `/admin/collections/pages/${pageId}?locale=${lang}`
+  const closeEdit = useCallback(() => setEdit(null), [])
+  useCloseOnOther('page', closeEdit)
+  useEffect(() => { if (edit != null) announceOpen('page') }, [edit])
+
+  const update = (i: number, v: any) => setBlocks((bs) => bs.map((b, k) => (k === i ? v : b)))
+  const move = (i: number, d: number) => setBlocks((bs) => {
+    const j = i + d
+    if (j < 0 || j >= bs.length) return bs
+    const n = [...bs]; [n[i], n[j]] = [n[j], n[i]]; return n
+  })
+  const remove = (i: number) => { if (confirm(`Xóa phần "${blockLabel(blocks[i].blockType)}${blockSummary(blocks[i]) ? ': ' + blockSummary(blocks[i]) : ''}"?`)) { setBlocks((bs) => bs.filter((_, k) => k !== i)); setEdit(null) } }
+  const add = (at: number, slug: string) => {
+    setBlocks((bs) => [...bs.slice(0, at), { blockType: slug }, ...bs.slice(at)])
+    setAdding(null); setEdit(at); setTab('content')
+  }
+  const save = async () => {
+    setSaving(true); setMsg('')
+    try {
+      const j = await api(`/api/pages/${pageId}?locale=${lang}&depth=2`, json('PATCH', { layout: toSave(blocks) }))
+      const fresh = j.doc?.layout || blocks
+      setBlocks(fresh); setSaved(fresh)
+      setMsg('✓ Đã lưu — khách xem web sẽ thấy ngay.')
+      router.refresh()
+      setTimeout(() => setMsg(''), 4000)
+    } catch (e: any) { setMsg('✕ ' + e.message) } finally { setSaving(false) }
+  }
+
+  const AddBtn = ({ at }: { at: number }) => on ? (
+    <div className="ce-add">
+      <button type="button" onClick={() => setAdding(adding === at ? null : at)}>＋ Thêm phần ở đây</button>
+      {adding === at ? (
+        <div className="ce-add-menu">
+          {PAGE_BLOCKS.map((b) => <button type="button" key={b.slug} onClick={() => add(at, b.slug)}>{b.labels?.singular as string}</button>)}
+        </div>
+      ) : null}
+    </div>
+  ) : null
+
+  const cur = edit != null ? blocks[edit] : null
+  const fields = cur ? blockFields(cur.blockType) : []
+  return (
+    <>
+      {blocks.map((b, i) => {
+        const hidden = b.appearance?.hidden
+        if (!on && hidden) return null
+        return (
+          <React.Fragment key={b.id || `new-${i}`}>
+            {i === 0 ? <AddBtn at={0} /> : null}
+            <div className={`ce-block ${on ? 'on' : ''} ${edit === i ? 'active' : ''} ${hidden ? 'is-hidden' : ''}`}>
+              {on ? (
+                <div className="ce-tools">
+                  <span className="ce-tag">{blockLabel(b.blockType)}{hidden ? ' · đang ẩn' : ''}</span>
+                  <button type="button" className="ce-btn primary sm" onClick={() => { setEdit(i); setTab('content') }}>✏️ Sửa</button>
+                  <button type="button" className="ce-btn sm" onClick={() => { setEdit(i); setTab('look') }} title="Màu sắc, khoảng cách">🎨</button>
+                  <button type="button" className="ce-btn sm" onClick={() => move(i, -1)} title="Đưa lên">↑</button>
+                  <button type="button" className="ce-btn sm" onClick={() => move(i, 1)} title="Đưa xuống">↓</button>
+                  <button type="button" className="ce-btn sm" title={hidden ? 'Hiện lại' : 'Tạm ẩn'}
+                    onClick={() => update(i, { ...b, appearance: { ...(b.appearance || {}), hidden: !hidden } })}>{hidden ? '👁 Hiện' : '🙈'}</button>
+                  <button type="button" className="ce-btn sm danger" onClick={() => remove(i)} title="Xóa phần">🗑</button>
+                </div>
+              ) : null}
+              <div onDoubleClick={() => on && (setEdit(i), setTab('content'))}>
+                <BlockView b={b} lang={lang} isHome={isHome} />
+              </div>
+            </div>
+            <AddBtn at={i + 1} />
+          </React.Fragment>
+        )
+      })}
+      {blocks.length === 0 ? <AddBtn at={0} /> : null}
+      {cur && on ? (
+        <Drawer
+          title={`${blockLabel(cur.blockType)}${blockSummary(cur) ? ' — ' + blockSummary(cur).slice(0, 40) : ''} (${lang.toUpperCase()})`}
+          onClose={() => setEdit(null)}
+          tabs={[
+            { id: 'content', label: 'Nội dung & hình ảnh', active: tab === 'content', onClick: () => setTab('content') },
+            { id: 'look', label: 'Màu sắc & bố cục', active: tab === 'look', onClick: () => setTab('look') },
+          ]}
+          footer={<><span className="ce-hint">{msg || 'Thay đổi hiện ngay trên trang. Bấm Lưu để đăng.'}</span><button type="button" className="ce-btn primary" disabled={!dirty || saving} onClick={save}>💾 Lưu & đăng</button></>}
+        >
+          <FieldList
+            fields={fields.filter((f) => (tab === 'look' ? f.name === 'appearance' || f.name === 'style' || f.name === 'columns' : f.name !== 'appearance' && f.name !== 'style' && f.name !== 'columns' && f.name !== 'anchor'))
+              .flatMap((f) => (f.name === 'appearance' ? f.fields : [f]))}
+            value={tab === 'look' ? { ...cur, ...(cur.appearance || {}) } : cur}
+            onChange={(v) => {
+              if (tab === 'look') {
+                const { bg, text, spacing, hidden, ...rest } = v
+                update(edit!, { ...rest, appearance: { ...(cur.appearance || {}), bg, text, spacing, hidden } })
+              } else update(edit!, v)
+            }}
+            adminHref={adminHref}
+          />
+          {tab === 'look' && cur.anchor !== undefined ? null : null}
+        </Drawer>
+      ) : null}
+      {edit == null ? <SaveBar dirty={dirty} saving={saving} msg={msg} onSave={save} onDiscard={() => { setBlocks(saved); setEdit(null) }} /> : null}
+    </>
+  )
+}
+
+/* ================= Bài viết ================= */
+const POST_FIELDS: F[] = [
+  { name: 'title', type: 'text', label: 'Tiêu đề' },
+  { name: 'excerpt', type: 'textarea', label: 'Tóm tắt (hiện ở danh sách)' },
+  { name: 'featuredImage', type: 'upload', label: 'Ảnh đại diện' },
+  { name: 'content', type: 'richText', label: 'Nội dung bài' },
+]
+const POST_META: F[] = [
+  { name: 'layoutStyle', type: 'select', label: 'Bố cục bài viết', defaultValue: 'standard', options: [
+    { label: 'Chuẩn (cột đọc giữa trang)', value: 'standard' },
+    { label: 'Rộng (ảnh lớn tràn khung)', value: 'wide' },
+    { label: 'Ảnh bên trái, chữ bên phải', value: 'image-left' },
+    { label: 'Ảnh bìa nền tối (kiểu tạp chí)', value: 'cover' },
+  ] },
+  { name: 'status', type: 'select', label: 'Trạng thái', defaultValue: 'draft', options: [
+    { label: 'Nháp (khách không thấy)', value: 'draft' },
+    { label: 'Chờ duyệt', value: 'pending_review' },
+    { label: 'Đã đăng (khách thấy)', value: 'published' },
+  ] },
+  { name: 'topic', type: 'select', label: 'Chủ đề', options: [
+    { label: 'Đầu tư', value: 'dau-tu' }, { label: 'Thuế', value: 'thue' }, { label: 'Quản trị doanh nghiệp', value: 'quan-tri-dn' },
+    { label: 'Quản trị rủi ro', value: 'rui-ro' }, { label: 'Giấy phép', value: 'giay-phep' }, { label: 'Lao động & nhân sự', value: 'lao-dong' },
+    { label: 'Hợp đồng & giao dịch', value: 'hop-dong' }, { label: 'Tuân thủ & bảo vệ dữ liệu', value: 'tuan-thu' },
+  ] },
+  { name: 'publishedAt', type: 'date', label: 'Ngày đăng' },
+  { name: 'slug', type: 'text', label: 'Đường dẫn (slug)', admin: { description: 'Chỉ chữ thường không dấu và dấu gạch ngang.' } },
+]
+const PICK = ['title', 'excerpt', 'featuredImage', 'content', 'layoutStyle', 'status', 'topic', 'publishedAt', 'slug']
+
+export function EditablePost({ initial, lang, section }: { initial: any; lang: Lang; section: SectionKey }) {
+  const router = useRouter()
+  const [on] = useEditOn()
+  const [saved, setSaved] = useState<any>(initial)
+  const [post, setPost] = useState<any>(initial)
+  const [open, setOpen] = useState(false)
+  const [tab, setTab] = useState<'content' | 'meta'>('content')
+  const [saving, setSaving] = useState(false)
+  const [msg, setMsg] = useState('')
+  const dirty = JSON.stringify(post) !== JSON.stringify(saved)
+  useUnsavedGuard(dirty)
+  const closeOpen = useCallback(() => setOpen(false), [])
+  useCloseOnOther('post', closeOpen)
+  useEffect(() => { if (open) announceOpen('post') }, [open])
+  const save = async () => {
+    setSaving(true); setMsg('')
+    try {
+      const data = Object.fromEntries(PICK.map((k) => [k, post[k]]))
+      const j = await api(`/api/posts/${post.id}?locale=${lang}&depth=2`, json('PATCH', toSave(data)))
+      setPost(j.doc); setSaved(j.doc)
+      setMsg('✓ Đã lưu.')
+      if (j.doc.slug !== initial.slug) { window.location.href = `/${lang}/${section}/${j.doc.slug}`; return }
+      router.refresh(); setTimeout(() => setMsg(''), 4000)
+    } catch (e: any) { setMsg('✕ ' + e.message) } finally { setSaving(false) }
+  }
+  const del = async () => {
+    if (!confirm('Xóa hẳn bài viết này? Không khôi phục được.')) return
+    try { await api(`/api/posts/${post.id}`, { method: 'DELETE' }); window.location.href = `/${lang}/${section}` } catch (e: any) { setMsg('✕ ' + e.message) }
+  }
+  return (
+    <>
+      <div className={`ce-block ${on ? 'on' : ''} ${open ? 'active' : ''}`}>
+        {on ? (
+          <div className="ce-tools">
+            <span className="ce-tag">Bài viết · {post.status === 'published' ? 'Đã đăng' : post.status === 'pending_review' ? 'Chờ duyệt' : 'Nháp'}</span>
+            <button type="button" className="ce-btn primary sm" onClick={() => { setOpen(true); setTab('content') }}>✏️ Sửa bài</button>
+            <button type="button" className="ce-btn sm" onClick={() => { setOpen(true); setTab('meta') }}>🧩 Bố cục & đăng bài</button>
+            <button type="button" className="ce-btn sm danger" onClick={del}>🗑</button>
+          </div>
+        ) : null}
+        <div onDoubleClick={() => on && setOpen(true)}><PostView post={post} lang={lang} section={section} /></div>
+      </div>
+      {open && on ? (
+        <Drawer title={`Bài viết (${lang.toUpperCase()})`} onClose={() => setOpen(false)}
+          tabs={[
+            { id: 'content', label: 'Nội dung & ảnh', active: tab === 'content', onClick: () => setTab('content') },
+            { id: 'meta', label: 'Bố cục & đăng bài', active: tab === 'meta', onClick: () => setTab('meta') },
+          ]}
+          footer={<><span className="ce-hint">{msg || 'Xem trước ngay trên trang.'}</span><button type="button" className="ce-btn primary" disabled={!dirty || saving} onClick={save}>💾 Lưu</button></>}>
+          <FieldList fields={tab === 'content' ? POST_FIELDS : POST_META} value={post} onChange={setPost} adminHref={`/admin/collections/posts/${post.id}?locale=${lang}`} />
+        </Drawer>
+      ) : null}
+      {!open ? <SaveBar dirty={dirty} saving={saving} msg={msg} onSave={save} onDiscard={() => setPost(saved)} /> : null}
+    </>
+  )
+}
+
+/* ================= Nút "Viết bài mới" trên trang danh sách ================= */
+export function NewPostButton({ lang, section }: { lang: Lang; section: SectionKey }) {
+  const [on] = useEditOn()
+  const [busy, setBusy] = useState(false)
+  if (!on) return null
+  return (
+    <button type="button" className="ce-btn primary ce-newpost" disabled={busy} onClick={async () => {
+      const title = prompt('Tiêu đề bài viết mới:')
+      if (!title) return
+      setBusy(true)
+      try {
+        const cat = await api(`/api/categories?where[slug][equals]=${section}&limit=1`)
+        const slug = title.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 70) + '-' + Date.now().toString(36).slice(-4)
+        await api(`/api/posts?locale=${lang}`, json('POST', { title, slug, status: 'draft', category: cat.docs[0]?.id, publishedAt: new Date().toISOString() }))
+        window.location.href = `/${lang}/${section}/${slug}`
+      } catch (e: any) { alert(e.message); setBusy(false) }
+    }}>＋ Viết bài mới</button>
+  )
+}
+
+/* ================= Thanh công cụ trên cùng ================= */
+const SETTINGS_FIELDS: F[] = [
+  { name: 'companyLegalName', type: 'text', label: 'Tên pháp lý công ty' },
+  { name: 'companyTradeName', type: 'text', label: 'Tên thương mại' },
+  { name: 'taxCode', type: 'text', label: 'Mã số thuế' },
+  { name: 'publicAddress', type: 'textarea', label: 'Địa chỉ hiển thị trên web' },
+  { name: 'phone', type: 'text', label: 'Điện thoại' },
+  { name: 'email', type: 'email', label: 'Email' },
+  { name: 'logo', type: 'upload', label: 'Logo (trống = logo mặc định)' },
+  { name: 'facebookUrl', type: 'text', label: 'Link Facebook' },
+  { name: 'linkedinUrl', type: 'text', label: 'Link LinkedIn' },
+]
+const NAV_FIELDS: F[] = [{
+  name: 'items', type: 'array', label: 'Các mục menu', labels: { singular: 'Mục menu' },
+  fields: [
+    { name: 'label', type: 'text', label: 'Chữ hiển thị' },
+    { name: 'href', type: 'text', label: 'Đường dẫn', admin: { description: 'Ví dụ: / , /gioi-thieu , /#contact , https://…' } },
+    { name: 'openInNewTab', type: 'checkbox', label: 'Mở tab mới' },
+  ],
+}]
+const THEME_FIELDS: F[] = [
+  ...THEME_COLORS.map((c) => ({ name: c.name, type: 'text', label: c.label, admin: { description: `Mã màu, mặc định ${c.def}` } })),
+  { name: 'headingFont', type: 'select', label: 'Kiểu chữ tiêu đề', defaultValue: 'serif', options: [{ label: 'Có chân (sang trọng)', value: 'serif' }, { label: 'Không chân (hiện đại)', value: 'sans' }] },
+  { name: 'radius', type: 'select', label: 'Bo góc nút & thẻ', defaultValue: 'small', options: [{ label: 'Vuông', value: 'none' }, { label: 'Bo nhẹ', value: 'small' }, { label: 'Bo tròn', value: 'large' }] },
+]
+
+type Panel = null | 'theme' | 'settings' | 'nav'
+
+export function EditorBar({ lang, userName, role, adminHref }: { lang: Lang; userName: string; role: string; adminHref: string }) {
+  const [on, setOn] = useEditOn()
+  const [panel, setPanel] = useState<Panel>(null)
+  const [data, setData] = useState<any>(null)
+  const [saved, setSaved] = useState<any>(null)
+  const [msg, setMsg] = useState('')
+  const [saving, setSaving] = useState(false)
+  const slug = { theme: 'theme', settings: 'site-settings', nav: 'navigation' } as const
+
+  const closePanel = useCallback(() => setPanel(null), [])
+  useCloseOnOther('bar', closePanel)
+  const openPanel = useCallback(async (p: Exclude<Panel, null>) => {
+    announceOpen('bar')
+    setPanel(p); setData(null); setMsg('')
+    try {
+      const j = await api(`/api/globals/${slug[p]}?locale=${lang}&depth=1`)
+      setData(j); setSaved(j)
+    } catch (e: any) { setMsg('✕ ' + e.message) }
+  }, [lang]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Xem trước màu ngay khi chọn
+  useEffect(() => {
+    if (panel !== 'theme' || !data) return
+    let el = document.getElementById('ce-theme-preview') as HTMLStyleElement | null
+    if (!el) { el = document.createElement('style'); el.id = 'ce-theme-preview'; document.head.appendChild(el) }
+    el.textContent = themeCss(data)
+  }, [panel, data])
+
+  const close = () => {
+    if (panel === 'theme' && JSON.stringify(data) !== JSON.stringify(saved)) document.getElementById('ce-theme-preview')?.remove()
+    setPanel(null)
+  }
+  const save = async () => {
+    if (!panel) return
+    setSaving(true); setMsg('')
+    try {
+      const body = toSave(panel === 'nav' ? { items: data.items } : Object.fromEntries(Object.entries(data).filter(([k]) => !['id', 'globalType', 'createdAt', 'updatedAt'].includes(k))))
+      const j = await api(`/api/globals/${slug[panel]}?locale=${lang}&depth=1`, json('POST', body))
+      setSaved(j.result || data); setMsg('✓ Đã lưu.')
+      setTimeout(() => window.location.reload(), 600)
+    } catch (e: any) { setMsg('✕ ' + e.message) } finally { setSaving(false) }
+  }
+
+  const fields = panel === 'theme' ? THEME_FIELDS : panel === 'settings' ? SETTINGS_FIELDS : NAV_FIELDS
+  const titles = { theme: 'Màu sắc & kiểu chữ (toàn web)', settings: 'Thông tin công ty (chân trang)', nav: `Menu (${lang.toUpperCase()})` }
+  return (
+    <>
+      <div className="ce-bar">
+        <span className="ce-brand">✏️ FLF</span>
+        <label className="ce-switch">
+          <input type="checkbox" checked={on} onChange={(e) => setOn(e.target.checked)} />
+          <span>{on ? 'Đang ở chế độ sửa' : 'Xem như khách'}</span>
+        </label>
+        <button type="button" onClick={() => openPanel('theme')}>🎨 Màu sắc</button>
+        <button type="button" onClick={() => openPanel('nav')}>☰ Menu</button>
+        <button type="button" onClick={() => openPanel('settings')}>🏢 Công ty</button>
+        <a href={adminHref}>⚙️ Quản trị nâng cao</a>
+        <span className="ce-user">{userName} · {role}</span>
+        <button type="button" onClick={async () => { await fetch('/api/users/logout', { method: 'POST', credentials: 'include' }); window.location.reload() }}>Đăng xuất</button>
+      </div>
+      {panel ? (
+        <Drawer title={titles[panel]} onClose={close}
+          footer={<><span className="ce-hint">{msg || (panel === 'theme' ? 'Màu đổi ngay trên trang để anh xem thử.' : '')}</span><button type="button" className="ce-btn primary" disabled={saving || !data} onClick={save}>💾 Lưu</button></>}>
+          {data ? <FieldList fields={fields} value={data} onChange={setData} /> : <p>{msg || 'Đang tải…'}</p>}
+        </Drawer>
+      ) : null}
+    </>
+  )
+}

@@ -1,10 +1,21 @@
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import React from 'react'
 
-import { href, type Lang, mediaAlt, mediaUrl, T } from '@/lib/site'
+import { href, type Lang, mediaAlt, mediaUrl, T } from '@/lib/shared'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type B = Record<string, any>
+
+const PAD: Record<string, string> = { compact: '2.5rem', large: '7rem' }
+/** Màu nền / chữ / khoảng cách riêng của một phần. */
+export function ap(b: B): React.CSSProperties {
+  const a = b.appearance || {}
+  const st: React.CSSProperties = {}
+  if (a.bg) st.background = a.bg
+  if (a.text) st.color = a.text
+  if (PAD[a.spacing]) { st.paddingTop = PAD[a.spacing]; st.paddingBottom = PAD[a.spacing] }
+  return st
+}
 
 const Lines = ({ text }: { text?: string | null }) =>
   text ? (
@@ -29,14 +40,11 @@ const Img = ({ m, cls }: { m: any; cls?: string }) => {
 function Hero({ b, lang, page }: { b: B; lang: Lang; page: boolean }) {
   const img = mediaUrl(b.image)
   return (
-    <section className={page ? 'page-hero' : 'hero'}>
+    <section style={ap(b)} className={page ? 'page-hero' : 'hero'}>
       <div className="hero-plane" aria-hidden="true">
+        {img ? <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center' }} /> : null}
         <div className="hero-plane-shade"></div>
-        {img ? (
-          <img className="hero-mark" src={img} alt="" style={{ objectFit: 'cover', width: '100%', height: '100%', opacity: 0.35 }} />
-        ) : (
-          <img className="hero-mark" src="/brand/logo-color.png" alt="" />
-        )}
+        {img ? null : <img className="hero-mark" src="/brand/logo-color.png" alt="" />}
       </div>
       <div className="wrap hero-copy">
         {b.eyebrow ? <p className="eyebrow">{b.eyebrow}</p> : null}
@@ -64,8 +72,11 @@ function Cards({ b, lang }: { b: B; lang: Lang }) {
       {it.link?.label ? <p><Link l={it.link} lang={lang} cls="text-link" /></p> : null}
     </article>
   )
+  const cols = b.columns && b.columns !== 'auto' ? { display: 'grid', gridTemplateColumns: `repeat(${b.columns}, minmax(0, 1fr))`, gap: '1.5rem' } as React.CSSProperties : undefined
   const grid =
-    style === 'services' ? (
+    cols ? (
+      <div className="cols-grid" style={cols}>{items.map((it, i) => card(it, i, style === 'services' ? 'service-item' : style === 'about' ? 'point' : 'why-item'))}</div>
+    ) : style === 'services' ? (
       <div className="services-rail">{items.map((it, i) => card(it, i, 'service-item'))}</div>
     ) : style === 'about' ? (
       <div className="about-grid">{items.map((it, i) => card(it, i, 'point'))}</div>
@@ -73,7 +84,7 @@ function Cards({ b, lang }: { b: B; lang: Lang }) {
       <div className="why-grid">{items.map((it, i) => card(it, i, 'why-item'))}</div>
     )
   return (
-    <section id={b.anchor || undefined} className={`section ${sectionCls}`}>
+    <section style={ap(b)} id={b.anchor || undefined} className={`section ${sectionCls}`}>
       <div className={`wrap${style === 'about' && !items.some((x) => x.image) ? ' narrow' : ''}`}>
         <div className="section-head">
           {b.index ? <p className="section-index">{b.index}</p> : null}
@@ -93,7 +104,7 @@ function Steps({ b }: { b: B }) {
   const n = (i: number) => String(i + 1).padStart(2, '0')
   if (b.style === 'intake') {
     return (
-      <section id={b.anchor || undefined} className="section services">
+      <section style={ap(b)} id={b.anchor || undefined} className="section services">
         <div className="wrap">
           {b.index ? <p className="section-index">{b.index}</p> : null}
           {b.title ? <h2>{b.title}</h2> : null}
@@ -108,7 +119,7 @@ function Steps({ b }: { b: B }) {
     )
   }
   return (
-    <section id={b.anchor || undefined} className="section process">
+    <section style={ap(b)} id={b.anchor || undefined} className="section process">
       <div className="wrap">
         {b.index ? <p className="section-index light">{b.index}</p> : null}
         {b.title ? <h2>{b.title}</h2> : null}
@@ -125,7 +136,7 @@ function Steps({ b }: { b: B }) {
 
 function Text({ b }: { b: B }) {
   return (
-    <section id={b.anchor || undefined} className="section about">
+    <section style={ap(b)} id={b.anchor || undefined} className="section about">
       <div className="wrap narrow">
         {b.index ? <p className="section-index">{b.index}</p> : null}
         {b.title ? <h2>{b.title}</h2> : null}
@@ -139,7 +150,7 @@ function Text({ b }: { b: B }) {
 function Contact({ b, lang }: { b: B; lang: Lang }) {
   const t = T[lang]
   return (
-    <section id={b.anchor || 'contact'} className="section contact">
+    <section style={ap(b)} id={b.anchor || 'contact'} className="section contact">
       <div className="wrap contact-frame">
         {b.title ? <h2>{b.title}</h2> : null}
         {b.lead ? <p className="lead"><Lines text={b.lead} /></p> : null}
@@ -161,7 +172,7 @@ function Contact({ b, lang }: { b: B; lang: Lang }) {
 
 function Cta({ b, lang }: { b: B; lang: Lang }) {
   return (
-    <section className="cta-band">
+    <section style={ap(b)} className="cta-band">
       <div className="wrap">
         {b.title ? <h2>{b.title}</h2> : null}
         <div className="hero-cta">
@@ -173,20 +184,24 @@ function Cta({ b, lang }: { b: B; lang: Lang }) {
   )
 }
 
+export function BlockView({ b, lang, isHome }: { b: B; lang: Lang; isHome: boolean }) {
+  switch (b.blockType) {
+    case 'hero': return <Hero b={b} lang={lang} page={!isHome} />
+    case 'cards': return <Cards b={b} lang={lang} />
+    case 'steps': return <Steps b={b} />
+    case 'text': return <Text b={b} />
+    case 'contact': return <Contact b={b} lang={lang} />
+    case 'cta': return <Cta b={b} lang={lang} />
+    default: return null
+  }
+}
+
 export function Blocks({ blocks, lang, isHome }: { blocks: B[] | null | undefined; lang: Lang; isHome: boolean }) {
   return (
     <>
-      {(blocks || []).map((b, i) => {
-        switch (b.blockType) {
-          case 'hero': return <Hero key={i} b={b} lang={lang} page={!isHome} />
-          case 'cards': return <Cards key={i} b={b} lang={lang} />
-          case 'steps': return <Steps key={i} b={b} />
-          case 'text': return <Text key={i} b={b} />
-          case 'contact': return <Contact key={i} b={b} lang={lang} />
-          case 'cta': return <Cta key={i} b={b} lang={lang} />
-          default: return null
-        }
-      })}
+      {(blocks || []).filter((b) => !b.appearance?.hidden).map((b, i) => (
+        <BlockView key={b.id || i} b={b} lang={lang} isHome={isHome} />
+      ))}
     </>
   )
 }

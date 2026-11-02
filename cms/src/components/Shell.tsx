@@ -1,10 +1,12 @@
 import Script from 'next/script'
 import React from 'react'
 
-import { getSettings, href, type Lang, mediaUrl, T } from '@/lib/site'
+import { EditorBar } from '@/components/edit/EditKit'
+import { getEditor, getSettings, getTheme, href, type Lang, mediaUrl, T, themeCss } from '@/lib/site'
 
-export async function Shell({ lang, path = '', children }: { lang: Lang; path?: string; children: React.ReactNode }) {
-  const { settings, nav } = await getSettings(lang)
+export async function Shell({ lang, path = '', adminHref = '/admin', children }: { lang: Lang; path?: string; adminHref?: string; children: React.ReactNode }) {
+  const [{ settings, nav }, theme, editor] = await Promise.all([getSettings(lang), getTheme(), getEditor()])
+  const css = themeCss(theme)
   const t = T[lang]
   const other: Lang = lang === 'vi' ? 'en' : 'vi'
   const logo = mediaUrl(settings?.logo as never) || '/brand/logo-color.png'
@@ -29,9 +31,11 @@ export async function Shell({ lang, path = '', children }: { lang: Lang; path?: 
   )
 
   return (
-    <div lang={lang} id="top">
+    <div lang={lang} id="top" className="ce-site">
+      {css ? <style id="flf-theme" dangerouslySetInnerHTML={{ __html: css }} /> : null}
+      {editor ? <EditorBar lang={lang} userName={(editor as { name?: string; email?: string }).name || (editor as { email?: string }).email || ''} role={(editor as { role?: string }).role || ''} adminHref={adminHref} /> : null}
       <a className="skip" href="#main">{t.skip}</a>
-      {previewMode ? (
+      {previewMode && !editor ? (
         <div className="review-bar" role="note">
           <span>{t.preview}</span>
           <a href={`/${other}${path}`}>{t.other}</a>

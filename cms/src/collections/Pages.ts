@@ -13,7 +13,7 @@ export const Pages: CollectionConfig = {
     useAsTitle: 'title',
     // Nút "Preview" trong CMS: mở đúng trang trên web theo ngôn ngữ đang sửa
     preview: (doc, { locale }) =>
-      `${process.env.NEXT_PUBLIC_SERVER_URL || ''}/${locale || 'vi'}${doc?.slug && doc.slug !== 'trang-chu' ? '/' + doc.slug : ''}`,
+      `/${locale || 'vi'}${doc?.slug && doc.slug !== 'trang-chu' ? '/' + doc.slug : ''}`,
     defaultColumns: ['title', 'slug', 'status', 'updatedAt'],
     group: 'Nội dung',
     description: 'Trang chủ (slug: trang-chu) và Giới thiệu (slug: gioi-thieu) hiển thị trên web.',
