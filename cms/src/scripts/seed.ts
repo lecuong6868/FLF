@@ -1,9 +1,17 @@
 import 'dotenv/config'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { getPayload } from 'payload'
 
 import config from '../payload.config'
 
 const CATEGORIES = [
+  {
+    slug: 'tin-tuc',
+    title: { vi: 'Tin tức', en: 'News' },
+    description: { vi: 'Hoạt động, thông báo của FLF.', en: 'FLF activities and announcements.' },
+  },
   {
     slug: 'quy-dinh-moi',
     title: { vi: 'Quy định mới', en: 'New regulations' },
@@ -104,6 +112,122 @@ async function ensureCategory(
   return created
 }
 
+type PayloadT = Awaited<ReturnType<typeof getPayload>>
+
+/** Đoạn văn → richText (Lexical) tối giản. */
+function rich(paragraphs: string[]) {
+  return {
+    root: {
+      type: 'root', format: '', indent: 0, version: 1, direction: 'ltr',
+      children: paragraphs.map((text) => ({
+        type: 'paragraph', format: '', indent: 0, version: 1, direction: 'ltr', textFormat: 0,
+        children: [{ type: 'text', text, format: 0, detail: 0, mode: 'normal', style: '', version: 1 }],
+      })),
+    },
+  }
+}
+
+const NAV = {
+  vi: [['Trang chủ', '/'], ['Giới thiệu', '/gioi-thieu'], ['Lĩnh vực', '/#services'], ['Tin tức', '/tin-tuc'], ['Quy định mới', '/quy-dinh-moi'], ['Chuyên mục', '/chuyen-muc'], ['Liên hệ', '/#contact']],
+  en: ['Home', 'About', 'Services', 'News', 'New regulations', 'Topics', 'Contact'],
+}
+
+/**
+ * Nạp nội dung ban đầu cho web — CHỈ khi còn trống, không bao giờ ghi đè nội dung anh đã sửa trong CMS.
+ */
+async function seedSite(payload: PayloadT) {
+  // Trang/bài tạo với quyền admin (hook chặn đăng nếu không rõ người đăng)
+  const admin = (await payload.find({ collection: 'users', where: { role: { equals: 'admin' } }, limit: 1, overrideAccess: true })).docs[0]
+  if (!admin) {
+    console.log('[seed] chưa có admin — bỏ qua nạp trang/bài')
+    return
+  }
+  const user = { ...admin, collection: 'users' } as never
+  const settings = await payload.findGlobal({ slug: 'site-settings', overrideAccess: true })
+  if (!settings?.companyLegalName) {
+    await payload.updateGlobal({
+      slug: 'site-settings',
+      data: {
+        companyLegalName: 'CÔNG TY CỔ PHẦN GIẢI PHÁP LIÊN MINH LUẬT VIỆT NAM',
+        companyTradeName: 'First Legal Force (FLF)',
+        taxCode: '0314193708',
+        registeredAddress: '01 Trần Khánh Dư, Phường Tân Định, TP. Hồ Chí Minh',
+        facebookUrl: 'https://www.facebook.com/firstlegalforce',
+        linkedinUrl: 'https://www.linkedin.com/company/firstlegalforce/home/',
+      },
+      overrideAccess: true,
+    })
+    console.log('[seed] thông tin công ty')
+  }
+
+  const nav = await payload.findGlobal({ slug: 'navigation', locale: 'vi', overrideAccess: true })
+  const items = (nav?.items || []) as { href?: string }[]
+  const oldDefault = items.length === 3 && items[0]?.href === '/vi'
+  if (!items.length || oldDefault) {
+    const saved = await payload.updateGlobal({
+      slug: 'navigation', locale: 'vi', overrideAccess: true,
+      data: { items: NAV.vi.map(([label, href]) => ({ label, href, openInNewTab: false })) },
+    })
+    await payload.updateGlobal({
+      slug: 'navigation', locale: 'en', overrideAccess: true,
+      data: { items: (saved.items || []).map((it, i) => ({ id: it.id, label: NAV.en[i], href: it.href, openInNewTab: false })) },
+    })
+    console.log('[seed] menu VI/EN')
+  }
+
+  const dir = path.dirname(fileURLToPath(import.meta.url))
+  const pages = JSON.parse(fs.readFileSync(path.join(dir, 'seed-pages.json'), 'utf8')) as Record<string, { vi: unknown[]; en: unknown[] }>
+  const titles: Record<string, { vi: string; en: string }> = {
+    'trang-chu': { vi: 'Trang chủ', en: 'Home' },
+    'gioi-thieu': { vi: 'Giới thiệu', en: 'About' },
+  }
+  for (const [slug, layout] of Object.entries(pages)) {
+    const found = await payload.find({ collection: 'pages', where: { slug: { equals: slug } }, limit: 1, overrideAccess: true })
+    if (found.docs[0]) continue
+    const doc = await payload.create({
+      collection: 'pages', locale: 'vi', overrideAccess: true, user,
+      data: { title: titles[slug]?.vi || slug, slug, status: 'published', layout: layout.vi as never },
+    })
+    await payload.update({
+      collection: 'pages', id: doc.id, locale: 'en', overrideAccess: true, user,
+      data: { title: titles[slug]?.en || slug, layout: layout.en as never },
+    })
+    console.log(`[seed] trang ${slug} (VI/EN)`)
+  }
+
+  const anyPost = await payload.find({ collection: 'posts', limit: 1, overrideAccess: true })
+  if (!anyPost.totalDocs) {
+    const cats = await payload.find({ collection: 'categories', limit: 20, overrideAccess: true })
+    const cat = (s: string) => cats.docs.find((c) => c.slug === s)?.id
+    const samples = [
+      {
+        cat: 'tin-tuc', slug: 'thong-bao-website-moi', topic: undefined,
+        vi: ['Thông báo: FLF đang hoàn thiện website mới', 'Bài mẫu trong mục Tin tức — anh/chị sửa hoặc xóa trong CMS.', ['Đây là bài viết mẫu để kiểm tra giao diện danh sách và trang chi tiết.', 'Vào CMS → Bài viết để sửa tiêu đề, nội dung, ảnh đại diện, hoặc đổi trạng thái.']],
+        en: ['Notice: FLF is preparing its new website', 'Sample article in News — edit or delete it in the CMS.', ['This is a sample article used to check the list and detail layouts.', 'Go to CMS → Posts to edit the title, content, featured image or status.']],
+      },
+      {
+        cat: 'chuyen-muc', slug: 'lam-ro-nhu-cau-truoc-khi-dau-tu', topic: 'dau-tu',
+        vi: ['Làm rõ nhu cầu trước khi mở rộng đầu tư', 'Bài chuyên mục mẫu theo chủ đề Đầu tư.', ['Trước khi mở rộng đầu tư, doanh nghiệp thường cần làm rõ bài toán vận hành, phạm vi tư vấn và phần việc nào cần đối tác hành nghề luật sư.', 'Nội dung minh họa — không thay thế tư vấn chuyên môn.']],
+        en: ['Clarify your needs before expanding investment', 'Sample Topics article on Investment.', ['Before expanding investment, a business usually needs to clarify its operating challenge, advisory scope, and which work needs a licensed law firm partner.', 'Illustrative content — not a substitute for professional advice.']],
+      },
+    ] as const
+    for (const sp of samples) {
+      const doc = await payload.create({
+        collection: 'posts', locale: 'vi', overrideAccess: true, user,
+        data: {
+          title: sp.vi[0], slug: sp.slug, status: 'published', category: cat(sp.cat), topic: sp.topic,
+          excerpt: sp.vi[1], content: rich([...sp.vi[2]]) as never, publishedAt: new Date().toISOString(),
+        } as never,
+      })
+      await payload.update({
+        collection: 'posts', id: doc.id, locale: 'en', overrideAccess: true, user,
+        data: { title: sp.en[0], excerpt: sp.en[1], content: rich([...sp.en[2]]) as never } as never,
+      })
+    }
+    console.log('[seed] 2 bài mẫu')
+  }
+}
+
 async function main() {
   // Hỗ trợ DATABASE_URI (TASK) lẫn DATABASE_URL
   if (!process.env.DATABASE_URL && process.env.DATABASE_URI) {
@@ -149,31 +273,7 @@ async function main() {
     await ensureCategory(payload, cat)
   }
 
-  await payload.updateGlobal({
-    slug: 'site-settings',
-    data: {
-      companyLegalName: 'CÔNG TY CỔ PHẦN GIẢI PHÁP LIÊN MINH LUẬT VIỆT NAM',
-      companyTradeName: 'First Legal Force (FLF)',
-      taxCode: '0314193708',
-      registeredAddress: '01 Trần Khánh Dư, Phường Tân Định, TP. Hồ Chí Minh',
-      facebookUrl: 'https://www.facebook.com/firstlegalforce',
-      linkedinUrl: 'https://www.linkedin.com/company/firstlegalforce/home/',
-    },
-    overrideAccess: true,
-  })
-
-  await payload.updateGlobal({
-    slug: 'navigation',
-    data: {
-      items: [
-        { label: 'Trang chủ', href: '/vi' },
-        { label: 'Chuyên mục', href: '/vi/chuyen-muc' },
-        { label: 'Quy định mới', href: '/vi/quy-dinh-moi' },
-      ],
-    },
-    locale: 'vi',
-    overrideAccess: true,
-  })
+  await seedSite(payload)
 
   console.log('[seed] xong')
   process.exit(0)

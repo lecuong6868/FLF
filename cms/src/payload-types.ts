@@ -204,6 +204,7 @@ export interface Post {
    */
   status: 'draft' | 'pending_review' | 'published';
   category?: (number | null) | Category;
+  topic?: ('dau-tu' | 'thue' | 'quan-tri-dn' | 'rui-ro' | 'giay-phep' | 'lao-dong' | 'hop-dong' | 'tuan-thu') | null;
   featuredImage?: (number | null) | Media;
   excerpt?: string | null;
   content?: {
@@ -230,6 +231,8 @@ export interface Post {
   createdAt: string;
 }
 /**
+ * Trang chủ (slug: trang-chu) và Giới thiệu (slug: gioi-thieu) hiển thị trên web.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
@@ -238,6 +241,160 @@ export interface Page {
   title: string;
   slug: string;
   status: 'draft' | 'pending_review' | 'published';
+  /**
+   * Mỗi khối là một phần trên web, theo thứ tự từ trên xuống. Kéo thả để đổi thứ tự. Đổi ngôn ngữ VI/EN ở góc trên để sửa bản tiếng Anh.
+   */
+  layout?:
+    | (
+        | {
+            eyebrow?: string | null;
+            masthead?: string | null;
+            headline: string;
+            sub?: string | null;
+            /**
+             * Để trống thì dùng logo FLF như bản mẫu.
+             */
+            image?: (number | null) | Media;
+            primary?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            secondary?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            style?: ('about' | 'services' | 'why' | 'navy') | null;
+            index?: string | null;
+            title?: string | null;
+            lead?: string | null;
+            note?: string | null;
+            items?:
+              | {
+                  title?: string | null;
+                  /**
+                   * Xuống dòng sẽ hiển thị xuống dòng.
+                   */
+                  text?: string | null;
+                  image?: (number | null) | Media;
+                  link?: {
+                    label?: string | null;
+                    /**
+                     * Ví dụ: #contact, /vi/gioi-thieu, https://…
+                     */
+                    href?: string | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            more?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cards';
+          }
+        | {
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            style?: ('process' | 'intake') | null;
+            index?: string | null;
+            title?: string | null;
+            note?: string | null;
+            items?:
+              | {
+                  title?: string | null;
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'steps';
+          }
+        | {
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            index?: string | null;
+            title?: string | null;
+            image?: (number | null) | Media;
+            content?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'text';
+          }
+        | {
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            title?: string | null;
+            lead?: string | null;
+            consent?: string | null;
+            button?: string | null;
+            privacy?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contact';
+          }
+        | {
+            title?: string | null;
+            primary?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            secondary?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+      )[]
+    | null;
   content?: {
     root: {
       type: string;
@@ -409,6 +566,7 @@ export interface PostsSelect<T extends boolean = true> {
   slug?: T;
   status?: T;
   category?: T;
+  topic?: T;
   featuredImage?: T;
   excerpt?: T;
   content?: T;
@@ -430,6 +588,125 @@ export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   status?: T;
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              masthead?: T;
+              headline?: T;
+              sub?: T;
+              image?: T;
+              primary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cards?:
+          | T
+          | {
+              anchor?: T;
+              style?: T;
+              index?: T;
+              title?: T;
+              lead?: T;
+              note?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    image?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          href?: T;
+                        };
+                    id?: T;
+                  };
+              more?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        steps?:
+          | T
+          | {
+              anchor?: T;
+              style?: T;
+              index?: T;
+              title?: T;
+              note?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        text?:
+          | T
+          | {
+              anchor?: T;
+              index?: T;
+              title?: T;
+              image?: T;
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        contact?:
+          | T
+          | {
+              anchor?: T;
+              title?: T;
+              lead?: T;
+              consent?: T;
+              button?: T;
+              privacy?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              title?: T;
+              primary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
   content?: T;
   seo?:
     | T

@@ -12,6 +12,7 @@ export const Posts: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
+    description: 'Chọn Chuyên mục: Tin tức / Quy định mới / Chuyên mục — bài "Đã đăng" sẽ hiện ở mục tương ứng trên web.',
     defaultColumns: ['title', 'status', 'category', 'updatedAt'],
     group: 'Nội dung',
   },
@@ -89,6 +90,22 @@ export const Posts: CollectionConfig = {
       type: 'relationship',
       relationTo: 'categories',
       label: 'Chuyên mục',
+      admin: { position: 'sidebar' },
+    },
+    {
+      name: 'topic',
+      type: 'select',
+      label: 'Chủ đề (cho Chuyên mục)',
+      options: [
+        { label: 'Đầu tư', value: 'dau-tu' },
+        { label: 'Thuế', value: 'thue' },
+        { label: 'Quản trị doanh nghiệp', value: 'quan-tri-dn' },
+        { label: 'Quản trị rủi ro', value: 'rui-ro' },
+        { label: 'Giấy phép', value: 'giay-phep' },
+        { label: 'Lao động & nhân sự', value: 'lao-dong' },
+        { label: 'Hợp đồng & giao dịch', value: 'hop-dong' },
+        { label: 'Tuân thủ & bảo vệ dữ liệu', value: 'tuan-thu' },
+      ],
       admin: { position: 'sidebar' },
     },
     {
