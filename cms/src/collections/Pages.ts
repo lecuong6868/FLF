@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { PAGE_BLOCKS } from '../blocks'
-import { admins, authenticated, canPublish, staff } from '../access/roles'
+import { admins, canPublish, publishers, staff } from '../access/roles'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -19,13 +19,13 @@ export const Pages: CollectionConfig = {
     description: 'Trang chủ (slug: trang-chu) và Giới thiệu (slug: gioi-thieu) hiển thị trên web.',
   },
   access: {
-    create: authenticated,
+    create: publishers, // sửa trang: admin hoặc reviewer
     delete: admins,
     read: ({ req: { user } }) => {
       if (staff({ req: { user } } as never)) return true
       return { status: { equals: 'published' } }
     },
-    update: authenticated,
+    update: publishers,
   },
   hooks: {
     beforeChange: [

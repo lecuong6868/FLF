@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react'
 
-import { api, richIsSimple, richToText, textToRich, uploadImage } from './api'
+import { api, uploadImage } from './api'
+import { RichEditor } from './RichEditor'
 
 export type F = Record<string, any>
 
@@ -71,25 +72,6 @@ function ImageInput({ value, onChange }: { value: any; onChange: (v: any) => voi
   )
 }
 
-function RichInput({ value, onChange, adminHref }: { value: any; onChange: (v: any) => void; adminHref?: string }) {
-  const simple = !value || richIsSimple(value)
-  const [text, setText] = useState(() => richToText(value))
-  if (!simple) {
-    return (
-      <p className="ce-hint">
-        Nội dung này có định dạng nâng cao (in đậm, liên kết, danh sách…).{' '}
-        {adminHref ? <a href={adminHref} target="_blank" rel="noreferrer">Mở trình soạn thảo đầy đủ ↗</a> : 'Sửa trong trang quản trị.'}
-      </p>
-    )
-  }
-  return (
-    <>
-      <textarea rows={10} value={text} onChange={(e) => { setText(e.target.value); onChange(textToRich(e.target.value)) }} />
-      <p className="ce-hint">Mỗi đoạn cách nhau 1 dòng trống. Cần in đậm / chèn link: {adminHref ? <a href={adminHref} target="_blank" rel="noreferrer">trình soạn thảo đầy đủ ↗</a> : 'trang quản trị'}.</p>
-    </>
-  )
-}
-
 function ArrayInput({ field, value, onChange, adminHref }: { field: F; value: any[]; onChange: (v: any[]) => void; adminHref?: string }) {
   const rows = value || []
   const [open, setOpen] = useState<number | null>(rows.length ? 0 : null)
@@ -142,7 +124,7 @@ export function FieldInput({ field, value, onChange, adminHref }: { field: F; va
     case 'upload':
       return <ImageInput value={value} onChange={onChange} />
     case 'richText':
-      return <RichInput value={value} onChange={onChange} adminHref={adminHref} />
+      return <RichEditor value={value} onChange={onChange} adminHref={adminHref} />
     case 'group':
       return <div className="ce-group"><FieldList fields={field.fields} value={value || {}} onChange={onChange} adminHref={adminHref} /></div>
     case 'array':

@@ -132,3 +132,28 @@
 .ce-inbox-msg { white-space: pre-wrap; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: .7rem; margin: .5rem 0 1rem; }
 .ce-tabs button { font-size: 12px; padding: .65rem .3rem; }
 .contact-done .lead { margin-bottom: 1rem; }
+
+/* Ô soạn thảo có định dạng */
+.ce-rich { border: 1px solid #d1d5db; border-radius: 8px; background: #fff; }
+.ce-rich-bar { display: flex; flex-wrap: wrap; gap: 3px; padding: 5px; border-bottom: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px 8px 0 0; position: sticky; top: -1rem; z-index: 2; }
+.ce-rich-bar button { min-width: 30px; height: 30px; border: 1px solid transparent; background: none; border-radius: 5px; cursor: pointer; font: 14px system-ui, sans-serif; color: #111827; }
+.ce-rich-bar button:hover { background: #e5e7eb; }
+.ce-rich-bar button.on { background: #dbeafe; border-color: #93c5fd; color: #1d4ed8; }
+.ce-rich-bar select { width: auto !important; padding: .25rem .4rem !important; font-size: 13px !important; }
+.ce-rich-bar .sep { width: 1px; background: #e5e7eb; margin: 3px 2px; }
+.ce-rich-link { padding: .6rem; border-bottom: 1px solid #e5e7eb; display: grid; gap: .4rem; background: #eff6ff; }
+.ce-rich-area { min-height: 220px; max-height: 55vh; overflow: auto; padding: .8rem .9rem; outline: none; font: 15px/1.6 system-ui, sans-serif !important; color: #111827 !important; }
+.ce-rich-area h2 { font-size: 1.35em; margin: .8em 0 .3em; } .ce-rich-area h3 { font-size: 1.15em; margin: .7em 0 .3em; } .ce-rich-area h4 { font-size: 1em; margin: .6em 0 .2em; }
+.ce-rich-area p { margin: 0 0 .6em; } .ce-rich-area ul, .ce-rich-area ol { padding-left: 1.4em; margin: 0 0 .6em; }
+.ce-rich-area blockquote { border-left: 3px solid #93c5fd; margin: .4em 0; padding-left: .8em; color: #374151; }
+.ce-rich-area a { color: #2563eb; text-decoration: underline; }
+.ce-rich + .ce-hint { display: none; }
+
+/* Tài khoản */
+.ce-h { margin: 1.2rem 0 .6rem; font: 700 13px system-ui, sans-serif; text-transform: uppercase; letter-spacing: .04em; color: #6b7280; }
+.ce-user-row { display: grid; grid-template-columns: 1fr auto auto; gap: .5rem; align-items: center; padding: .6rem 0; border-bottom: 1px solid #f3f4f6; }
+.ce-user-row select { width: auto !important; }
+.ce-secret { background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 8px; padding: .8rem; display: grid; gap: .5rem; margin-bottom: 1rem; }
+.ce-secret code { font: 600 18px/1.3 ui-monospace, monospace; background: #fff; border: 1px dashed #10b981; padding: .4rem .6rem; border-radius: 6px; user-select: all; }
+.ce-roles { margin-top: 1.2rem; padding: .7rem; background: #f9fafb; border-radius: 8px; font-size: 13px; }
+.ce-roles p { margin: .2rem 0; }

@@ -28,7 +28,7 @@ export default async function About({ params }: P) {
     <Shell adminHref={page ? `/admin/collections/pages/${page.id}?locale=${lang}` : '/admin'} lang={lang} path="/gioi-thieu">
       {page ? (
         <>
-          {editor ? <EditablePage pageId={page.id} initial={(page.layout || []) as never} lang={lang} isHome={false} /> : <Blocks blocks={page.layout as never} lang={lang} isHome={false} />}
+          {editor && ['admin', 'reviewer'].includes((editor as { role?: string }).role || '') ? <EditablePage pageId={page.id} initial={(page.layout || []) as never} lang={lang} isHome={false} /> : <Blocks blocks={page.layout as never} lang={lang} isHome={false} />}
           {page.content ? <section className="section about"><div className="wrap narrow article-body"><RichText data={page.content} /></div></section> : null}
         </>
       ) : (

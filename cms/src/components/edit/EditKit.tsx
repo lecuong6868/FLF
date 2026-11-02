@@ -187,6 +187,7 @@ export function EditablePage({ pageId, initial, lang, isHome }: { pageId: number
           footer={<><span className="ce-hint">{msg || 'Thay đổi hiện ngay trên trang. Bấm Lưu để đăng.'}</span><button type="button" className="ce-btn primary" disabled={!dirty || saving} onClick={save}>💾 Lưu & đăng</button></>}
         >
           <FieldList
+            key={`${edit}-${tab}`}
             fields={fields.filter((f) => (tab === 'look' ? f.name === 'appearance' || f.name === 'style' || f.name === 'columns' : f.name !== 'appearance' && f.name !== 'style' && f.name !== 'columns' && f.name !== 'anchor'))
               .flatMap((f) => (f.name === 'appearance' ? f.fields : [f]))}
             value={tab === 'look' ? { ...cur, ...(cur.appearance || {}) } : cur}
@@ -235,7 +236,8 @@ const POST_META: F[] = [
 ]
 const PICK = ['title', 'excerpt', 'featuredImage', 'content', 'layoutStyle', 'status', 'topic', 'publishedAt', 'slug']
 
-export function EditablePost({ initial, lang, section }: { initial: any; lang: Lang; section: SectionKey }) {
+export function EditablePost({ initial, lang, section, role }: { initial: any; lang: Lang; section: SectionKey; role: string }) {
+  const canPublish = role === 'admin' || role === 'reviewer'
   const router = useRouter()
   const [on] = useEditOn()
   const [saved, setSaved] = useState<any>(initial)
@@ -272,7 +274,7 @@ export function EditablePost({ initial, lang, section }: { initial: any; lang: L
             <span className="ce-tag">Bài viết · {post.status === 'published' ? 'Đã đăng' : post.status === 'pending_review' ? 'Chờ duyệt' : 'Nháp'}</span>
             <button type="button" className="ce-btn primary sm" onClick={() => { setOpen(true); setTab('content') }}>✏️ Sửa bài</button>
             <button type="button" className="ce-btn sm" onClick={() => { setOpen(true); setTab('meta') }}>🧩 Bố cục & đăng bài</button>
-            <button type="button" className="ce-btn sm danger" onClick={del}>🗑</button>
+            {role === 'admin' ? <button type="button" className="ce-btn sm danger" onClick={del}>🗑</button> : null}
           </div>
         ) : null}
         <div onDoubleClick={() => on && setOpen(true)}><PostView post={post} lang={lang} section={section} /></div>
@@ -284,7 +286,8 @@ export function EditablePost({ initial, lang, section }: { initial: any; lang: L
             { id: 'meta', label: 'Bố cục & đăng bài', active: tab === 'meta', onClick: () => setTab('meta') },
           ]}
           footer={<><span className="ce-hint">{msg || 'Xem trước ngay trên trang.'}</span><button type="button" className="ce-btn primary" disabled={!dirty || saving} onClick={save}>💾 Lưu</button></>}>
-          <FieldList fields={tab === 'content' ? POST_FIELDS : POST_META} value={post} onChange={setPost} adminHref={`/admin/collections/posts/${post.id}?locale=${lang}`} />
+          <FieldList fields={tab === 'content' ? POST_FIELDS : canPublish ? POST_META : POST_META.map((f) => (f.name === 'status' ? { ...f, label: 'Trạng thái (bài của anh/chị cần người duyệt đăng)', options: f.options.filter((o: any) => o.value !== 'published' || post.status === 'published') } : f))}
+            value={post} onChange={setPost} adminHref={`/admin/collections/posts/${post.id}?locale=${lang}`} />
         </Drawer>
       ) : null}
       {!open ? <SaveBar dirty={dirty} saving={saving} msg={msg} onSave={save} onDiscard={() => setPost(saved)} /> : null}
@@ -388,6 +391,98 @@ function Inbox({ onClose, onCount }: { onClose: () => void; onCount: (n: number)
   )
 }
 
+/* ================= Quản lý tài khoản (chỉ admin) ================= */
+const ROLE_LABEL: Record<string, string> = { admin: 'Quản trị', reviewer: 'Người duyệt', editor: 'Người viết bài' }
+const ROLE_HELP: Record<string, string> = {
+  admin: 'Toàn quyền: trang, bài, màu sắc, menu, công ty, liên hệ, tài khoản.',
+  reviewer: 'Sửa trang, viết & đăng bài, sửa menu và thông tin công ty.',
+  editor: 'Viết & sửa bài, gửi duyệt — không tự đăng, không sửa trang.',
+}
+function genPassword() {
+  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'
+  const a = new Uint32Array(14); crypto.getRandomValues(a)
+  return Array.from(a, (x) => c[x % c.length]).join('')
+}
+
+function Accounts({ onClose }: { onClose: () => void }) {
+  const [users, setUsers] = useState<any[] | null>(null)
+  const [me, setMe] = useState<any>(null)
+  const [msg, setMsg] = useState('')
+  const [shown, setShown] = useState<{ email: string; password: string } | null>(null)
+  const [form, setForm] = useState({ name: '', email: '', role: 'editor' })
+  const load = useCallback(async () => {
+    try {
+      const [u, m] = await Promise.all([api('/api/users?limit=100&sort=email'), api('/api/users/me')])
+      setUsers(u.docs); setMe(m.user)
+    } catch (e: any) { setMsg('✕ ' + e.message); setUsers([]) }
+  }, [])
+  useEffect(() => { load() }, [load])
+
+  const create = async () => {
+    if (!form.email.trim()) return setMsg('Nhập email.')
+    const password = genPassword()
+    try {
+      await api('/api/users', json('POST', { ...form, email: form.email.trim().toLowerCase(), password }))
+      setShown({ email: form.email.trim().toLowerCase(), password }); setForm({ name: '', email: '', role: 'editor' }); setMsg(''); load()
+    } catch (e: any) { setMsg('✕ ' + e.message) }
+  }
+  const setRole = async (u: any, role: string) => {
+    if (u.id === me?.id) return setMsg('Không tự đổi vai trò của chính mình.')
+    try { await api(`/api/users/${u.id}`, json('PATCH', { role })); setMsg(`✓ Đã đổi vai trò ${u.email}.`); load() } catch (e: any) { setMsg('✕ ' + e.message) }
+  }
+  const reset = async (u: any) => {
+    if (!confirm(`Tạo mật khẩu mới cho ${u.email}? Mật khẩu cũ sẽ không dùng được nữa.`)) return
+    const password = genPassword()
+    try { await api(`/api/users/${u.id}`, json('PATCH', { password })); setShown({ email: u.email, password }) } catch (e: any) { setMsg('✕ ' + e.message) }
+  }
+  const remove = async (u: any) => {
+    if (u.id === me?.id) return setMsg('Không tự xóa tài khoản đang đăng nhập.')
+    if (!confirm(`Xóa tài khoản ${u.email}?`)) return
+    try { await api(`/api/users/${u.id}`, { method: 'DELETE' }); load() } catch (e: any) { setMsg('✕ ' + e.message) }
+  }
+
+  return (
+    <Drawer title="👥 Tài khoản nhân viên" onClose={onClose} footer={<span className="ce-hint">{msg || 'Mật khẩu tạo tự động, chỉ hiện 1 lần — anh gửi riêng cho nhân viên.'}</span>}>
+      {shown ? (
+        <div className="ce-secret">
+          <strong>Mật khẩu cho {shown.email}</strong>
+          <code>{shown.password}</code>
+          <span className="ce-row">
+            <button type="button" className="ce-btn sm" onClick={() => navigator.clipboard?.writeText(`${window.location.origin}/admin\nEmail: ${shown.email}\nMật khẩu: ${shown.password}`).then(() => setMsg('✓ Đã chép.'), () => setMsg('Chép chưa được — anh tự bôi đen để chép.'))}>📋 Chép thông tin đăng nhập</button>
+            <button type="button" className="ce-link" onClick={() => setShown(null)}>Đã lưu, ẩn đi</button>
+          </span>
+          <p className="ce-hint">Mật khẩu này chỉ hiện lúc này. Nhân viên nên đổi lại sau khi đăng nhập.</p>
+        </div>
+      ) : null}
+      <h4 className="ce-h">Tạo tài khoản mới</h4>
+      <FieldList fields={[
+        { name: 'name', type: 'text', label: 'Họ tên' },
+        { name: 'email', type: 'email', label: 'Email đăng nhập' },
+        { name: 'role', type: 'select', label: 'Vai trò', defaultValue: 'editor', options: ['editor', 'reviewer', 'admin'].map((r) => ({ value: r, label: ROLE_LABEL[r] })) },
+      ]} value={form} onChange={setForm} />
+      <p className="ce-hint" style={{ marginTop: '-.5rem' }}>{ROLE_HELP[form.role]}</p>
+      <button type="button" className="ce-btn primary" onClick={create}>＋ Tạo tài khoản</button>
+
+      <h4 className="ce-h">Danh sách ({users?.length ?? '…'})</h4>
+      {users === null ? <p>Đang tải…</p> : users.map((u) => (
+        <div key={u.id} className="ce-user-row">
+          <div><strong>{u.name || u.email}</strong>{u.id === me?.id ? <span className="badge-draft" style={{ background: '#dbeafe', color: '#1d4ed8' }}>Anh</span> : null}<br /><span className="ce-hint">{u.email}</span></div>
+          <select value={u.role} disabled={u.id === me?.id} onChange={(e) => setRole(u, e.target.value)}>
+            {['editor', 'reviewer', 'admin'].map((r) => <option key={r} value={r}>{ROLE_LABEL[r]}</option>)}
+          </select>
+          <span className="ce-row">
+            <button type="button" className="ce-btn sm" onClick={() => reset(u)} title="Tạo mật khẩu mới">🔑</button>
+            {u.id !== me?.id ? <button type="button" className="ce-btn sm danger" onClick={() => remove(u)} title="Xóa">🗑</button> : null}
+          </span>
+        </div>
+      ))}
+      <div className="ce-roles">
+        {['admin', 'reviewer', 'editor'].map((r) => <p key={r}><strong>{ROLE_LABEL[r]}:</strong> {ROLE_HELP[r]}</p>)}
+      </div>
+    </Drawer>
+  )
+}
+
 /* ================= Thanh công cụ trên cùng ================= */
 const SETTINGS_FIELDS: F[] = [
   { name: 'companyLegalName', type: 'text', label: 'Tên pháp lý công ty' },
@@ -436,6 +531,9 @@ export function EditorBar({ lang, userName, role, adminHref }: { lang: Lang; use
   }, [isAdmin])
   const closeInbox = useCallback(() => setInbox(false), [])
   useCloseOnOther('inbox', closeInbox)
+  const [accounts, setAccounts] = useState(false)
+  const closeAccounts = useCallback(() => setAccounts(false), [])
+  useCloseOnOther('accounts', closeAccounts)
 
   const closePanel = useCallback(() => setPanel(null), [])
   useCloseOnOther('bar', closePanel)
@@ -486,14 +584,16 @@ export function EditorBar({ lang, userName, role, adminHref }: { lang: Lang; use
             📥 Liên hệ{newCount ? <b className="ce-badge">{newCount}</b> : null}
           </button>
         ) : null}
-        <button type="button" onClick={() => openPanel('theme')}>🎨 Màu sắc</button>
-        <button type="button" onClick={() => openPanel('nav')}>☰ Menu</button>
-        <button type="button" onClick={() => openPanel('settings')}>🏢 Công ty</button>
+        {isAdmin ? <button type="button" onClick={() => openPanel('theme')}>🎨 Màu sắc</button> : null}
+        {isAdmin || role === 'reviewer' ? <button type="button" onClick={() => openPanel('nav')}>☰ Menu</button> : null}
+        {isAdmin || role === 'reviewer' ? <button type="button" onClick={() => openPanel('settings')}>🏢 Công ty</button> : null}
+        {isAdmin ? <button type="button" onClick={() => { announceOpen('accounts'); setPanel(null); setInbox(false); setAccounts(true) }}>👥 Tài khoản</button> : null}
         <a href={adminHref}>⚙️ Quản trị nâng cao</a>
-        <span className="ce-user">{userName} · {role}</span>
+        <span className="ce-user">{userName} · {ROLE_LABEL[role] || role}</span>
         <button type="button" onClick={async () => { await fetch('/api/users/logout', { method: 'POST', credentials: 'include' }); window.location.reload() }}>Đăng xuất</button>
       </div>
       {inbox ? <Inbox onClose={closeInbox} onCount={setNewCount} /> : null}
+      {accounts ? <Accounts onClose={closeAccounts} /> : null}
       {panel ? (
         <Drawer title={titles[panel]} onClose={close}
           footer={<><span className="ce-hint">{msg || (panel === 'theme' ? 'Màu đổi ngay trên trang để anh xem thử.' : '')}</span><button type="button" className="ce-btn primary" disabled={saving || !data} onClick={save}>💾 Lưu</button></>}>
