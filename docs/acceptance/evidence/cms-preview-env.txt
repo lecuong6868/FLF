@@ -1,0 +1,13 @@
+# Bằng chứng môi trường xưởng + chặn workflow_dispatch
+# Thời điểm UTC: 2026-10-31T15:44:55Z
+
+- RAM total: 961Mi (swap 2Gi)
+- Docker: missing
+- gh CLI: có (~/.local/bin/gh) nhưng chưa đăng nhập; GH_TOKEN rỗng
+- Node (cài tạm vào ~/.local/node): v22.23.4 — typecheck PASS
+- YAML workflow: parse OK
+- bash -n cms/scripts/run-gha-preview.sh: OK
+- POST workflow_dispatch (không auth): HTTP 401 Requires authentication
+- Run PR trước (#41214779210): Docker npm ci FAIL (thiếu .npmrc) — đã sửa trong Dockerfile; tunnel job skipped (không phải dispatch)
+- Kết luận: không tự mở được link tạm từ xưởng. Cần anh bấm Run workflow trên GitHub
+  hoặc cấp PAT/token actions:write. Không đánh dấu đạt khi chưa có URL + http-accept thật.

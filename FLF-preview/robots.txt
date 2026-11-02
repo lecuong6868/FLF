@@ -1,0 +1,3 @@
+# Preview — không index công cụ tìm kiếm
+User-agent: *
+Disallow: /
