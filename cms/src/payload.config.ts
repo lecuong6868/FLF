@@ -12,6 +12,7 @@ import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { Navigation } from './globals/Navigation'
 import { SiteSettings } from './globals/SiteSettings'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -48,6 +49,8 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
+    // Bản chạy thật (NODE_ENV=production) không tự tạo bảng: chạy các migration trong src/migrations khi khởi động
+    prodMigrations: migrations,
     pool: {
       connectionString: process.env.DATABASE_URL || process.env.DATABASE_URI || '',
     },
