@@ -296,7 +296,7 @@ export function EditablePost({ initial, lang, section, role }: { initial: any; l
 }
 
 /* ================= Nút "Viết bài mới" trên trang danh sách ================= */
-export function NewPostButton({ lang, section }: { lang: Lang; section: SectionKey }) {
+export function NewPostButton({ lang, section, topic }: { lang: Lang; section: SectionKey; topic?: string }) {
   const [on] = useEditOn()
   const [busy, setBusy] = useState(false)
   if (!on) return null
@@ -308,7 +308,7 @@ export function NewPostButton({ lang, section }: { lang: Lang; section: SectionK
       try {
         const cat = await api(`/api/categories?where[slug][equals]=${section}&limit=1`)
         const slug = title.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 70) + '-' + Date.now().toString(36).slice(-4)
-        await api(`/api/posts?locale=${lang}`, json('POST', { title, slug, status: 'draft', category: cat.docs[0]?.id, publishedAt: new Date().toISOString() }))
+        await api(`/api/posts?locale=${lang}`, json('POST', { title, slug, status: 'draft', category: cat.docs[0]?.id, topic: topic || undefined, publishedAt: new Date().toISOString() }))
         window.location.href = `/${lang}/${section}/${slug}`
       } catch (e: any) { alert(e.message); setBusy(false) }
     }}>＋ Viết bài mới</button>
