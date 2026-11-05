@@ -128,8 +128,8 @@ function rich(paragraphs: string[]) {
 }
 
 const NAV = {
-  vi: [['Trang chủ', '/'], ['Giới thiệu', '/gioi-thieu'], ['Lĩnh vực', '/#services'], ['Tin tức', '/tin-tuc'], ['Quy định mới', '/quy-dinh-moi'], ['Chuyên mục', '/chuyen-muc'], ['Liên hệ', '/#contact']],
-  en: ['Home', 'About', 'Services', 'News', 'New regulations', 'Topics', 'Contact'],
+  vi: [['Giới thiệu', '/gioi-thieu'], ['Dịch vụ', '/dich-vu'], ['Tư vấn đặc biệt', '/#dac-biet'], ['Dự án', '/du-an'], ['VBPL', '/quy-dinh-moi'], ['Chuyên mục', '/chuyen-muc'], ['Liên hệ', '/#lien-he']],
+  en: ['About', 'Services', 'Special advisory', 'Projects', 'New laws', 'Topics', 'Contact'],
 }
 
 /**
@@ -162,7 +162,7 @@ async function seedSite(payload: PayloadT) {
 
   const nav = await payload.findGlobal({ slug: 'navigation', locale: 'vi', overrideAccess: true })
   const items = (nav?.items || []) as { href?: string }[]
-  const oldDefault = items.length === 3 && items[0]?.href === '/vi'
+  const oldDefault = !items.some((i) => i?.href === '/du-an') // menu cũ (trước bản thiết kế A) → thay 1 lần
   if (!items.length || oldDefault) {
     const saved = await payload.updateGlobal({
       slug: 'navigation', locale: 'vi', overrideAccess: true,
@@ -180,10 +180,21 @@ async function seedSite(payload: PayloadT) {
   const titles: Record<string, { vi: string; en: string }> = {
     'trang-chu': { vi: 'Trang chủ', en: 'Home' },
     'gioi-thieu': { vi: 'Giới thiệu', en: 'About' },
+    'dich-vu': { vi: 'Dịch vụ', en: 'Services' },
+    'du-an': { vi: 'Dự án', en: 'Projects' },
   }
+  const NEW_FIRST = ['heroAsk', 'pageHero'] // trang còn bố cục cũ (trước thiết kế A) → thay 1 lần, sau đó không đụng nữa
   for (const [slug, layout] of Object.entries(pages)) {
     const found = await payload.find({ collection: 'pages', where: { slug: { equals: slug } }, limit: 1, overrideAccess: true })
-    if (found.docs[0]) continue
+    const old = found.docs[0]
+    if (old) {
+      const first = ((old.layout || []) as { blockType?: string }[])[0]?.blockType
+      if (first && NEW_FIRST.includes(first)) continue
+      await payload.update({ collection: 'pages', id: old.id, locale: 'vi', overrideAccess: true, user, data: { layout: layout.vi as never } })
+      await payload.update({ collection: 'pages', id: old.id, locale: 'en', overrideAccess: true, user, data: { layout: layout.en as never } })
+      console.log(`[seed] trang ${slug}: thay bố cục cũ bằng thiết kế A`)
+      continue
+    }
     const doc = await payload.create({
       collection: 'pages', locale: 'vi', overrideAccess: true, user,
       data: { title: titles[slug]?.vi || slug, slug, status: 'published', layout: layout.vi as never },
@@ -193,6 +204,30 @@ async function seedSite(payload: PayloadT) {
       data: { title: titles[slug]?.en || slug, layout: layout.en as never },
     })
     console.log(`[seed] trang ${slug} (VI/EN)`)
+  }
+
+  const anyProject = await payload.find({ collection: 'projects', limit: 1, overrideAccess: true })
+  if (!anyProject.totalDocs) {
+    const ex = [
+      ['blockchain', 'dau-tu', true], ['ai', 'tu-van', false], ['fintech', 'ho-tro', false],
+      ['other', 'dau-tu', false], ['other', 'tu-van', false], ['other', 'ho-tro', false],
+    ] as const
+    for (const [i, [field, role, featured]] of ex.entries()) {
+      const doc = await payload.create({
+        collection: 'projects', locale: 'vi', overrideAccess: true, user,
+        data: {
+          name: `[Tên dự án ${i + 1}]`, field, role, featured, order: i + 1, status: 'published', url: 'https://example.com',
+          fieldLabel: field === 'other' ? '[Lĩnh vực]' : undefined,
+          summary: '[Một – hai câu giới thiệu dự án: giải quyết vấn đề gì, cho ai.]',
+          stage: featured ? '[Seed / Series A]' : undefined, support: featured ? '[Cấu trúc pháp lý, gọi vốn]' : undefined,
+        } as never,
+      })
+      await payload.update({
+        collection: 'projects', id: doc.id, locale: 'en', overrideAccess: true, user,
+        data: { fieldLabel: field === 'other' ? '[Field]' : undefined, summary: '[One or two sentences: what problem it solves, for whom.]' } as never,
+      })
+    }
+    console.log('[seed] 6 dự án mẫu')
   }
 
   const anyPost = await payload.find({ collection: 'posts', limit: 1, overrideAccess: true })

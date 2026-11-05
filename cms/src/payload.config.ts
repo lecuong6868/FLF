@@ -7,6 +7,7 @@ import sharp from 'sharp'
 
 import { Categories } from './collections/Categories'
 import { ContactRequests } from './collections/ContactRequests'
+import { Projects } from './collections/Projects'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
@@ -47,7 +48,7 @@ export default buildConfig({
       beforeNavLinks: ['@/components/admin/EditOnSiteNav'],
     },
   },
-  collections: [Users, Media, Categories, Posts, Pages, ContactRequests],
+  collections: [Users, Media, Categories, Posts, Pages, Projects, ContactRequests],
   globals: [SiteSettings, Navigation, Theme],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

@@ -13,13 +13,13 @@ export const SECTIONS = {
     vi: 'Hoạt động, thông báo và cập nhật từ FLF.',
     en: 'Activities, announcements and updates from FLF.',
   } },
-  'quy-dinh-moi': { vi: 'Quy định mới', en: 'New regulations', lead: {
-    vi: 'Cập nhật văn bản / chính sách liên quan doanh nghiệp, chỉ đăng sau khi biên tập đối chiếu nguồn chính thức.',
-    en: 'Updates on regulations and policies relevant to businesses, published only after editors verify official sources.',
+  'quy-dinh-moi': { vi: 'Văn bản pháp luật mới', en: 'New legal documents', lead: {
+    vi: 'Tóm tắt văn bản mới ảnh hưởng tới doanh nghiệp, cập nhật hằng ngày từ nguồn chính thức. Mỗi bài đều dẫn link văn bản gốc.',
+    en: 'Summaries of new legal documents affecting businesses, updated daily from official sources, each linking to the original.',
   } },
-  'chuyen-muc': { vi: 'Chuyên mục', en: 'Topics', lead: {
-    vi: 'Bài phân tích theo chủ đề nhu cầu doanh nghiệp.',
-    en: 'Analysis articles grouped by business topic.',
+  'chuyen-muc': { vi: 'Chuyên mục', en: 'Insights', lead: {
+    vi: 'Bài phân tích, hỏi đáp và hướng dẫn thực tế theo chủ đề doanh nghiệp quan tâm.',
+    en: 'Analysis, Q&A and practical guides on topics businesses care about.',
   } },
 } as const
 export type SectionKey = keyof typeof SECTIONS
@@ -34,43 +34,93 @@ export const TOPICS: Record<string, { vi: string; en: string }> = {
   'lao-dong': { vi: 'Lao động & nhân sự', en: 'Labour & HR' },
   'hop-dong': { vi: 'Hợp đồng & giao dịch', en: 'Contracts & transactions' },
   'tuan-thu': { vi: 'Tuân thủ & bảo vệ dữ liệu', en: 'Compliance & data protection' },
+  'm-a': { vi: 'M&A', en: 'M&A' },
+  startup: { vi: 'Startup', en: 'Startups' },
+  blockchain: { vi: 'Blockchain', en: 'Blockchain' },
+  ai: { vi: 'Trí tuệ nhân tạo', en: 'Artificial intelligence' },
+}
+
+/** Văn bản pháp luật: tình trạng hiệu lực + lĩnh vực. */
+export const DOC_STATUS: Record<string, { vi: string; en: string; tone: 'red' | 'navy' | 'sand' }> = {
+  'sap-hieu-luc': { vi: 'Sắp hiệu lực', en: 'Coming into force', tone: 'red' },
+  'da-hieu-luc': { vi: 'Đã hiệu lực', en: 'In force', tone: 'navy' },
+  'du-thao': { vi: 'Dự thảo', en: 'Draft', tone: 'sand' },
+}
+export const DOC_FIELDS: Record<string, { vi: string; en: string }> = {
+  'doanh-nghiep': { vi: 'Doanh nghiệp', en: 'Corporate' },
+  'dau-tu': { vi: 'Đầu tư', en: 'Investment' },
+  thue: { vi: 'Thuế', en: 'Tax' },
+  'lao-dong': { vi: 'Lao động', en: 'Labour' },
+  'dat-dai': { vi: 'Đất đai', en: 'Land' },
+  'cong-nghe': { vi: 'Công nghệ', en: 'Technology' },
+}
+export const PROJECT_FIELDS: Record<string, { vi: string; en: string }> = {
+  blockchain: { vi: 'Blockchain', en: 'Blockchain' },
+  ai: { vi: 'Trí tuệ nhân tạo', en: 'Artificial intelligence' },
+  fintech: { vi: 'Fintech', en: 'Fintech' },
+  ecommerce: { vi: 'Thương mại điện tử', en: 'E-commerce' },
+  'real-estate': { vi: 'Bất động sản', en: 'Real estate' },
+  other: { vi: 'Khác', en: 'Other' },
+}
+export const PROJECT_ROLES: Record<string, { vi: string; en: string }> = {
+  'dau-tu': { vi: 'FLF đầu tư', en: 'FLF invested' },
+  'ho-tro': { vi: 'FLF hỗ trợ', en: 'FLF supported' },
+  'tu-van': { vi: 'FLF tư vấn', en: 'FLF advised' },
 }
 
 export const T = {
   vi: {
-    skip: 'Bỏ qua đến nội dung chính', menu: 'Menu', open: 'Mở menu', close: 'Đóng menu', cta: 'Trao đổi nhu cầu',
+    skip: 'Bỏ qua đến nội dung chính', menu: 'Menu', open: 'Mở menu', close: 'Đóng menu', cta: 'Đặt lịch tư vấn',
     home: 'Trang chủ', connect: 'Kết nối', back: '← Quay lại danh sách', read: 'Đọc bài', empty: 'Chưa có bài viết nào được đăng.',
     name: 'Họ và tên', email: 'Email', message: 'Nhu cầu cần trao đổi', send: 'Gửi yêu cầu',
     formNote: 'Form đang ở chế độ xem thử — yêu cầu chưa được gửi đi. Vui lòng liên hệ qua email/điện thoại bên dưới.',
     preview: 'Bản thử website mới · nội dung lấy từ CMS', other: 'English version →', taxCode: 'MST',
+    explore: 'Khám phá', contact: 'Liên hệ', ask: 'Hỏi trợ lý FLF', all: 'Tất cả', more: 'Xem thêm',
+    disclaimer: 'Thông tin trên website mang tính tham khảo, không thay thế ý kiến tư vấn chính thức.',
+    detail: 'Xem chi tiết', seeAll: 'Xem tất cả →', role: 'Vai trò', field: 'Lĩnh vực', allFields: 'Mọi lĩnh vực',
+    projectDetail: 'Xem chi tiết dự án', stage: 'Giai đoạn', support: 'FLF đồng hành', featured: 'Dự án nổi bật',
+    search: 'Tìm theo tên, số hiệu văn bản…', soon: 'Hiệu lực trong 30 ngày tới', soonLead: 'Những văn bản doanh nghiệp cần chuẩn bị ngay.',
+    effect: 'Hiệu lực', issued: 'Ban hành', source: 'Văn bản gốc', basis: 'Căn cứ', noDocs: 'Chưa có văn bản phù hợp.',
+    keyPoint: 'Điểm then chốt', related: 'Bài viết liên quan', articleNote: 'Bài viết mang tính tham khảo, không thay thế ý kiến tư vấn cho trường hợp cụ thể.',
+    situation: 'Bạn đang gặp tình huống này?', situationLead: 'FLF rà soát và đề xuất phương án cụ thể.', talk: 'Trao đổi với FLF',
+    whatWeDo: 'FLF làm gì', youGet: 'Bạn nhận được', commonCase: 'Doanh nghiệp thường gặp',
   },
   en: {
-    skip: 'Skip to main content', menu: 'Menu', open: 'Open menu', close: 'Close menu', cta: 'Discuss your needs',
+    skip: 'Skip to main content', menu: 'Menu', open: 'Open menu', close: 'Close menu', cta: 'Book a consultation',
     home: 'Home', connect: 'Connect', back: '← Back to list', read: 'Read article', empty: 'No articles published yet.',
     name: 'Full name', email: 'Email', message: 'What would you like to discuss?', send: 'Send request',
     formNote: 'This form is in preview mode — your request has not been sent. Please use the email/phone below.',
     preview: 'New website preview · content from the CMS', other: 'Tiếng Việt →', taxCode: 'Tax code',
+    explore: 'Explore', contact: 'Contact', ask: 'Ask FLF assistant', all: 'All', more: 'Load more',
+    disclaimer: 'Information on this website is for reference only and does not replace formal advice.',
+    detail: 'Learn more', seeAll: 'See all →', role: 'Role', field: 'Sector', allFields: 'All sectors',
+    projectDetail: 'View project', stage: 'Stage', support: 'FLF support', featured: 'Featured project',
+    search: 'Search by title or document number…', soon: 'In force within 30 days', soonLead: 'Documents businesses should prepare for now.',
+    effect: 'Effective', issued: 'Issued', source: 'Original document', basis: 'Basis', noDocs: 'No matching documents yet.',
+    keyPoint: 'Key point', related: 'Related articles', articleNote: 'This article is for reference only and does not replace advice on a specific case.',
+    situation: 'Facing this situation?', situationLead: 'FLF reviews it and proposes a concrete plan.', talk: 'Talk to FLF',
+    whatWeDo: 'What FLF does', youGet: 'What you get', commonCase: 'Typical situations',
   },
 } as const
 
 export const DEFAULT_NAV: Record<Lang, { label: string; href: string; openInNewTab?: boolean | null }[]> = {
   vi: [
-    { label: 'Trang chủ', href: '/' },
     { label: 'Giới thiệu', href: '/gioi-thieu' },
-    { label: 'Lĩnh vực', href: '/#services' },
-    { label: 'Tin tức', href: '/tin-tuc' },
-    { label: 'Quy định mới', href: '/quy-dinh-moi' },
+    { label: 'Dịch vụ', href: '/dich-vu' },
+    { label: 'Tư vấn đặc biệt', href: '/#dac-biet' },
+    { label: 'Dự án', href: '/du-an' },
+    { label: 'VBPL', href: '/quy-dinh-moi' },
     { label: 'Chuyên mục', href: '/chuyen-muc' },
-    { label: 'Liên hệ', href: '/#contact' },
+    { label: 'Liên hệ', href: '/#lien-he' },
   ],
   en: [
-    { label: 'Home', href: '/' },
     { label: 'About', href: '/gioi-thieu' },
-    { label: 'Services', href: '/#services' },
-    { label: 'News', href: '/tin-tuc' },
-    { label: 'New regulations', href: '/quy-dinh-moi' },
-    { label: 'Topics', href: '/chuyen-muc' },
-    { label: 'Contact', href: '/#contact' },
+    { label: 'Services', href: '/dich-vu' },
+    { label: 'Special advisory', href: '/#dac-biet' },
+    { label: 'Projects', href: '/du-an' },
+    { label: 'Legal updates', href: '/quy-dinh-moi' },
+    { label: 'Insights', href: '/chuyen-muc' },
+    { label: 'Contact', href: '/#lien-he' },
   ],
 }
 

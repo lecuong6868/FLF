@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { PAGE_BLOCKS } from '@/blocks'
 import { THEME_COLORS } from '@/globals/Theme'
-import { BlockView } from '@/components/Blocks'
+import { type BlockData, BlockView } from '@/components/Blocks'
 import { PostView } from '@/components/PostView'
 import { type Lang, type SectionKey, themeCss } from '@/lib/shared'
 import { api, json, toSave } from './api'
@@ -13,7 +13,7 @@ import { type F, FieldList } from './Fields'
 import './editor.css'
 
 /* ---------------- Bật/tắt chế độ sửa (nhớ trong trình duyệt) ---------------- */
-function useEditOn(): [boolean, (v: boolean) => void] {
+export function useEditOn(): [boolean, (v: boolean) => void] {
   const [on, setOn] = useState(true)
   useEffect(() => {
     try { setOn(localStorage.getItem('flf-edit') !== 'off') } catch {}
@@ -29,17 +29,17 @@ function useEditOn(): [boolean, (v: boolean) => void] {
 }
 
 /* Chỉ 1 ngăn kéo mở một lúc */
-function useCloseOnOther(id: string, close: () => void) {
+export function useCloseOnOther(id: string, close: () => void) {
   useEffect(() => {
     const h = (e: Event) => { if ((e as CustomEvent).detail !== id) close() }
     window.addEventListener('ce-open', h)
     return () => window.removeEventListener('ce-open', h)
   }, [id, close])
 }
-const announceOpen = (id: string) => window.dispatchEvent(new CustomEvent('ce-open', { detail: id }))
+export const announceOpen = (id: string) => window.dispatchEvent(new CustomEvent('ce-open', { detail: id }))
 
 /* ---------------- Ngăn kéo bên phải ---------------- */
-function Drawer({ title, onClose, children, footer, tabs }: {
+export function Drawer({ title, onClose, children, footer, tabs }: {
   title: string; onClose: () => void; children: React.ReactNode; footer?: React.ReactNode
   tabs?: { id: string; label: string; active: boolean; onClick: () => void }[]
 }) {
@@ -93,7 +93,7 @@ function blockSummary(b: any): string {
 }
 
 /* ================= Trang (Trang chủ / Giới thiệu) ================= */
-export function EditablePage({ pageId, initial, lang, isHome }: { pageId: number | string; initial: any[]; lang: Lang; isHome: boolean }) {
+export function EditablePage({ pageId, initial, lang, isHome, data }: { pageId: number | string; initial: any[]; lang: Lang; isHome: boolean; data?: BlockData }) {
   const router = useRouter()
   const [on] = useEditOn()
   const [saved, setSaved] = useState<any[]>(initial || [])
@@ -168,7 +168,7 @@ export function EditablePage({ pageId, initial, lang, isHome }: { pageId: number
                 </div>
               ) : null}
               <div onDoubleClick={() => on && (setEdit(i), setTab('content'))}>
-                <BlockView b={b} lang={lang} isHome={isHome} />
+                <BlockView b={b} lang={lang} isHome={isHome} data={data} />
               </div>
             </div>
             <AddBtn at={i + 1} />
@@ -230,11 +230,23 @@ const POST_META: F[] = [
     { label: 'Đầu tư', value: 'dau-tu' }, { label: 'Thuế', value: 'thue' }, { label: 'Quản trị doanh nghiệp', value: 'quan-tri-dn' },
     { label: 'Quản trị rủi ro', value: 'rui-ro' }, { label: 'Giấy phép', value: 'giay-phep' }, { label: 'Lao động & nhân sự', value: 'lao-dong' },
     { label: 'Hợp đồng & giao dịch', value: 'hop-dong' }, { label: 'Tuân thủ & bảo vệ dữ liệu', value: 'tuan-thu' },
+    { label: 'M&A', value: 'm-a' }, { label: 'Startup', value: 'startup' }, { label: 'Blockchain', value: 'blockchain' }, { label: 'AI', value: 'ai' },
   ] },
+  { name: 'docStatus', type: 'select', label: 'VBPL — Tình trạng', options: [
+    { label: 'Sắp hiệu lực', value: 'sap-hieu-luc' }, { label: 'Đã hiệu lực', value: 'da-hieu-luc' }, { label: 'Dự thảo', value: 'du-thao' },
+  ] },
+  { name: 'docField', type: 'select', label: 'VBPL — Lĩnh vực', options: [
+    { label: 'Doanh nghiệp', value: 'doanh-nghiep' }, { label: 'Đầu tư', value: 'dau-tu' }, { label: 'Thuế', value: 'thue' },
+    { label: 'Lao động', value: 'lao-dong' }, { label: 'Đất đai', value: 'dat-dai' }, { label: 'Công nghệ', value: 'cong-nghe' },
+  ] },
+  { name: 'docNumber', type: 'text', label: 'VBPL — Số hiệu (vd: 18/2026/NĐ-CP)' },
+  { name: 'issuedAt', type: 'date', label: 'VBPL — Ngày ban hành' },
+  { name: 'effectiveAt', type: 'date', label: 'VBPL — Ngày hiệu lực' },
+  { name: 'sourceUrl', type: 'text', label: 'VBPL — Link văn bản gốc' },
   { name: 'publishedAt', type: 'date', label: 'Ngày đăng' },
   { name: 'slug', type: 'text', label: 'Đường dẫn (slug)', admin: { description: 'Chỉ chữ thường không dấu và dấu gạch ngang.' } },
 ]
-const PICK = ['title', 'excerpt', 'featuredImage', 'content', 'layoutStyle', 'status', 'topic', 'publishedAt', 'slug']
+const PICK = ['title', 'excerpt', 'featuredImage', 'content', 'layoutStyle', 'status', 'topic', 'publishedAt', 'slug', 'docStatus', 'docField', 'docNumber', 'issuedAt', 'effectiveAt', 'sourceUrl']
 
 export function EditablePost({ initial, lang, section, role }: { initial: any; lang: Lang; section: SectionKey; role: string }) {
   const canPublish = role === 'admin' || role === 'reviewer'

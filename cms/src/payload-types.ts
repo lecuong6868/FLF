@@ -72,6 +72,7 @@ export interface Config {
     categories: Category;
     posts: Post;
     pages: Page;
+    projects: Project;
     'contact-requests': ContactRequest;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -85,6 +86,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
     'contact-requests': ContactRequestsSelect<false> | ContactRequestsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -211,7 +213,28 @@ export interface Post {
   status: 'draft' | 'pending_review' | 'published';
   category?: (number | null) | Category;
   layoutStyle?: ('standard' | 'wide' | 'image-left' | 'cover') | null;
-  topic?: ('dau-tu' | 'thue' | 'quan-tri-dn' | 'rui-ro' | 'giay-phep' | 'lao-dong' | 'hop-dong' | 'tuan-thu') | null;
+  topic?:
+    | (
+        | 'dau-tu'
+        | 'thue'
+        | 'quan-tri-dn'
+        | 'rui-ro'
+        | 'giay-phep'
+        | 'lao-dong'
+        | 'hop-dong'
+        | 'tuan-thu'
+        | 'm-a'
+        | 'startup'
+        | 'blockchain'
+        | 'ai'
+      )
+    | null;
+  docStatus?: ('sap-hieu-luc' | 'da-hieu-luc' | 'du-thao') | null;
+  docField?: ('doanh-nghiep' | 'dau-tu' | 'thue' | 'lao-dong' | 'dat-dai' | 'cong-nghe') | null;
+  docNumber?: string | null;
+  issuedAt?: string | null;
+  effectiveAt?: string | null;
+  sourceUrl?: string | null;
   featuredImage?: (number | null) | Media;
   excerpt?: string | null;
   content?: {
@@ -253,6 +276,488 @@ export interface Page {
    */
   layout?:
     | (
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            headline: string;
+            sub?: string | null;
+            primary?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            secondary?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            image?: (number | null) | Media;
+            askEyebrow?: string | null;
+            askTitle?: string | null;
+            suggestions?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            disclaimer?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'heroAsk';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            title: string;
+            lead?: string | null;
+            primary?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            secondary?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pageHero';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            eyebrow?: string | null;
+            title?: string | null;
+            lead?: string | null;
+            body?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'intro';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            eyebrow?: string | null;
+            title?: string | null;
+            more?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            items?:
+              | {
+                  icon?: ('shield' | 'board' | 'doc' | 'chart' | 'deal' | 'chip') | null;
+                  title?: string | null;
+                  text?: string | null;
+                  bullets?: string | null;
+                  link?: {
+                    label?: string | null;
+                    /**
+                     * Ví dụ: #contact, /vi/gioi-thieu, https://…
+                     */
+                    href?: string | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'services';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            eyebrow?: string | null;
+            title?: string | null;
+            lead?: string | null;
+            items?:
+              | {
+                  title?: string | null;
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'special';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            eyebrow?: string | null;
+            title?: string | null;
+            count?: number | null;
+            more?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'projectsTeaser';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            showFeatured?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'projectsList';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            eyebrow?: string | null;
+            title?: string | null;
+            items?:
+              | {
+                  title?: string | null;
+                  text?: string | null;
+                  accent?: ('navy' | 'red' | 'green') | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stepCards';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            eyebrow?: string | null;
+            title?: string | null;
+            note?: string | null;
+            items?:
+              | {
+                  title?: string | null;
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'stepList';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            eyebrow?: string | null;
+            title?: string | null;
+            items?:
+              | {
+                  icon?: ('shield' | 'board' | 'doc' | 'chart' | 'deal' | 'chip') | null;
+                  title?: string | null;
+                  text?: string | null;
+                  accent?: ('navy' | 'red' | 'green') | null;
+                  id?: string | null;
+                }[]
+              | null;
+            more?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featureCards';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            eyebrow?: string | null;
+            title?: string | null;
+            count?: number | null;
+            topicsTitle?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'news';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            icon?: ('shield' | 'board' | 'doc' | 'chart' | 'deal' | 'chip') | null;
+            title?: string | null;
+            text?: string | null;
+            situation?: string | null;
+            items?: string | null;
+            deliverables?: string | null;
+            cta?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'serviceDetail';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            eyebrow?: string | null;
+            title?: string | null;
+            items?:
+              | {
+                  q?: string | null;
+                  a?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            title?: string | null;
+            lead?: string | null;
+            dark?: boolean | null;
+            primary?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            secondary?: {
+              label?: string | null;
+              /**
+               * Ví dụ: #contact, /vi/gioi-thieu, https://…
+               */
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'ctaBand';
+          }
+        | {
+            appearance?: {
+              /**
+               * Mã màu, ví dụ #ffffff. Trống = mặc định.
+               */
+              bg?: string | null;
+              /**
+               * Mã màu, ví dụ #102130. Trống = mặc định.
+               */
+              text?: string | null;
+              spacing?: ('compact' | 'normal' | 'large') | null;
+              hidden?: boolean | null;
+            };
+            /**
+             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
+             */
+            anchor?: string | null;
+            eyebrow?: string | null;
+            title?: string | null;
+            lead?: string | null;
+            consent?: string | null;
+            button?: string | null;
+            privacy?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contact';
+          }
         | {
             appearance?: {
               /**
@@ -428,32 +933,6 @@ export interface Page {
               spacing?: ('compact' | 'normal' | 'large') | null;
               hidden?: boolean | null;
             };
-            /**
-             * Dùng cho menu nhảy tới phần này, ví dụ: services, contact. Có thể để trống.
-             */
-            anchor?: string | null;
-            title?: string | null;
-            lead?: string | null;
-            consent?: string | null;
-            button?: string | null;
-            privacy?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'contact';
-          }
-        | {
-            appearance?: {
-              /**
-               * Mã màu, ví dụ #ffffff. Trống = mặc định.
-               */
-              bg?: string | null;
-              /**
-               * Mã màu, ví dụ #102130. Trống = mặc định.
-               */
-              text?: string | null;
-              spacing?: ('compact' | 'normal' | 'large') | null;
-              hidden?: boolean | null;
-            };
             title?: string | null;
             primary?: {
               label?: string | null;
@@ -494,6 +973,33 @@ export interface Page {
     title?: string | null;
     description?: string | null;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Startup FLF đầu tư / hỗ trợ / tư vấn. Nút "Xem chi tiết" trên web dẫn tới Website dự án.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  name: string;
+  logo?: (number | null) | Media;
+  cover?: (number | null) | Media;
+  field?: ('blockchain' | 'ai' | 'fintech' | 'ecommerce' | 'real-estate' | 'other') | null;
+  fieldLabel?: string | null;
+  role?: ('dau-tu' | 'ho-tro' | 'tu-van') | null;
+  summary?: string | null;
+  stage?: string | null;
+  support?: string | null;
+  /**
+   * Nút "Xem chi tiết dự án" mở link này ở tab mới. Ví dụ: https://…
+   */
+  url?: string | null;
+  featured?: boolean | null;
+  order?: number | null;
+  status?: ('draft' | 'published') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -560,6 +1066,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
       } | null)
     | ({
         relationTo: 'contact-requests';
@@ -672,6 +1182,12 @@ export interface PostsSelect<T extends boolean = true> {
   category?: T;
   layoutStyle?: T;
   topic?: T;
+  docStatus?: T;
+  docField?: T;
+  docNumber?: T;
+  issuedAt?: T;
+  effectiveAt?: T;
+  sourceUrl?: T;
   featuredImage?: T;
   excerpt?: T;
   content?: T;
@@ -696,6 +1212,396 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        heroAsk?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              headline?: T;
+              sub?: T;
+              primary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              image?: T;
+              askEyebrow?: T;
+              askTitle?: T;
+              suggestions?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              disclaimer?: T;
+              id?: T;
+              blockName?: T;
+            };
+        pageHero?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              title?: T;
+              lead?: T;
+              primary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        intro?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              eyebrow?: T;
+              title?: T;
+              lead?: T;
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        services?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              eyebrow?: T;
+              title?: T;
+              more?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              items?:
+                | T
+                | {
+                    icon?: T;
+                    title?: T;
+                    text?: T;
+                    bullets?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          href?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        special?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              eyebrow?: T;
+              title?: T;
+              lead?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        projectsTeaser?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              eyebrow?: T;
+              title?: T;
+              count?: T;
+              more?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        projectsList?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              showFeatured?: T;
+              id?: T;
+              blockName?: T;
+            };
+        stepCards?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              eyebrow?: T;
+              title?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    accent?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stepList?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              eyebrow?: T;
+              title?: T;
+              note?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        featureCards?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              eyebrow?: T;
+              title?: T;
+              items?:
+                | T
+                | {
+                    icon?: T;
+                    title?: T;
+                    text?: T;
+                    accent?: T;
+                    id?: T;
+                  };
+              more?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        news?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              eyebrow?: T;
+              title?: T;
+              count?: T;
+              topicsTitle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        serviceDetail?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              icon?: T;
+              title?: T;
+              text?: T;
+              situation?: T;
+              items?: T;
+              deliverables?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              eyebrow?: T;
+              title?: T;
+              items?:
+                | T
+                | {
+                    q?: T;
+                    a?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        ctaBand?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              title?: T;
+              lead?: T;
+              dark?: T;
+              primary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        contact?:
+          | T
+          | {
+              appearance?:
+                | T
+                | {
+                    bg?: T;
+                    text?: T;
+                    spacing?: T;
+                    hidden?: T;
+                  };
+              anchor?: T;
+              eyebrow?: T;
+              title?: T;
+              lead?: T;
+              consent?: T;
+              button?: T;
+              privacy?: T;
+              id?: T;
+              blockName?: T;
+            };
         hero?:
           | T
           | {
@@ -813,26 +1719,6 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        contact?:
-          | T
-          | {
-              appearance?:
-                | T
-                | {
-                    bg?: T;
-                    text?: T;
-                    spacing?: T;
-                    hidden?: T;
-                  };
-              anchor?: T;
-              title?: T;
-              lead?: T;
-              consent?: T;
-              button?: T;
-              privacy?: T;
-              id?: T;
-              blockName?: T;
-            };
         cta?:
           | T
           | {
@@ -868,6 +1754,27 @@ export interface PagesSelect<T extends boolean = true> {
         title?: T;
         description?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  cover?: T;
+  field?: T;
+  fieldLabel?: T;
+  role?: T;
+  summary?: T;
+  stage?: T;
+  support?: T;
+  url?: T;
+  featured?: T;
+  order?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -2,328 +2,340 @@
  "trang-chu": {
   "vi": [
    {
-    "blockType": "hero",
-    "eyebrow": "First Legal Force · Tư vấn doanh nghiệp đa lĩnh vực",
-    "masthead": "FLF — Đồng hành cùng doanh nghiệp làm rõ nhu cầu trước khi triển khai",
-    "headline": "Bắt đầu từ bài toán của bạn — rồi mới chọn phạm vi tư vấn phù hợp",
-    "sub": "FLF giúp doanh nghiệp xác định vấn đề cần giải quyết, khung công việc và đầu ra mong muốn, rồi điều phối các bước tiếp theo một cách rõ ràng. Đây là bản xem thử giao diện — chưa phải website chính thức.",
+    "blockType": "heroAsk",
+    "headline": "Nền tảng pháp lý vững để doanh nghiệp tăng trưởng an toàn",
+    "sub": "FLF đồng hành cùng doanh nghiệp từ quản trị rủi ro, thủ tục giấy phép đến các thương vụ M&A, dự án đầu tư, startup, Blockchain và AI — rõ việc, rõ chi phí, rõ thời hạn.",
     "primary": {
-     "label": "Trao đổi về bài toán của bạn",
-     "href": "/#contact"
+     "label": "Trao đổi nhu cầu",
+     "href": "#lien-he"
     },
     "secondary": {
-     "label": "Xem nhóm lĩnh vực",
-     "href": "/#services"
-    }
-   },
-   {
-    "blockType": "cards",
-    "anchor": "about",
-    "style": "about",
-    "index": "01 — Giới thiệu",
-    "title": "FLF làm việc xoay quanh nhu cầu, phạm vi và đầu ra",
-    "lead": "First Legal Force (FLF) là đơn vị tư vấn doanh nghiệp đa lĩnh vực. Chúng tôi ưu tiên hiểu rõ tình huống của khách hàng, phân tách những gì cần làm ngay và những gì cần phối hợp thêm — trước khi đề xuất lộ trình. Khi công việc thuộc hành nghề luật sư hoặc lĩnh vực pháp lý đặc thù, FLF phối hợp với công ty luật đối tác theo thỏa thuận với khách hàng.",
-    "note": "",
-    "items": [
+     "label": "Xem dịch vụ",
+     "href": "/dich-vu"
+    },
+    "askEyebrow": "Hỏi nhanh trợ lý FLF",
+    "askTitle": "Doanh nghiệp của bạn đang gặp vấn đề gì?",
+    "suggestions": [
      {
-      "title": "Nhu cầu khách hàng",
-      "text": "Làm rõ bài toán vận hành, mở rộng hoặc tuân thủ mà doanh nghiệp đang gặp — bằng ngôn ngữ thực tế, không bắt đầu bằng danh mục dịch vụ cứng.",
-      "link": {}
+      "text": "Cần xin giấy phép “con” để hoạt động"
      },
      {
-      "title": "Phạm vi công việc",
-      "text": "Thống nhất phần FLF đảm nhận và phần cần đầu mối khác (kể cả đối tác pháp lý) trước khi triển khai, để tránh chồng chéo hoặc khoảng trống.",
-      "link": {}
+      "text": "Rủi ro thuế, công nợ?"
      },
      {
-      "title": "Đầu ra mong muốn",
-      "text": "Mỗi bước gắn với đầu ra cụ thể: tóm tắt nhu cầu, lộ trình, checklist việc cần làm, hoặc đầu mối phụ trách — để khách hàng biết đang nhận gì.",
-      "link": {}
+      "text": "Thủ tục nhà đầu tư nước ngoài"
+     },
+     {
+      "text": "Rà soát rủi ro trước M&A"
      }
     ],
+    "disclaimer": "Thông tin tham khảo, không thay thế ý kiến tư vấn chính thức."
+   },
+   {
+    "blockType": "services",
+    "anchor": "dich-vu",
+    "eyebrow": "Dịch vụ cho doanh nghiệp",
+    "title": "Ba trụ cột giữ doanh nghiệp vận hành đúng luật và bền vững",
     "more": {
-     "label": "Xem trang Giới thiệu đầy đủ",
-     "href": "/gioi-thieu"
-    }
-   },
-   {
-    "blockType": "cards",
-    "anchor": "services",
-    "style": "services",
-    "index": "02 — Nhóm lĩnh vực",
-    "title": "Ba nhóm hỗ trợ doanh nghiệp đang cân nhắc",
-    "lead": "",
-    "note": "Nội dung dưới đây phục vụ duyệt Preview. Tên lĩnh vực và mức độ cung cấp sẽ được khách hàng xác nhận trước khi phát triển trang chi tiết. Chưa công bố chứng nhận, số liệu thành tích hay danh sách khách hàng.",
+     "label": "Nhận tư vấn ban đầu →",
+     "href": "#lien-he"
+    },
     "items": [
      {
-      "title": "Tư vấn doanh nghiệp & quản trị",
-      "text": "Khách mục tiêu: doanh nghiệp cần làm rõ bài toán vận hành hoặc quản trị trước khi thuê đơn vị chuyên sâu.\nVấn đề thường gặp: chưa biết bắt đầu từ đâu; quy trình phụ thuộc cá nhân; thiếu đầu mối điều phối.\nPhạm vi FLF: làm rõ nhu cầu, khung việc, điều phối đa lĩnh vực ở mức tư vấn.\nĐầu ra: bản tóm tắt nhu cầu, đề xuất lộ trình, đầu mối phụ trách.",
+      "icon": "shield",
+      "title": "Tư vấn quản trị rủi ro",
+      "text": "Nhận diện và kiểm soát rủi ro pháp lý, tài chính, vận hành trước khi chúng thành tranh chấp.",
+      "bullets": "Rà soát pháp lý định kỳ\nBộ quy chế tuân thủ nội bộ\nRà soát hợp đồng trọng yếu",
       "link": {
-       "label": "Trao đổi về bài toán vận hành",
-       "href": "/#contact"
+       "label": "Xem chi tiết →",
+       "href": "/dich-vu#rui-ro"
       }
      },
      {
-      "title": "Đầu tư & mở rộng hoạt động",
-      "text": "Khách mục tiêu: doanh nghiệp hoặc nhà đầu tư đang cân nhắc mở rộng, hợp tác hay cấu trúc hoạt động tại Việt Nam.\nVấn đề thường gặp: chưa rõ thứ tự việc tư vấn so với thủ tục pháp lý.\nPhạm vi FLF: định hướng bước, checklist nhu cầu, phối hợp đối tác khi phần việc thuộc hành nghề luật.\nĐầu ra: lộ trình bước và danh mục việc cần đối tác pháp lý (nếu có).",
+      "icon": "board",
+      "title": "Tư vấn quản lý doanh nghiệp",
+      "text": "Cơ cấu tổ chức, điều lệ, quyền và nghĩa vụ cổ đông, quy trình ra quyết định minh bạch.",
+      "bullets": "Điều lệ & quy chế quản trị\nCơ cấu cổ đông, góp vốn\nTái cấu trúc doanh nghiệp",
       "link": {
-       "label": "Đặt lịch trao đổi đầu tư / mở rộng",
-       "href": "/#contact"
+       "label": "Xem chi tiết →",
+       "href": "/dich-vu#quan-ly"
       }
      },
      {
-      "title": "Tuân thủ & giấy phép",
-      "text": "Khách mục tiêu: doanh nghiệp cần rà soát nghĩa vụ hoặc giấy phép ở mức định hướng.\nVấn đề thường gặp: không rõ giấy phép nào bắt buộc; lo sai trình tự.\nPhạm vi FLF: rà soát nhu cầu tư vấn định hướng, lập danh mục việc — không cam kết “ra giấy” trên Preview này.\nĐầu ra: danh mục việc liên quan và phân công FLF / đối tác.\nNhóm này chờ khách hàng xác nhận trước khi tách trang riêng.",
+      "icon": "doc",
+      "title": "Thủ tục & giấy phép các loại",
+      "text": "Từ đăng ký doanh nghiệp đến giấy phép kinh doanh có điều kiện — trọn gói, đúng hạn.",
+      "bullets": "Thành lập, thay đổi, giải thể\nGiấy phép con theo ngành\nLao động, PCCC, môi trường",
       "link": {
-       "label": "Yêu cầu rà soát định hướng",
-       "href": "/#contact"
+       "label": "Xem chi tiết →",
+       "href": "/dich-vu#giay-phep"
       }
-     }
-    ],
-    "more": {}
-   },
-   {
-    "blockType": "steps",
-    "anchor": "process",
-    "style": "process",
-    "index": "03 — Quy trình",
-    "title": "Bốn bước từ tiếp nhận đến triển khai",
-    "note": "",
-    "items": [
-     {
-      "title": "Tiếp nhận",
-      "text": "Doanh nghiệp gửi thông tin qua form hoặc kênh liên hệ công khai."
-     },
-     {
-      "title": "Làm rõ nhu cầu",
-      "text": "Trao đổi để xác định vấn đề cần giải quyết, phạm vi FLF và phần có thể cần đối tác pháp lý."
-     },
-     {
-      "title": "Đề xuất lộ trình & đầu ra",
-      "text": "Thống nhất phương án làm việc, đầu ra từng bước, đầu mối và thứ tự ưu tiên."
-     },
-     {
-      "title": "Triển khai trong phạm vi đã chốt",
-      "text": "Thực hiện theo thỏa thuận; cập nhật tiến độ; không mở rộng phạm vi khi chưa thống nhất lại."
      }
     ]
    },
    {
-    "blockType": "cards",
-    "anchor": "why",
-    "style": "why",
-    "index": "04 — Vì sao chọn FLF",
-    "title": "Ưu tiên sự rõ ràng trước khi hứa kết quả",
-    "lead": "",
-    "note": "Preview này không nêu số năm hoạt động, số khách hàng, chứng nhận hay cam kết kết quả chưa được xác minh. Dưới đây là cách làm việc mà FLF muốn thể hiện trên website mới.",
+    "blockType": "special",
+    "anchor": "dac-biet",
+    "eyebrow": "Tư vấn đặc biệt",
+    "title": "Cho những quyết định lớn: thương vụ, dự án và công nghệ mới",
     "items": [
      {
-      "title": "Nói rõ phạm vi từ đầu",
-      "text": "Khách hàng biết phần nào FLF đảm nhận và phần nào cần đối tác — trước khi bắt đầu công việc.",
-      "link": {}
+      "title": "M&A",
+      "text": "Thẩm định, cấu trúc thương vụ, đàm phán và hoàn tất chuyển nhượng."
      },
      {
-      "title": "Gắn từng bước với đầu ra",
-      "text": "Lộ trình không dừng ở khẩu hiệu: mỗi giai đoạn có sản phẩm giao nhận cụ thể để đối chiếu.",
-      "link": {}
+      "title": "Thủ tục đầu tư",
+      "text": "Chủ trương đầu tư, IRC/ERC, dự án vốn nước ngoài."
      },
      {
-      "title": "Điều phối khi cần chuyên sâu",
-      "text": "Với lĩnh vực đặc thù thuộc hành nghề luật sư, FLF kết nối quy trình với đối tác phù hợp thay vì tự nhận năng lực chưa xác minh.",
-      "link": {}
+      "title": "Startup",
+      "text": "Cấu trúc sáng lập, gọi vốn, ESOP, bảo hộ tài sản trí tuệ."
+     },
+     {
+      "title": "Blockchain",
+      "text": "Mô hình tài sản số, token, tuân thủ khi triển khai dự án."
+     },
+     {
+      "title": "Trí tuệ nhân tạo (AI)",
+      "text": "Dữ liệu, bản quyền, trách nhiệm khi đưa AI vào sản phẩm."
      }
-    ],
-    "more": {}
+    ]
+   },
+   {
+    "blockType": "projectsTeaser",
+    "eyebrow": "Dự án",
+    "title": "Startup FLF đầu tư, hỗ trợ và tư vấn",
+    "count": 3,
+    "more": {
+     "label": "Xem tất cả dự án →",
+     "href": "/du-an"
+    }
+   },
+   {
+    "blockType": "stepCards",
+    "eyebrow": "Cách FLF làm việc",
+    "title": "Bốn bước, không bất ngờ, không phí ẩn",
+    "items": [
+     {
+      "title": "Lắng nghe",
+      "text": "Làm rõ vấn đề, mục tiêu và giới hạn của doanh nghiệp.",
+      "accent": "navy"
+     },
+     {
+      "title": "Đề xuất",
+      "text": "Phạm vi việc, tiến độ và chi phí rõ ràng bằng văn bản.",
+      "accent": "red"
+     },
+     {
+      "title": "Triển khai",
+      "text": "Cập nhật tiến độ định kỳ, một đầu mối phụ trách.",
+      "accent": "green"
+     },
+     {
+      "title": "Bàn giao",
+      "text": "Hồ sơ đầy đủ, hướng dẫn duy trì tuân thủ về sau.",
+      "accent": "navy"
+     }
+    ]
+   },
+   {
+    "blockType": "news",
+    "eyebrow": "VBPL",
+    "title": "Văn bản pháp luật mới",
+    "count": 3,
+    "topicsTitle": "Chuyên mục"
    },
    {
     "blockType": "contact",
-    "anchor": "contact",
-    "title": "Sẵn sàng trao đổi về bài toán của bạn",
-    "lead": "Để lại thông tin liên hệ và mô tả ngắn nhu cầu. Đội ngũ sẽ phản hồi trong giờ làm việc khi website chính thức đi vào vận hành. Trên Preview, form chỉ minh họa giao diện — không gửi dữ liệu đi đâu.",
-    "consent": "Tôi đồng ý để FLF liên hệ và xử lý dữ liệu cá nhân theo mục đích phản hồi yêu cầu (khung tuân thủ Nghị định 13/2023/NĐ-CP — bản chính sách đầy đủ sẽ bổ sung khi triển khai thật).",
-    "button": "Gửi yêu cầu",
-    "privacy": "Địa chỉ hiển thị công khai đang chờ khách xác nhận (địa chỉ đăng ký MST và địa chỉ trên website cũ chưa khớp). MST đã xác minh: 0314193708."
+    "anchor": "lien-he",
+    "eyebrow": "Liên hệ",
+    "title": "Gửi cho FLF nhu cầu của bạn",
+    "lead": "Chúng tôi phản hồi trong giờ làm việc với phạm vi việc, thời gian và chi phí dự kiến.",
+    "consent": "Tôi đồng ý để FLF xử lý dữ liệu cá nhân nhằm phản hồi yêu cầu (NĐ 13/2023).",
+    "button": "Gửi yêu cầu"
    }
   ],
   "en": [
    {
-    "blockType": "hero",
-    "eyebrow": "First Legal Force · Multi-disciplinary business advisory",
-    "masthead": "FLF — Helping businesses clarify needs before delivery",
-    "headline": "Start with your challenge — then choose the right advisory scope",
-    "sub": "FLF helps companies define the problem to solve, the work involved, and the outcomes they expect — then coordinate the next steps clearly. This is a design preview, not the official website.",
+    "blockType": "heroAsk",
+    "headline": "A solid legal foundation for safe business growth",
+    "sub": "FLF works with businesses from risk management and licensing to M&A, investment projects, startups, Blockchain and AI — clear scope, clear cost, clear timeline.",
     "primary": {
-     "label": "Discuss your operating challenge",
-     "href": "/#contact"
+     "label": "Discuss your needs",
+     "href": "#lien-he"
     },
     "secondary": {
-     "label": "Browse practice areas",
-     "href": "/#services"
-    }
-   },
-   {
-    "blockType": "cards",
-    "anchor": "about",
-    "style": "about",
-    "index": "01 — About",
-    "title": "FLF works around needs, scope, and deliverables",
-    "lead": "First Legal Force (FLF) is a multi-disciplinary business advisory firm. We focus on understanding your situation, separating what can start now from what needs extra coordination — before proposing a roadmap. When work falls under the practice of law or specialised legal fields, FLF collaborates with partner law firms under terms agreed with the client.",
-    "note": "",
-    "items": [
+     "label": "View services",
+     "href": "/dich-vu"
+    },
+    "askEyebrow": "Ask the FLF assistant",
+    "askTitle": "What is your business facing?",
+    "suggestions": [
      {
-      "title": "Client needs",
-      "text": "Clarify the operating, expansion, or compliance challenge you face — in plain language, not a rigid service catalogue.",
-      "link": {}
+      "text": "Which sub-licences do I need?"
      },
      {
-      "title": "Scope of work",
-      "text": "Agree what FLF owns and what other parties handle (including legal partners) before work begins, to avoid overlap or gaps.",
-      "link": {}
+      "text": "Tax or debt risks?"
      },
      {
-      "title": "Expected outcomes",
-      "text": "Each step ties to a concrete deliverable: a needs brief, a roadmap, a checklist, or a named contact — so you know what you are receiving.",
-      "link": {}
+      "text": "Foreign investor procedures"
+     },
+     {
+      "text": "Risk review before M&A"
      }
     ],
+    "disclaimer": "For reference only; not a substitute for formal advice."
+   },
+   {
+    "blockType": "services",
+    "anchor": "dich-vu",
+    "eyebrow": "Business services",
+    "title": "Three pillars that keep a business compliant and sustainable",
     "more": {
-     "label": "Read the full About page",
-     "href": "/gioi-thieu"
-    }
-   },
-   {
-    "blockType": "cards",
-    "anchor": "services",
-    "style": "services",
-    "index": "02 — Practice areas",
-    "title": "Three groups of support under review",
-    "lead": "",
-    "note": "Copy below is for Preview review. Area names and delivery depth will be confirmed by the client before dedicated pages are built. No unverified certifications, performance metrics, or client lists are shown.",
+     "label": "Get initial advice →",
+     "href": "#lien-he"
+    },
     "items": [
      {
-      "title": "Business & governance advisory",
-      "text": "Who it is for: companies that need to clarify operating or governance issues before engaging a specialist firm.\nCommon friction: unclear starting point; processes that depend on one person; no coordinating contact.\nFLF scope: clarify needs, frame the work, coordinate across disciplines at an advisory level.\nOutcomes: needs summary, proposed roadmap, named owner.",
+      "icon": "shield",
+      "title": "Risk management advisory",
+      "text": "Identify and control legal, financial and operational risks before they become disputes.",
+      "bullets": "Periodic legal review\nInternal compliance rules\nReview of key contracts",
       "link": {
-       "label": "Discuss your operating challenge",
-       "href": "/#contact"
+       "label": "Xem chi tiết →",
+       "href": "/dich-vu#rui-ro"
       }
      },
      {
-      "title": "Investment & expansion",
-      "text": "Who it is for: businesses or investors considering expansion, partnerships, or operating structures in Vietnam.\nCommon friction: unclear sequence between advisory work and legal procedures.\nFLF scope: step orientation, needs checklist, partner coordination when work requires licensed legal practice.\nOutcomes: step roadmap and a list of items that need a legal partner (if any).",
+      "icon": "board",
+      "title": "Business management advisory",
+      "text": "Organisation, charter, shareholder rights and duties, transparent decision-making.",
+      "bullets": "Charter & governance rules\nShareholding & capital contribution\nRestructuring",
       "link": {
-       "label": "Book an expansion discussion",
-       "href": "/#contact"
+       "label": "Xem chi tiết →",
+       "href": "/dich-vu#quan-ly"
       }
      },
      {
-      "title": "Compliance & licensing",
-      "text": "Who it is for: companies that need a directional review of obligations or licences.\nCommon friction: unclear which licences are mandatory; worry about the wrong sequence.\nFLF scope: directional advisory review and a work list — this Preview does not promise licence issuance.\nOutcomes: related work list and FLF / partner split.\nThis group awaits client confirmation before a dedicated page.",
+      "icon": "doc",
+      "title": "Procedures & licences",
+      "text": "From company registration to conditional business licences — end to end, on time.",
+      "bullets": "Set-up, changes, dissolution\nSector sub-licences\nLabour, fire safety, environment",
       "link": {
-       "label": "Request a scoping review",
-       "href": "/#contact"
+       "label": "Xem chi tiết →",
+       "href": "/dich-vu#giay-phep"
       }
-     }
-    ],
-    "more": {}
-   },
-   {
-    "blockType": "steps",
-    "anchor": "process",
-    "style": "process",
-    "index": "03 — Process",
-    "title": "Four steps from intake to delivery",
-    "note": "",
-    "items": [
-     {
-      "title": "Intake",
-      "text": "You share context through the form or public contact channels."
-     },
-     {
-      "title": "Clarify needs",
-      "text": "We discuss the problem to solve, FLF’s scope, and where a legal partner may be required."
-     },
-     {
-      "title": "Propose roadmap & outcomes",
-      "text": "Align on the working plan, deliverables per step, owners, and priorities."
-     },
-     {
-      "title": "Deliver within the agreed scope",
-      "text": "Execute as agreed; share progress updates; do not expand scope without a new alignment."
      }
     ]
    },
    {
-    "blockType": "cards",
-    "anchor": "why",
-    "style": "why",
-    "index": "04 — Why choose FLF",
-    "title": "Clarity first — before promising results",
-    "lead": "",
-    "note": "This Preview does not list years in business, client counts, certifications, or outcome guarantees that have not been verified. Below is the working style FLF wants the new site to show.",
+    "blockType": "special",
+    "anchor": "dac-biet",
+    "eyebrow": "Special advisory",
+    "title": "For big decisions: deals, projects and new technology",
     "items": [
      {
-      "title": "Scope stated upfront",
-      "text": "You know what FLF owns and what partners handle — before work starts.",
-      "link": {}
+      "title": "M&A",
+      "text": "Due diligence, deal structuring, negotiation and closing."
      },
      {
-      "title": "Every step has a deliverable",
-      "text": "Roadmaps are not slogans: each stage has something concrete you can review.",
-      "link": {}
+      "title": "Investment procedures",
+      "text": "Investment approval, IRC/ERC, foreign-invested projects."
      },
      {
-      "title": "Coordination for specialised work",
-      "text": "For matters that require licensed legal practice, FLF connects the process with suitable partners instead of claiming unverified capability.",
-      "link": {}
+      "title": "Startup",
+      "text": "Founder structure, fundraising, ESOP, IP protection."
+     },
+     {
+      "title": "Blockchain",
+      "text": "Digital-asset models, tokens, compliance when launching."
+     },
+     {
+      "title": "Artificial intelligence (AI)",
+      "text": "Data, copyright and liability when building AI into products."
      }
-    ],
-    "more": {}
+    ]
+   },
+   {
+    "blockType": "projectsTeaser",
+    "eyebrow": "Projects",
+    "title": "Startups FLF invests in, supports and advises",
+    "count": 3,
+    "more": {
+     "label": "All projects →",
+     "href": "/du-an"
+    }
+   },
+   {
+    "blockType": "stepCards",
+    "eyebrow": "How FLF works",
+    "title": "Four steps, no surprises, no hidden fees",
+    "items": [
+     {
+      "title": "Listen",
+      "text": "Clarify the problem, goals and constraints.",
+      "accent": "navy"
+     },
+     {
+      "title": "Propose",
+      "text": "Written scope, timeline and cost.",
+      "accent": "red"
+     },
+     {
+      "title": "Deliver",
+      "text": "Regular updates, one point of contact.",
+      "accent": "green"
+     },
+     {
+      "title": "Hand over",
+      "text": "Complete files and guidance to stay compliant.",
+      "accent": "navy"
+     }
+    ]
+   },
+   {
+    "blockType": "news",
+    "eyebrow": "New laws",
+    "title": "New legal documents",
+    "count": 3,
+    "topicsTitle": "Topics"
    },
    {
     "blockType": "contact",
-    "anchor": "contact",
-    "title": "Ready to discuss your challenge",
-    "lead": "Leave your contact details and a short description of your needs. The team will respond during business hours once the official site is live. On this Preview, the form is interface-only — nothing is submitted.",
-    "consent": "I agree to be contacted by FLF and to the processing of my personal data for responding to this request (framework aligned with Vietnam Decree 13/2023 — a full privacy policy will be added for production).",
-    "button": "Submit request (demo)",
-    "privacy": "The public display address is pending client confirmation (registered MST address and the former website address do not match). Verified tax code (MST): 0314193708."
+    "anchor": "lien-he",
+    "eyebrow": "Contact",
+    "title": "Tell FLF what you need",
+    "lead": "We reply during business hours with the scope, timeline and estimated cost.",
+    "consent": "I agree that FLF may process my personal data to respond to this request (Decree 13/2023).",
+    "button": "Send request"
    }
   ]
  },
  "gioi-thieu": {
   "vi": [
    {
-    "blockType": "hero",
-    "eyebrow": "First Legal Force · Giới thiệu",
-    "masthead": "FLF — Tư vấn doanh nghiệp xoay quanh nhu cầu thật của khách hàng",
-    "headline": "Hiểu bài toán trước, rồi mới chọn phạm vi và đầu ra phù hợp",
-    "sub": "Trang này mô tả cách FLF tiếp nhận vấn đề, thống nhất phạm vi công việc và bàn giao đầu ra. Đây là bản xem thử — chưa phải website chính thức.",
+    "blockType": "pageHero",
+    "title": "FLF — Tư vấn doanh nghiệp xoay quanh nhu cầu thật của khách hàng",
+    "lead": "Hiểu bài toán trước, rồi mới chọn phạm vi và đầu ra phù hợp. Cách FLF tiếp nhận vấn đề, thống nhất phạm vi công việc và bàn giao đầu ra.",
     "primary": {
      "label": "Trao đổi về bài toán của bạn",
-     "href": "/#contact"
+     "href": "#lien-he"
     },
     "secondary": {
-     "label": "Xem nhóm lĩnh vực",
-     "href": "/#services"
+     "label": "Xem dịch vụ",
+     "href": "/dich-vu"
     }
    },
    {
-    "blockType": "cards",
-    "anchor": "who",
-    "style": "about",
-    "index": "01 — Chúng tôi là ai",
+    "blockType": "intro",
+    "eyebrow": "Chúng tôi là ai",
     "title": "Đơn vị tư vấn doanh nghiệp đa lĩnh vực",
     "lead": "First Legal Force (FLF) là đơn vị tư vấn doanh nghiệp đa lĩnh vực. Chúng tôi làm việc với doanh nghiệp khi họ cần làm rõ tình huống đang gặp, xác định việc cần ưu tiên và thống nhất những gì sẽ nhận được sau mỗi bước — trước khi mở rộng phạm vi hay thuê thêm đầu mối chuyên sâu.",
-    "note": "Điểm xuất phát không phải danh mục dịch vụ cứng, mà là nhu cầu khách hàng: vận hành, mở rộng, tuân thủ hoặc điều phối nhiều việc cùng lúc. FLF giúp tách phần có thể bắt đầu ngay và phần cần phối hợp thêm, rồi đề xuất lộ trình gắn với đầu ra cụ thể.\n\nKhi công việc thuộc hành nghề luật sư hoặc lĩnh vực pháp lý đặc thù, FLF phối hợp với công ty luật đối tác theo thỏa thuận với khách hàng. Preview này cố ý không nêu tên đối tác cho đến khi khách duyệt công bố.",
-    "items": [],
-    "more": {}
+    "body": "Điểm xuất phát không phải danh mục dịch vụ cứng, mà là nhu cầu khách hàng: vận hành, mở rộng, tuân thủ hoặc điều phối nhiều việc cùng lúc. FLF giúp tách phần có thể bắt đầu ngay và phần cần phối hợp thêm, rồi đề xuất lộ trình gắn với đầu ra cụ thể.\n\nKhi công việc thuộc hành nghề luật sư hoặc lĩnh vực pháp lý đặc thù, FLF phối hợp với công ty luật đối tác theo thỏa thuận với khách hàng."
    },
    {
-    "blockType": "steps",
-    "anchor": "intake",
-    "style": "intake",
-    "index": "02 — Cách tiếp nhận vấn đề",
+    "blockType": "stepList",
+    "eyebrow": "Cách tiếp nhận vấn đề",
     "title": "Từ thông tin ban đầu đến khung việc rõ ràng",
     "note": "Mục tiêu của bước tiếp nhận là giúp hai bên cùng hiểu: vấn đề cần giải quyết là gì, thông tin còn thiếu ở đâu, và phần nào thuộc tư vấn doanh nghiệp hay cần đầu mối khác.",
     "items": [
@@ -342,68 +354,63 @@
     ]
    },
    {
-    "blockType": "cards",
-    "anchor": "scope",
-    "style": "about",
-    "index": "03 — Phạm vi công việc",
+    "blockType": "featureCards",
+    "eyebrow": "Phạm vi công việc",
     "title": "Những gì FLF tập trung hỗ trợ",
-    "lead": "",
-    "note": "",
+    "more": {
+     "label": "Xem các dịch vụ →",
+     "href": "/dich-vu"
+    },
     "items": [
      {
+      "icon": "board",
+      "accent": "navy",
       "title": "Trong phạm vi tư vấn",
-      "text": "Làm rõ nhu cầu; khung việc và thứ tự ưu tiên; điều phối đa lĩnh vực ở mức tư vấn; lập checklist / lộ trình; gắn đầu mối phụ trách từng phần việc đã chốt.",
-      "link": {}
+      "text": "Làm rõ nhu cầu; khung việc và thứ tự ưu tiên; điều phối đa lĩnh vực ở mức tư vấn; lập checklist / lộ trình; gắn đầu mối phụ trách từng phần việc đã chốt."
      },
      {
+      "icon": "shield",
+      "accent": "red",
       "title": "Ngoài phạm vi mặc định",
-      "text": "Hành nghề luật sư, đại diện tố tụng hay các thủ tục thuộc thẩm quyền hành nghề được cấp phép — những phần này được nối với đối tác phù hợp khi khách đồng ý.",
-      "link": {}
+      "text": "Hành nghề luật sư, đại diện tố tụng hay các thủ tục thuộc thẩm quyền hành nghề được cấp phép — những phần này được nối với đối tác phù hợp khi khách đồng ý."
      },
      {
+      "icon": "doc",
+      "accent": "green",
       "title": "Thay đổi phạm vi",
-      "text": "Nếu phát sinh việc mới trong quá trình làm, FLF không tự mở rộng phạm vi: hai bên thống nhất lại trước khi triển khai thêm.",
-      "link": {}
+      "text": "Nếu phát sinh việc mới trong quá trình làm, FLF không tự mở rộng phạm vi: hai bên thống nhất lại trước khi triển khai thêm."
      }
-    ],
-    "more": {
-     "label": "Xem nhóm lĩnh vực trên trang chủ",
-     "href": "/#services"
-    }
+    ]
    },
    {
-    "blockType": "cards",
-    "anchor": "deliverables",
-    "style": "navy",
-    "index": "04 — Đầu ra bàn giao",
+    "blockType": "stepCards",
+    "eyebrow": "Đầu ra bàn giao",
     "title": "Mỗi bước gắn với sản phẩm khách có thể đối chiếu",
-    "lead": "",
-    "note": "Preview này không cam kết kết quả kinh doanh hay pháp lý chưa được xác minh. Dưới đây là các loại đầu ra tư vấn mà FLF muốn thể hiện rõ trên website mới — để khách biết mình đang nhận gì ở từng giai đoạn.",
     "items": [
      {
       "title": "Bản tóm tắt nhu cầu",
       "text": "Ghi lại bài toán đã thống nhất, giả định còn mở và thông tin cần bổ sung — làm cơ sở chung trước khi đi tiếp.",
-      "link": {}
+      "accent": "navy"
      },
      {
       "title": "Lộ trình & checklist",
       "text": "Thứ tự việc, phần FLF / khách / đối tác, và mốc xem xét lại phạm vi khi cần.",
-      "link": {}
+      "accent": "red"
      },
      {
       "title": "Đầu mối phụ trách",
       "text": "Ai theo dõi từng phần việc đã chốt; kênh cập nhật tiến độ trong phạm vi thỏa thuận.",
-      "link": {}
+      "accent": "green"
      }
-    ],
-    "more": {}
+    ]
    },
    {
-    "blockType": "cta",
+    "blockType": "ctaBand",
     "title": "Sẵn sàng trao đổi về bài toán của bạn",
+    "dark": true,
     "primary": {
-     "label": "Đến form liên hệ (VI)",
-     "href": "/#contact"
+     "label": "Gửi nhu cầu cho FLF",
+     "href": "/#lien-he"
     },
     "secondary": {
      "label": "Về trang chủ",
@@ -413,120 +420,319 @@
   ],
   "en": [
    {
-    "blockType": "hero",
-    "eyebrow": "First Legal Force · About",
-    "masthead": "FLF — Business advisory centred on real client needs",
-    "headline": "Understand the challenge first — then agree scope and outcomes",
-    "sub": "This page explains how FLF intakes challenges, agrees the scope of work, and hands over deliverables. This is a design preview — not the official website.",
+    "blockType": "pageHero",
+    "title": "FLF — business advisory built around real client needs",
+    "lead": "Understand the problem first, then choose the right scope and deliverables.",
     "primary": {
-     "label": "Discuss your operating challenge",
-     "href": "/#contact"
+     "label": "Discuss your problem",
+     "href": "#lien-he"
     },
     "secondary": {
-     "label": "Browse practice areas",
-     "href": "/#services"
+     "label": "View services",
+     "href": "/dich-vu"
     }
    },
    {
-    "blockType": "cards",
-    "anchor": "who",
-    "style": "about",
-    "index": "01 — Who we are",
+    "blockType": "intro",
+    "eyebrow": "Who we are",
     "title": "A multi-disciplinary business advisory firm",
-    "lead": "First Legal Force (FLF) is a multi-disciplinary business advisory firm. We work with companies that need to clarify the situation they face, decide what to prioritise, and agree what they will receive after each step — before expanding scope or engaging extra specialists.",
-    "note": "We do not start from a rigid service catalogue. We start from client needs: operations, expansion, compliance, or coordinating several workstreams at once. FLF helps separate what can begin now from what needs further coordination, then proposes a roadmap tied to concrete deliverables.\n\nWhen work falls under the practice of law or specialised legal fields, FLF collaborates with partner law firms under terms agreed with the client. This Preview deliberately does not name partners until the client approves public listing.",
-    "items": [],
-    "more": {}
+    "lead": "First Legal Force (FLF) works with businesses when they need to clarify their situation, set priorities and agree on what they will receive after each step.",
+    "body": "Our starting point is the client need — operations, expansion, compliance or coordinating several workstreams at once.\n\nWhere work falls under licensed legal practice, FLF coordinates with partner law firms as agreed with the client."
    },
    {
-    "blockType": "steps",
-    "anchor": "intake",
-    "style": "intake",
-    "index": "02 — How we intake challenges",
-    "title": "From initial context to a clear work frame",
-    "note": "Intake aims to help both sides share the same picture: the problem to solve, what information is still missing, and which parts are business advisory versus other parties.",
+    "blockType": "stepList",
+    "eyebrow": "How we take on a problem",
+    "title": "From first information to a clear work plan",
     "items": [
      {
-      "title": "Receive context",
-      "text": "You share a short situation description through the form or public channels: what you face, what you want to achieve, and when you need a response."
+      "title": "Understand the context",
+      "text": "Describe the situation briefly: what is happening, what you want and when you need a reply."
      },
      {
-      "title": "Clarify the key questions",
-      "text": "FLF asks follow-ups to separate symptoms from causes, and to distinguish operating / governance work from specialised legal procedures (if any)."
+      "title": "Clarify key questions",
+      "text": "We separate symptoms from causes and operations from specialised legal work."
      },
      {
-      "title": "Lock scope before delivery",
-      "text": "Both sides agree what FLF owns, what you handle, and what partners cover — plus the outcomes expected at each step."
+      "title": "Agree scope before starting",
+      "text": "Who does what — FLF, the client, partners — with expected outputs for each step."
      }
     ]
    },
    {
-    "blockType": "cards",
-    "anchor": "scope",
-    "style": "about",
-    "index": "03 — Scope of work",
-    "title": "What FLF focuses on",
-    "lead": "",
-    "note": "",
-    "items": [
-     {
-      "title": "Within advisory scope",
-      "text": "Clarifying needs; framing work and priorities; coordinating across disciplines at an advisory level; building checklists / roadmaps; naming owners for agreed workstreams.",
-      "link": {}
-     },
-     {
-      "title": "Outside the default scope",
-      "text": "Licensed legal practice, litigation representation, or other regulated procedures — those parts are connected to suitable partners when the client agrees.",
-      "link": {}
-     },
-     {
-      "title": "Changing scope",
-      "text": "If new work appears mid-engagement, FLF does not expand scope unilaterally: both sides realign before extra delivery starts.",
-      "link": {}
-     }
-    ],
-    "more": {
-     "label": "See practice areas on the home page",
-     "href": "/#services"
-    }
-   },
-   {
-    "blockType": "cards",
-    "anchor": "deliverables",
-    "style": "navy",
-    "index": "04 — Deliverables",
-    "title": "Every step ties to something you can review",
-    "lead": "",
-    "note": "This Preview does not promise unverified business or legal outcomes. Below are the kinds of advisory deliverables FLF wants the new site to make explicit — so you know what you receive at each stage.",
-    "items": [
-     {
-      "title": "Needs summary",
-      "text": "A shared record of the agreed challenge, open assumptions, and information still needed — before work continues.",
-      "link": {}
-     },
-     {
-      "title": "Roadmap & checklist",
-      "text": "Sequence of work, FLF / client / partner split, and review points when scope may need revisiting.",
-      "link": {}
-     },
-     {
-      "title": "Named owners",
-      "text": "Who tracks each agreed workstream, and how progress updates are shared within the agreed scope.",
-      "link": {}
-     }
-    ],
-    "more": {}
-   },
-   {
-    "blockType": "cta",
-    "title": "Ready to discuss your challenge",
+    "blockType": "ctaBand",
+    "title": "Ready to discuss your problem",
+    "dark": true,
     "primary": {
-     "label": "Go to contact form (EN)",
-     "href": "/#contact"
+     "label": "Send your request",
+     "href": "/#lien-he"
     },
     "secondary": {
      "label": "Back to home",
      "href": "/"
+    }
+   }
+  ]
+ },
+ "dich-vu": {
+  "vi": [
+   {
+    "blockType": "pageHero",
+    "title": "Dịch vụ cho doanh nghiệp",
+    "lead": "Ba nhóm việc doanh nghiệp nào cũng cần, cộng năm mảng tư vấn chuyên sâu cho thương vụ và công nghệ mới. Báo phạm vi và chi phí rõ trước khi bắt đầu."
+   },
+   {
+    "blockType": "serviceDetail",
+    "anchor": "rui-ro",
+    "icon": "shield",
+    "title": "Tư vấn quản trị rủi ro",
+    "text": "Nhận diện và kiểm soát rủi ro pháp lý, tài chính, vận hành trước khi chúng thành tranh chấp.",
+    "situation": "[Tình huống điển hình khách hàng gặp — 2–3 câu.]",
+    "items": "Rà soát pháp lý định kỳ\nBộ quy chế tuân thủ nội bộ\nRà soát hợp đồng trọng yếu\n[Hạng mục khác]",
+    "deliverables": "[Kết quả bàn giao: hồ sơ, báo cáo, giấy phép… · thời gian dự kiến]",
+    "cta": {
+     "label": "Trao đổi về dịch vụ này",
+     "href": "#lien-he"
+    }
+   },
+   {
+    "blockType": "serviceDetail",
+    "anchor": "quan-ly",
+    "icon": "board",
+    "title": "Tư vấn quản lý doanh nghiệp",
+    "text": "Cơ cấu tổ chức, điều lệ, quyền và nghĩa vụ cổ đông, quy trình ra quyết định minh bạch.",
+    "situation": "[Tình huống điển hình khách hàng gặp — 2–3 câu.]",
+    "items": "Điều lệ & quy chế quản trị\nCơ cấu cổ đông, góp vốn\nTái cấu trúc doanh nghiệp\n[Hạng mục khác]",
+    "deliverables": "[Kết quả bàn giao: hồ sơ, báo cáo, giấy phép… · thời gian dự kiến]",
+    "cta": {
+     "label": "Trao đổi về dịch vụ này",
+     "href": "#lien-he"
+    }
+   },
+   {
+    "blockType": "serviceDetail",
+    "anchor": "giay-phep",
+    "icon": "doc",
+    "title": "Thủ tục & giấy phép các loại",
+    "text": "Từ đăng ký doanh nghiệp đến giấy phép kinh doanh có điều kiện — trọn gói, đúng hạn.",
+    "situation": "[Tình huống điển hình khách hàng gặp — 2–3 câu.]",
+    "items": "Thành lập, thay đổi, giải thể\nGiấy phép con theo ngành\nLao động, PCCC, môi trường\n[Hạng mục khác]",
+    "deliverables": "[Kết quả bàn giao: hồ sơ, báo cáo, giấy phép… · thời gian dự kiến]",
+    "cta": {
+     "label": "Trao đổi về dịch vụ này",
+     "href": "#lien-he"
+    }
+   },
+   {
+    "blockType": "special",
+    "anchor": "dac-biet",
+    "eyebrow": "Tư vấn đặc biệt",
+    "title": "Thương vụ, dự án và công nghệ mới",
+    "items": [
+     {
+      "title": "M&A",
+      "text": "Thẩm định, cấu trúc thương vụ, đàm phán và hoàn tất chuyển nhượng."
+     },
+     {
+      "title": "Thủ tục đầu tư",
+      "text": "Chủ trương đầu tư, IRC/ERC, dự án vốn nước ngoài."
+     },
+     {
+      "title": "Startup",
+      "text": "Cấu trúc sáng lập, gọi vốn, ESOP, bảo hộ tài sản trí tuệ."
+     },
+     {
+      "title": "Blockchain",
+      "text": "Mô hình tài sản số, token, tuân thủ khi triển khai dự án."
+     },
+     {
+      "title": "Trí tuệ nhân tạo (AI)",
+      "text": "Dữ liệu, bản quyền, trách nhiệm khi đưa AI vào sản phẩm."
+     }
+    ]
+   },
+   {
+    "blockType": "faq",
+    "eyebrow": "Câu hỏi thường gặp",
+    "title": "Trước khi bắt đầu",
+    "items": [
+     {
+      "q": "FLF báo phí như thế nào?",
+      "a": "[Trọn gói / theo giai đoạn / theo giờ — anh điền]"
+     },
+     {
+      "q": "Bao lâu thì có giấy phép?",
+      "a": "[Thời gian theo từng loại giấy phép]"
+     },
+     {
+      "q": "FLF có làm việc với doanh nghiệp nước ngoài?",
+      "a": "[Có, làm việc song ngữ Việt – Anh…]"
+     },
+     {
+      "q": "Trợ lý AI trên web có thay chuyên viên không?",
+      "a": "Không. Trợ lý chỉ cung cấp thông tin tham khảo và chuyển yêu cầu cho chuyên viên FLF."
+     }
+    ]
+   },
+   {
+    "blockType": "contact",
+    "anchor": "lien-he",
+    "eyebrow": "Liên hệ",
+    "title": "Gửi cho FLF nhu cầu của bạn",
+    "lead": "Chúng tôi phản hồi trong giờ làm việc với phạm vi việc, thời gian và chi phí dự kiến.",
+    "consent": "Tôi đồng ý để FLF xử lý dữ liệu cá nhân nhằm phản hồi yêu cầu (NĐ 13/2023).",
+    "button": "Gửi yêu cầu"
+   }
+  ],
+  "en": [
+   {
+    "blockType": "pageHero",
+    "title": "Services for businesses",
+    "lead": "Three areas every business needs, plus five specialised advisory areas for deals and new technology. Clear scope and cost before we start."
+   },
+   {
+    "blockType": "serviceDetail",
+    "anchor": "rui-ro",
+    "icon": "shield",
+    "title": "Risk management advisory",
+    "text": "Identify and control legal, financial and operational risks before they become disputes.",
+    "situation": "[Typical client situation — 2–3 sentences.]",
+    "items": "Periodic legal review\nInternal compliance rules\nReview of key contracts\n[Other items]",
+    "deliverables": "[Deliverables: files, reports, licences… · expected time]",
+    "cta": {
+     "label": "Discuss this service",
+     "href": "#lien-he"
+    }
+   },
+   {
+    "blockType": "serviceDetail",
+    "anchor": "quan-ly",
+    "icon": "board",
+    "title": "Business management advisory",
+    "text": "Organisation, charter, shareholder rights and duties, transparent decision-making.",
+    "situation": "[Typical client situation — 2–3 sentences.]",
+    "items": "Charter & governance rules\nShareholding & capital contribution\nRestructuring\n[Other items]",
+    "deliverables": "[Deliverables: files, reports, licences… · expected time]",
+    "cta": {
+     "label": "Discuss this service",
+     "href": "#lien-he"
+    }
+   },
+   {
+    "blockType": "serviceDetail",
+    "anchor": "giay-phep",
+    "icon": "doc",
+    "title": "Procedures & licences",
+    "text": "From company registration to conditional business licences — end to end, on time.",
+    "situation": "[Typical client situation — 2–3 sentences.]",
+    "items": "Set-up, changes, dissolution\nSector sub-licences\nLabour, fire safety, environment\n[Other items]",
+    "deliverables": "[Deliverables: files, reports, licences… · expected time]",
+    "cta": {
+     "label": "Discuss this service",
+     "href": "#lien-he"
+    }
+   },
+   {
+    "blockType": "special",
+    "anchor": "dac-biet",
+    "eyebrow": "Special advisory",
+    "title": "Deals, projects and new technology",
+    "items": [
+     {
+      "title": "M&A",
+      "text": "Due diligence, deal structuring, negotiation and closing."
+     },
+     {
+      "title": "Investment procedures",
+      "text": "Investment approval, IRC/ERC, foreign-invested projects."
+     },
+     {
+      "title": "Startup",
+      "text": "Founder structure, fundraising, ESOP, IP protection."
+     },
+     {
+      "title": "Blockchain",
+      "text": "Digital-asset models, tokens, compliance when launching."
+     },
+     {
+      "title": "Artificial intelligence (AI)",
+      "text": "Data, copyright and liability when building AI into products."
+     }
+    ]
+   },
+   {
+    "blockType": "faq",
+    "eyebrow": "FAQ",
+    "title": "Before we start",
+    "items": [
+     {
+      "q": "How does FLF charge?",
+      "a": "[Fixed fee / per phase / hourly]"
+     },
+     {
+      "q": "How long does a licence take?",
+      "a": "[Time per licence type]"
+     },
+     {
+      "q": "Do you work with foreign companies?",
+      "a": "[Yes, in Vietnamese and English…]"
+     },
+     {
+      "q": "Does the website AI assistant replace a consultant?",
+      "a": "No. It gives reference information and passes your request to an FLF consultant."
+     }
+    ]
+   },
+   {
+    "blockType": "contact",
+    "anchor": "lien-he",
+    "eyebrow": "Contact",
+    "title": "Tell FLF what you need",
+    "lead": "We reply during business hours with the scope, timeline and estimated cost.",
+    "consent": "I agree that FLF may process my personal data to respond to this request (Decree 13/2023).",
+    "button": "Send request"
+   }
+  ]
+ },
+ "du-an": {
+  "vi": [
+   {
+    "blockType": "pageHero",
+    "title": "Dự án FLF đồng hành",
+    "lead": "Các startup FLF đầu tư, hỗ trợ hoặc tư vấn pháp lý — từ Blockchain, AI đến những mô hình kinh doanh mới."
+   },
+   {
+    "blockType": "projectsList",
+    "showFeatured": true
+   },
+   {
+    "blockType": "ctaBand",
+    "title": "Startup của bạn cần một đối tác pháp lý?",
+    "lead": "Gửi giới thiệu dự án — FLF xem xét hỗ trợ cấu trúc pháp lý, gọi vốn, sở hữu trí tuệ, hoặc cùng đầu tư.",
+    "dark": true,
+    "primary": {
+     "label": "Gửi hồ sơ dự án",
+     "href": "/#lien-he"
+    }
+   }
+  ],
+  "en": [
+   {
+    "blockType": "pageHero",
+    "title": "Projects FLF works with",
+    "lead": "Startups FLF invests in, supports or advises — from Blockchain and AI to new business models."
+   },
+   {
+    "blockType": "projectsList",
+    "showFeatured": true
+   },
+   {
+    "blockType": "ctaBand",
+    "title": "Does your startup need a legal partner?",
+    "lead": "Send us your project — FLF can help with legal structure, fundraising, IP, or co-invest.",
+    "dark": true,
+    "primary": {
+     "label": "Send your project",
+     "href": "/#lien-he"
     }
    }
   ]

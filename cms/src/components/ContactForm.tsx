@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import type { Lang } from '@/lib/shared'
 
@@ -23,6 +23,16 @@ const TXT = {
 export function ContactForm({ lang, button, consentText }: { lang: Lang; button?: string; consentText?: string }) {
   const t = TXT[lang]
   const started = useRef(Date.now())
+  const msgRef = useRef<HTMLTextAreaElement>(null)
+  // Câu hỏi từ khung "Hỏi trợ lý" trên banner → điền sẵn vào ô nội dung
+  useEffect(() => {
+    const h = (e: Event) => {
+      const v = (e as CustomEvent).detail as string
+      if (msgRef.current) { msgRef.current.value = v; setTimeout(() => msgRef.current?.focus({ preventScroll: true }), 400) }
+    }
+    window.addEventListener('flf-ask', h)
+    return () => window.removeEventListener('flf-ask', h)
+  }, [])
   const [state, setState] = useState<'idle' | 'sending' | 'done'>('idle')
   const [err, setErr] = useState('')
 
@@ -65,7 +75,7 @@ export function ContactForm({ lang, button, consentText }: { lang: Lang; button?
       <label>{t.name}<input type="text" name="name" autoComplete="name" maxLength={120} required /></label>
       <label>{t.email}<input type="email" name="email" autoComplete="email" maxLength={160} /></label>
       <label>{t.phone}<input type="tel" name="phone" autoComplete="tel" maxLength={40} /></label>
-      <label>{t.message}<textarea name="message" maxLength={5000} required></textarea></label>
+      <label>{t.message}<textarea ref={msgRef} name="message" maxLength={5000} required></textarea></label>
       {/* Bẫy bot: người thật không thấy ô này */}
       <label aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>
         Website<input type="text" name="website" tabIndex={-1} autoComplete="off" />

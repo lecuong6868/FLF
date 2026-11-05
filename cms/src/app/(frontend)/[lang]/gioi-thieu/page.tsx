@@ -1,39 +1,6 @@
-import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import React from 'react'
-
-import { Blocks } from '@/components/Blocks'
-import { Shell } from '@/components/Shell'
-import { EditablePage } from '@/components/edit/EditKit'
-import { asLang, getEditor, getPage } from '@/lib/site'
-import { RichText } from '@payloadcms/richtext-lexical/react'
+import { cmsPage } from '@/components/CmsPage'
 
 export const dynamic = 'force-dynamic'
-
-type P = { params: Promise<{ lang: string }> }
-
-export async function generateMetadata({ params }: P): Promise<Metadata> {
-  const lang = asLang((await params).lang)
-  if (!lang) return {}
-  const page = await getPage('gioi-thieu', lang)
-  return { title: page?.seo?.title || (lang === 'vi' ? 'Giới thiệu' : 'About'), description: page?.seo?.description || undefined }
-}
-
-export default async function About({ params }: P) {
-  const lang = asLang((await params).lang)
-  if (!lang) notFound()
-  const editor = await getEditor()
-  const page = await getPage('gioi-thieu', lang)
-  return (
-    <Shell adminHref={page ? `/admin/collections/pages/${page.id}?locale=${lang}` : '/admin'} lang={lang} path="/gioi-thieu">
-      {page ? (
-        <>
-          {editor && ['admin', 'reviewer'].includes((editor as { role?: string }).role || '') ? <EditablePage pageId={page.id} initial={(page.layout || []) as never} lang={lang} isHome={false} /> : <Blocks blocks={page.layout as never} lang={lang} isHome={false} />}
-          {page.content ? <section className="section about"><div className="wrap narrow article-body"><RichText data={page.content} /></div></section> : null}
-        </>
-      ) : (
-        <section className="page-hero"><div className="wrap"><h1>First Legal Force</h1><p className="lead">{lang === 'vi' ? 'Trang Giới thiệu chưa được đăng trong CMS (Trang → slug "gioi-thieu", trạng thái Đã đăng).' : 'About page is not published in the CMS yet.'}</p></div></section>
-      )}
-    </Shell>
-  )
-}
+const p = cmsPage('gioi-thieu', '/gioi-thieu', { vi: 'Giới thiệu', en: 'About' })
+export const generateMetadata = p.generateMetadata
+export default p.Page
