@@ -26,14 +26,14 @@ export async function getPage(slug: string, lang: Lang) {
   return r.docs[0] || null
 }
 
-export async function getPosts(section: SectionKey, lang: Lang, drafts = false) {
+export async function getPosts(section: SectionKey, lang: Lang, drafts = false, limit = 100) {
   const p = await cms()
   const cat = await p.find({ collection: 'categories', where: { slug: { equals: section } }, limit: 1 })
   if (!cat.docs[0]) return []
   const r = await p.find({
     collection: 'posts',
     where: drafts ? { category: { equals: cat.docs[0].id } } : { category: { equals: cat.docs[0].id }, status: { equals: 'published' } },
-    locale: lang, depth: 1, limit: 100, sort: '-publishedAt',
+    locale: lang, depth: 1, limit, sort: '-publishedAt',
   })
   return r.docs
 }
@@ -59,4 +59,16 @@ export async function getEditor() {
   } catch {
     return null
   }
+}
+
+/** Dự án đang hiển thị (nhân viên thấy cả bản nháp), sắp theo thứ tự. */
+export async function getProjects(lang: Lang, drafts = false, limit = 100) {
+  const p = await cms()
+  const r = await p.find({
+    collection: 'projects',
+    where: drafts ? {} : { status: { equals: 'published' } },
+    locale: lang, depth: 1, limit, sort: 'order',
+    overrideAccess: true,
+  })
+  return r.docs
 }

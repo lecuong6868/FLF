@@ -159,6 +159,7 @@ export const ContactBlock: Block = {
   fields: [
     appearance,
     { ...anchor, defaultValue: 'contact' },
+    { name: 'eyebrow', type: 'text', label: 'Nhãn nhỏ phía trên (vd: LIÊN HỆ)' },
     { name: 'title', type: 'text', label: 'Tiêu đề' },
     { name: 'lead', type: 'textarea', label: 'Mô tả' },
     { name: 'consent', type: 'textarea', label: 'Câu đồng ý xử lý dữ liệu' },
@@ -179,4 +180,161 @@ export const CtaBlock: Block = {
   ],
 }
 
-export const PAGE_BLOCKS = [HeroBlock, CardsBlock, StepsBlock, TextBlock, ContactBlock, CtaBlock]
+/* ============ Khối theo thiết kế phương án A (11/2026) ============ */
+
+const eyebrow: Field = { name: 'eyebrow', type: 'text', label: 'Nhãn nhỏ phía trên (vd: DỊCH VỤ CHO DOANH NGHIỆP)' }
+const title: Field = { name: 'title', type: 'text', label: 'Tiêu đề phần' }
+const ICONS = [
+  { label: 'Khiên (rủi ro)', value: 'shield' },
+  { label: 'Bảng (quản lý)', value: 'board' },
+  { label: 'Hồ sơ (giấy phép)', value: 'doc' },
+  { label: 'Biểu đồ', value: 'chart' },
+  { label: 'Bắt tay', value: 'deal' },
+  { label: 'Chip (công nghệ)', value: 'chip' },
+]
+const ACCENTS = [
+  { label: 'Navy', value: 'navy' },
+  { label: 'Đỏ', value: 'red' },
+  { label: 'Xanh lá', value: 'green' },
+]
+const B = (slug: string, singular: string, fields: Field[]): Block => ({
+  slug,
+  admin: { disableBlockName: true },
+  labels: { singular, plural: singular },
+  fields: [appearance, ...fields],
+})
+
+export const HeroAskBlock = B('heroAsk', 'Banner trang chủ + ô hỏi trợ lý', [
+  { name: 'headline', type: 'textarea', label: 'Tiêu đề lớn', required: true },
+  { name: 'sub', type: 'textarea', label: 'Đoạn mô tả' },
+  link('primary', 'Nút chính'),
+  link('secondary', 'Nút phụ'),
+  { name: 'image', type: 'upload', relationTo: 'media', label: 'Ảnh nền (tùy chọn)' },
+  { name: 'askEyebrow', type: 'text', label: 'Nhãn khung hỏi (vd: HỎI NHANH TRỢ LÝ FLF)' },
+  { name: 'askTitle', type: 'text', label: 'Câu hỏi lớn trong khung' },
+  { name: 'suggestions', type: 'array', label: 'Câu hỏi gợi ý', labels: { singular: 'Gợi ý', plural: 'Gợi ý' }, fields: [{ name: 'text', type: 'text', label: 'Câu gợi ý' }] },
+  { name: 'disclaimer', type: 'text', label: 'Dòng lưu ý dưới khung' },
+])
+
+export const PageHeroBlock = B('pageHero', 'Banner trang con', [
+  { name: 'title', type: 'textarea', label: 'Tiêu đề lớn', required: true },
+  { name: 'lead', type: 'textarea', label: 'Đoạn mô tả' },
+  link('primary', 'Nút chính'),
+  link('secondary', 'Nút phụ'),
+])
+
+export const ServicesBlock = B('services', 'Thẻ dịch vụ (có icon, gạch đầu dòng)', [
+  anchor, eyebrow, title,
+  link('more', 'Liên kết cạnh tiêu đề'),
+  {
+    name: 'items', type: 'array', label: 'Dịch vụ', labels: { singular: 'Dịch vụ', plural: 'Dịch vụ' },
+    fields: [
+      { name: 'icon', type: 'select', label: 'Biểu tượng', defaultValue: 'shield', options: ICONS },
+      { name: 'title', type: 'text', label: 'Tên dịch vụ' },
+      { name: 'text', type: 'textarea', label: 'Mô tả' },
+      { name: 'bullets', type: 'textarea', label: 'Gạch đầu dòng (mỗi dòng 1 ý)' },
+      link('link', 'Liên kết "Xem chi tiết"'),
+    ],
+  },
+])
+
+export const SpecialBlock = B('special', 'Lưới tư vấn đặc biệt (nền navy, đánh số)', [
+  anchor, eyebrow, title,
+  { name: 'lead', type: 'textarea', label: 'Đoạn mô tả (tùy chọn)' },
+  {
+    name: 'items', type: 'array', label: 'Mục', labels: { singular: 'Mục', plural: 'Mục' },
+    fields: [{ name: 'title', type: 'text', label: 'Tên' }, { name: 'text', type: 'textarea', label: 'Mô tả' }],
+  },
+])
+
+export const ProjectsTeaserBlock = B('projectsTeaser', 'Dự án (lấy tự động từ mục Dự án)', [
+  anchor, eyebrow, title,
+  { name: 'count', type: 'number', label: 'Số dự án hiển thị', defaultValue: 3 },
+  link('more', 'Liên kết "Xem tất cả"'),
+])
+
+export const ProjectsListBlock = B('projectsList', 'Danh sách dự án đầy đủ (có bộ lọc)', [
+  anchor,
+  { name: 'showFeatured', type: 'checkbox', label: 'Hiện khung "Dự án nổi bật"', defaultValue: true },
+])
+
+export const StepCardsBlock = B('stepCards', 'Quy trình (thẻ màu đánh số)', [
+  anchor, eyebrow, title,
+  {
+    name: 'items', type: 'array', label: 'Bước', labels: { singular: 'Bước', plural: 'Các bước' },
+    fields: [
+      { name: 'title', type: 'text', label: 'Tên bước' },
+      { name: 'text', type: 'textarea', label: 'Mô tả' },
+      { name: 'accent', type: 'select', label: 'Màu', defaultValue: 'navy', options: ACCENTS },
+    ],
+  },
+])
+
+export const StepListBlock = B('stepList', 'Các bước (danh sách 2 cột)', [
+  anchor, eyebrow, title,
+  { name: 'note', type: 'textarea', label: 'Đoạn mô tả bên trái' },
+  {
+    name: 'items', type: 'array', label: 'Bước', labels: { singular: 'Bước', plural: 'Các bước' },
+    fields: [{ name: 'title', type: 'text', label: 'Tên bước' }, { name: 'text', type: 'textarea', label: 'Mô tả' }],
+  },
+])
+
+export const IntroBlock = B('intro', 'Giới thiệu 2 cột (tiêu đề trái, nội dung phải)', [
+  anchor, eyebrow, title,
+  { name: 'lead', type: 'textarea', label: 'Đoạn mở đầu (chữ lớn)' },
+  { name: 'body', type: 'textarea', label: 'Các đoạn tiếp theo (cách nhau 1 dòng trống)' },
+])
+
+export const FeatureCardsBlock = B('featureCards', 'Thẻ có icon (nền nhạt)', [
+  anchor, eyebrow, title,
+  {
+    name: 'items', type: 'array', label: 'Thẻ', labels: { singular: 'Thẻ', plural: 'Các thẻ' },
+    fields: [
+      { name: 'icon', type: 'select', label: 'Biểu tượng', defaultValue: 'shield', options: ICONS },
+      { name: 'title', type: 'text', label: 'Tiêu đề' },
+      { name: 'text', type: 'textarea', label: 'Nội dung' },
+      { name: 'accent', type: 'select', label: 'Màu', defaultValue: 'navy', options: ACCENTS },
+    ],
+  },
+  link('more', 'Liên kết cuối phần'),
+])
+
+export const NewsBlock = B('news', 'VBPL mới + Chuyên mục (lấy tự động bài viết)', [
+  anchor, eyebrow, title,
+  { name: 'count', type: 'number', label: 'Số văn bản hiển thị', defaultValue: 3 },
+  { name: 'topicsTitle', type: 'text', label: 'Tiêu đề khung Chuyên mục' },
+])
+
+export const ServiceDetailBlock = B('serviceDetail', 'Chi tiết một dịch vụ', [
+  anchor,
+  { name: 'icon', type: 'select', label: 'Biểu tượng', defaultValue: 'shield', options: ICONS },
+  { name: 'title', type: 'text', label: 'Tên dịch vụ' },
+  { name: 'text', type: 'textarea', label: 'Mô tả' },
+  { name: 'situation', type: 'textarea', label: 'Doanh nghiệp thường gặp' },
+  { name: 'items', type: 'textarea', label: 'FLF làm gì (mỗi dòng 1 việc)' },
+  { name: 'deliverables', type: 'textarea', label: 'Bạn nhận được' },
+  link('cta', 'Nút liên hệ'),
+])
+
+export const FaqBlock = B('faq', 'Câu hỏi thường gặp', [
+  anchor, eyebrow, title,
+  {
+    name: 'items', type: 'array', label: 'Câu hỏi', labels: { singular: 'Câu hỏi', plural: 'Câu hỏi' },
+    fields: [{ name: 'q', type: 'text', label: 'Câu hỏi' }, { name: 'a', type: 'textarea', label: 'Trả lời' }],
+  },
+])
+
+export const CtaBandBlock = B('ctaBand', 'Dải kêu gọi (tiêu đề + nút)', [
+  title,
+  { name: 'lead', type: 'textarea', label: 'Mô tả (tùy chọn)' },
+  { name: 'dark', type: 'checkbox', label: 'Nền navy', defaultValue: false },
+  link('primary', 'Nút chính'),
+  link('secondary', 'Nút phụ'),
+])
+
+/** Khối mới đặt trước để dễ chọn; khối cũ vẫn giữ để không mất dữ liệu đã có. */
+export const PAGE_BLOCKS = [
+  HeroAskBlock, PageHeroBlock, IntroBlock, ServicesBlock, SpecialBlock, ProjectsTeaserBlock, ProjectsListBlock, StepCardsBlock, StepListBlock,
+  FeatureCardsBlock, NewsBlock, ServiceDetailBlock, FaqBlock, CtaBandBlock, ContactBlock,
+  HeroBlock, CardsBlock, StepsBlock, TextBlock, CtaBlock,
+]

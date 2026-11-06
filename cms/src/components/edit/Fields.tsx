@@ -112,6 +112,8 @@ export function FieldInput({ field, value, onChange, adminHref }: { field: F; va
       return <textarea rows={Math.min(10, Math.max(3, String(value || '').split('\n').length + 1))} value={value || ''} onChange={(e) => onChange(e.target.value)} />
     case 'checkbox':
       return <input type="checkbox" checked={!!value} onChange={(e) => onChange(e.target.checked)} />
+    case 'number':
+      return <input type="text" inputMode="numeric" value={value ?? ''} onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value.replace(/[^\d.-]/g, '')) || 0)} />
     case 'date':
       return <input type="date" value={(value || '').slice(0, 10)} onChange={(e) => onChange(e.target.value ? new Date(e.target.value).toISOString() : null)} />
     case 'select':
