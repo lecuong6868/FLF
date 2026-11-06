@@ -2,7 +2,7 @@ import Script from 'next/script'
 import React from 'react'
 
 import { EditorBar } from '@/components/edit/EditKit'
-import { getEditor, getSettings, getTheme, href, type Lang, mediaUrl, T, themeCss } from '@/lib/site'
+import { getEditor, getSettings, getTheme, href, type Lang, mediaUrl, T, themeCss, TOPICS } from '@/lib/site'
 
 export async function Shell({ lang, path = '', adminHref = '/admin', children }: { lang: Lang; path?: string; adminHref?: string; children: React.ReactNode }) {
   const [{ settings, nav }, theme, editor] = await Promise.all([getSettings(lang), getTheme(), getEditor()])
@@ -11,13 +11,27 @@ export async function Shell({ lang, path = '', adminHref = '/admin', children }:
   const other: Lang = lang === 'vi' ? 'en' : 'vi'
   const logo = mediaUrl(settings?.logo as never) || '/brand/logo-color.png'
   const previewMode = process.env.PREVIEW_MODE === 'true'
-  const links = nav.map((n, i) => (
-    <li key={i}>
-      <a href={href(n.href, lang)} {...(n.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-        {n.label}
-      </a>
-    </li>
+  // Mục "Chuyên mục" tự có menu xổ xuống các chủ đề (Đầu tư, Thuế…)
+  const isTopics = (h: string) => /^\/?(vi\/|en\/)?chuyen-muc\/?$/.test(h.replace(/^\/(vi|en)(?=\/)/, ''))
+  const topicLinks = Object.entries(TOPICS).map(([k, v]) => (
+    <li key={k}><a href={`/${lang}/chuyen-muc?chu-de=${k}`}>{v[lang]}</a></li>
   ))
+  const makeLinks = (mobile: boolean) => nav.map((n, i) =>
+    isTopics(n.href) ? (
+      <li key={i} className="nav-item has-children">
+        <a href={href(n.href, lang)} className={mobile ? undefined : 'nav-parent'} aria-haspopup="true">
+          {n.label}{mobile ? null : <span className="nav-caret" aria-hidden="true">▾</span>}
+        </a>
+        <ul className="submenu">{topicLinks}</ul>
+      </li>
+    ) : (
+      <li key={i}>
+        <a href={href(n.href, lang)} {...(n.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+          {n.label}
+        </a>
+      </li>
+    ),
+  )
   const langSwitch = (label: string) => (
     <nav className="lang-switch" aria-label={label}>
       {(['vi', 'en'] as Lang[]).map((l) =>
@@ -50,7 +64,7 @@ export async function Shell({ lang, path = '', adminHref = '/admin', children }:
               <em>{lang === 'vi' ? 'Tư vấn đa lĩnh vực' : 'Multidisciplinary advisory'}</em>
             </span>
           </a>
-          <nav className="nav-desktop" aria-label="Menu"><ul>{links}</ul></nav>
+          <nav className="nav-desktop" aria-label="Menu"><ul>{makeLinks(false)}</ul></nav>
           <div className="header-tools">
             {langSwitch('Language')}
             <a className="btn btn-sm header-cta" href={`/${lang}#contact`}>{t.cta}</a>
@@ -64,7 +78,7 @@ export async function Shell({ lang, path = '', adminHref = '/admin', children }:
         <div className="mobile-panel" id="mobile-nav" data-mobile-panel hidden aria-hidden="true">
           <nav aria-label="Menu mobile">
             <ul>
-              {links}
+              {makeLinks(true)}
               <li><a href={`/${other}${path}`} lang={other}>{other === 'en' ? 'English (EN)' : 'Tiếng Việt (VI)'}</a></li>
             </ul>
           </nav>

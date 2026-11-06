@@ -219,6 +219,7 @@ a {
   z-index: 50;
 }
 .nav-desktop .has-children.is-open > .submenu,
+.nav-desktop .has-children:hover > .submenu,
 .nav-desktop .has-children:focus-within > .submenu {
   opacity: 1;
   visibility: visible;
