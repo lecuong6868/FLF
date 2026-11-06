@@ -315,8 +315,7 @@
   "vi": [
    {
     "blockType": "pageHero",
-    "title": "FLF — Tư vấn doanh nghiệp xoay quanh nhu cầu thật của khách hàng",
-    "lead": "Hiểu bài toán trước, rồi mới chọn phạm vi và đầu ra phù hợp. Cách FLF tiếp nhận vấn đề, thống nhất phạm vi công việc và bàn giao đầu ra.",
+    "title": "Hiểu vấn đề trước, rồi mới chọn phạm vi và đầu ra phù hợp",
     "primary": {
      "label": "Trao đổi về bài toán của bạn",
      "href": "#lien-he"
@@ -406,7 +405,7 @@
    },
    {
     "blockType": "ctaBand",
-    "title": "Sẵn sàng trao đổi về bài toán của bạn",
+    "title": "Sẵn sàng trao đổi về vấn đề của bạn",
     "dark": true,
     "primary": {
      "label": "Gửi nhu cầu cho FLF",
@@ -477,8 +476,7 @@
   "vi": [
    {
     "blockType": "pageHero",
-    "title": "Dịch vụ cho doanh nghiệp",
-    "lead": "Ba nhóm việc doanh nghiệp nào cũng cần, cộng năm mảng tư vấn chuyên sâu cho thương vụ và công nghệ mới. Báo phạm vi và chi phí rõ trước khi bắt đầu."
+    "title": "Dịch vụ cho doanh nghiệp"
    },
    {
     "blockType": "serviceDetail",
@@ -586,8 +584,7 @@
   "en": [
    {
     "blockType": "pageHero",
-    "title": "Services for businesses",
-    "lead": "Three areas every business needs, plus five specialised advisory areas for deals and new technology. Clear scope and cost before we start."
+    "title": "Services for businesses"
    },
    {
     "blockType": "serviceDetail",
